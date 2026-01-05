@@ -1,0 +1,68 @@
+@use "@/styles/index" as *;
+
+.container {
+  display: flex;
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--primary-bg-color);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.logoWrapper {
+  width: 272px;
+  height: 83px;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.loaderTrack {
+  width: 200px;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.loaderBar {
+  width: 100%;
+  height: 100%;
+  transform-origin: left;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #fdd148 0%, #ff8b4d 100%);
+  animation: progress 2s ease-in-out infinite;
+}
+
+@keyframes progress {
+  0% {
+    transform: scaleX(0);
+  }
+  50% {
+    transform: scaleX(0.7);
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

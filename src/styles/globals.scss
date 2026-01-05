@@ -13,9 +13,8 @@ body {
 
 body {
   background: var(--primary-bg-color);
-  font-weight: 400;
+  color: var(--primary-text-color);
   font-size: 16px;
-  line-height: 1.5;
   font-family:
     var(--font-inter),
     system-ui,
@@ -30,7 +29,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: var(--primary-text-color);
+  font-weight: 400;
+  line-height: 1.5;
 }
 
 a {
