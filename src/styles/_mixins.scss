@@ -1,0 +1,26 @@
+@use "sass:map";
+@use "variables" as *;
+
+@mixin flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flexBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin minWidth($size) {
+  @media screen and (min-width: map.get($breakpoints, $size)) {
+    @content;
+  }
+}
+
+@mixin maxWidth($size) {
+  @media screen and (max-width: map.get($breakpoints, $size)) {
+    @content;
+  }
+}

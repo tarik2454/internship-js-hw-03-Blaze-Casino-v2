@@ -1,0 +1,42 @@
+:root {
+  /* Fonts */
+  --font-inter: "Inter";
+  --font-manrope: "Manrope";
+  --font-satoshi-900: "Satoshi-900";
+
+  /* Colors */
+  --primary-text-color: #fff;
+  --secondary-text-color: #ffffff40;
+  --accent-color: #ffd026;
+
+  --primary-bg-color: #0e111b;
+  --secondary-bg-color: #141a26;
+
+  --black-e8-color: #0905058e;
+  --black-1e-color: #0e141e;
+  --black-27-color: #151a27;
+  --black-34-color: #222734;
+  --black-30-color: #1b2030;
+  --gray-80-color: #ffffff80;
+  --gray-66-color: #ffffff66;
+  --gray-f6-color: #fff6;
+  --green-5e-color: rgb(83, 216, 89);
+  --red-ef-color: rgb(240, 48, 48);
+
+  --blue-c1-color: #025cc1;
+
+  /* Shadows */
+  --shadow-card:
+    0 0 4px 5.5px #264079, 0 0 5px 5px #6066d0, 0 0 8px 4.5px #15688e;
+  --shadow-button: 0 0 7.4px #ffd0260d inset;
+
+  /* Radius */
+  --radius-4: 4px;
+  --radius-8: 8px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+
+  /* Transitions */
+  --transition-slow: all 0.5s ease-in-out;
+  --transition-base: all 0.2s ease-in-out;
+}
