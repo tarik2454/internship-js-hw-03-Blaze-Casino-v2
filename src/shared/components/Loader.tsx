@@ -9,10 +9,9 @@ export const Loader = () => {
       <div className={styles.content}>
         <div className={styles.logoWrapper}>
           <Image
-            src="/evo-gaming-logo.svg"
-            alt="Evo Gaming"
-            width={272}
-            height={83}
+            src="/images/logo/logo-register.svg"
+            alt="Blaze Casino"
+            fill={true}
             priority
             className={styles.logo}
           />
