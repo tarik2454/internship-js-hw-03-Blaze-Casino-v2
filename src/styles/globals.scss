@@ -8,13 +8,19 @@
 html,
 body {
   max-width: 100vw;
+  min-height: 100vh;
   overflow-x: hidden;
 }
 
 body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(to right, #0f0c29, #312c5f, #24243e);
+  color: var(--color-text-primary);
   font-weight: 400;
   font-size: 16px;
+  line-height: 1.4;
   font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
