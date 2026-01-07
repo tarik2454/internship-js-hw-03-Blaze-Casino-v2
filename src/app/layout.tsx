@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import Satoshi from "next/font/local";
 import "../styles/globals.scss";
+import { ReactQueryProvider } from "./providers/ReactQueryProvider";
 
 const satoshi900 = Satoshi({
   src: [
@@ -35,6 +36,9 @@ export const metadata: Metadata = {
     "Blaze Casino is a online casino that offers a wide range of games and bonuses to its players.",
 };
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -45,7 +49,10 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${manrope.variable} ${satoshi900.variable}`}
       >
-        <main>{children}</main>
+        <ReactQueryProvider>
+          {children}
+          <ToastContainer theme="dark" position="bottom-right" />
+        </ReactQueryProvider>
       </body>
     </html>
   );
