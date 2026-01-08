@@ -5,15 +5,15 @@ import { AuthForm } from "@/module/auth/components/AuthForm";
 import { useLogin } from "@/module/auth/hooks/useLogin";
 import { LoginSchemaDto } from "@/module/auth/auth.schema";
 import { toast } from "react-toastify";
-
 import { useRouter } from "next/navigation";
+import { AUTH_MODE } from "@/module/auth/auth.constants";
 
 export default function LoginPage() {
-  const { mutate: login } = useLogin();
+  const { mutate: handleLogin } = useLogin();
   const router = useRouter();
 
   const handleSubmit = (data: LoginSchemaDto) => {
-    login(data, {
+    handleLogin(data, {
       onSuccess: () => {
         toast.success("Login successful");
         router.push("/");
@@ -25,8 +25,8 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthContent mode="login">
-      <AuthForm mode="login" onSubmit={handleSubmit} />
+    <AuthContent mode={AUTH_MODE.LOGIN}>
+      <AuthForm mode={AUTH_MODE.LOGIN} onSubmit={handleSubmit} />
     </AuthContent>
   );
 }
