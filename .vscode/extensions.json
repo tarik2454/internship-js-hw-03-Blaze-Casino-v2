@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "dsznajder.es7-react-js-snippets",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "eamodio.gitlens",
+    "ritwickdey.live-sass",
+    "bierner.markdown-mermaid"
+  ]
+}
