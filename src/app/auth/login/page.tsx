@@ -4,22 +4,30 @@ import { AuthContent } from "@/module/auth/components/AuthContent";
 import { AuthForm } from "@/module/auth/components/AuthForm";
 import { useLogin } from "@/module/auth/hooks/useLogin";
 import { LoginSchemaDto } from "@/module/auth/auth.schema";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { AUTH_MODE } from "@/module/auth/auth.constants";
+import { usePopup } from "@/app/providers/PopupProvider";
 
 export default function LoginPage() {
   const { mutate: handleLogin } = useLogin();
   const router = useRouter();
+  const { showPopup } = usePopup();
 
   const handleSubmit = (data: LoginSchemaDto) => {
     handleLogin(data, {
       onSuccess: () => {
-        toast.success("Login successful");
+        showPopup({
+          message: "Login successful",
+          type: "success",
+        });
         router.push("/");
       },
       onError: (error) => {
-        toast.error(error.message || "Login failed");
+        console.log(error);
+        showPopup({
+          message: error?.message || "Login failed",
+          type: "error",
+        });
       },
     });
   };
