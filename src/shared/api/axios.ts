@@ -31,6 +31,7 @@ api.interceptors.response.use(
       if (status === 401) {
         localStorage.removeItem("accessToken");
       }
+
       throw new ApiException(message, status, error.response?.data);
     }
 
