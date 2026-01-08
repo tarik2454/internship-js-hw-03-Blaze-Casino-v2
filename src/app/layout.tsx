@@ -6,7 +6,7 @@ import "../styles/globals.scss";
 const satoshi900 = Satoshi({
   src: [
     {
-      path: "../public/fonts/Satoshi-900.otf",
+      path: "../../public/fonts/Satoshi-900.otf",
       weight: "900",
       style: "normal",
     },

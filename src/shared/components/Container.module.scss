@@ -1,0 +1,15 @@
+@use "@/styles/index" as *;
+
+.container {
+  width: 100%;
+  max-width: 393px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@include minWidth(xl) {
+  .container {
+    max-width: 1440px;
+    padding: 0 48px;
+  }
+}

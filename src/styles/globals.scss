@@ -12,25 +12,12 @@ body {
 }
 
 body {
-  background: var(--primary-bg-color);
+  background: linear-gradient(to right, #0f0c29, #312c5f, #24243e);
   font-weight: 400;
   font-size: 16px;
-  line-height: 1.5;
-  font-family:
-    var(--font-inter),
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Ubuntu,
-    Cantarell,
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
+  font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: var(--primary-text-color);
 }
 
 a {
