@@ -1,4 +1,4 @@
-import { Container } from "../shared/components/Container";
+import { Container } from "../../shared/components/Container";
 
 export default function Home() {
   return (
