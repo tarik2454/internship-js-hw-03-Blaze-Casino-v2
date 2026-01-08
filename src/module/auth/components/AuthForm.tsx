@@ -16,7 +16,7 @@ import {
   loginSchema,
   RegisterSchemaDto,
   registerSchema,
-} from "../schemas/auth.schema";
+} from "../auth.schema";
 
 type AuthFormProps<T> = {
   mode: "login" | "register";
@@ -75,6 +75,7 @@ export function AuthForm<T extends LoginSchemaDto | RegisterSchemaDto>({
         stylesVariant="authInput"
         placeholder="Enter password"
         labelClassName={styles.label}
+        inputWrapperClassName={styles.inputWrapperLast}
         error={getErrorMessage("password" as Path<T>)}
       />
 

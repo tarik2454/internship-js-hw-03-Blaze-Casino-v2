@@ -3,7 +3,7 @@
 import { AuthForm } from "@/module/auth/components/AuthForm";
 import { AuthContent } from "@/module/auth/components/AuthContent";
 import { useRegister } from "@/module/auth/hooks/useRegister";
-import { RegisterSchemaDto } from "@/module/auth/schemas/auth.schema";
+import { RegisterSchemaDto } from "@/module/auth/auth.schema";
 import { toast } from "react-toastify";
 
 import { useRouter } from "next/navigation";

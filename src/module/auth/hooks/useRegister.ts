@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { authApi } from "../api/auth.api";
-import { RegisterResponse, RegisterSchemaDto } from "../schemas/auth.schema";
+import { authApi } from "../auth.api";
+import { RegisterResponse, RegisterSchemaDto } from "../auth.schema";
 import { queryKeys } from "@/shared/api/keys";
 import { ApiError } from "@/shared/api/error.types";
 

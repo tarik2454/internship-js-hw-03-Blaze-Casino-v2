@@ -29,13 +29,15 @@ export function AuthContent({ mode, children }: AuthContentProps) {
 
         <p className={styles.footer}>
           {mode === "login" ? (
-            <Link href="/auth/register">
+            <Link href="/auth/register" className={styles.footerLink}>
               Don&apos;t have an account? Register
             </Link>
           ) : (
-            <Link href="/auth/login">Already have an account? Login</Link>
+            <Link href="/auth/login" className={styles.footerLink}>
+              Already have an account? Login
+            </Link>
           )}
-          <br />
+
           <span className={styles.footerText}>
             Your account data is stored locally in your browser
           </span>
