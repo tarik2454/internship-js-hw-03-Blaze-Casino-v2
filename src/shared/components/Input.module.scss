@@ -1,11 +1,44 @@
 .input {
+  width: 100%;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-8);
+  text-align: left;
+
   &:focus {
+    outline: transparent;
   }
+}
+
+.authInput {
+  padding: 12px 10px;
+  color: var(--color-black);
+  font-weight: 500;
+  font-size: 14px;
+  font-family: var(--font-manrope);
 
   &::placeholder {
+    color: var(--color-text-secondary);
   }
 
-  &:disabled {
-    cursor: not-allowed;
+  &:focus {
+    border: 1.5px solid var(--color-violet-ff);
+    outline: transparent;
   }
+}
+
+.label {
+  display: block;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  font-size: 14px;
+  font-family: var(--font-manrope);
+}
+
+.error {
+  display: block;
+  margin-top: 4px;
+  color: var(--color-red-21);
+  font-weight: 500;
+  font-size: 12px;
+  font-family: var(--font-manrope);
 }

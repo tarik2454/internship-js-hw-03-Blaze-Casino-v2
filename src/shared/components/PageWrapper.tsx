@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { cx } from "@/utils/classNames";
+import { cx } from "@/shared/utils/classNames";
 import styles from "./PageWrapper.module.scss";
 
 interface PageWrapperProps {

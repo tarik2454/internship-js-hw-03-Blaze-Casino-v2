@@ -1,4 +1,4 @@
-import { cx } from "@/utils/classNames";
+import { cx } from "@/shared/utils/classNames";
 import { MouseEventHandler, ReactNode } from "react";
 import styles from "./Button.module.scss";
 

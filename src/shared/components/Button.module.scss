@@ -2,6 +2,10 @@
 
 .button {
   @include flexCenter;
+  width: 100%;
+  border: none;
+  color: inherit;
+  cursor: pointer;
 
   &:disabled {
     cursor: not-allowed;
@@ -9,6 +13,8 @@
 }
 
 .redGradient {
+  padding: 13.5px 0;
+  border-radius: var(--radius-100);
   background: linear-gradient(0deg, #ff0047 0%, #ff417b 100%);
 
   &:hover {
@@ -25,6 +31,8 @@
 }
 
 .yellowGradient {
+  padding: 13.5px 0;
+  border-radius: var(--radius-16);
   background: linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
 
   &:hover {
