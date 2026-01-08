@@ -3,13 +3,16 @@ import { Container } from "@/shared/components/Container";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./AuthContent.module.scss";
+import { AUTH_ROUTES } from "../auth.routes";
+import { AUTH_MODE, AuthMode } from "../auth.constants";
 
-interface AuthContentProps {
-  mode: "login" | "register";
+export function AuthContent({
+  mode,
+  children,
+}: {
+  mode: AuthMode;
   children: ReactNode;
-}
-
-export function AuthContent({ mode, children }: AuthContentProps) {
+}) {
   return (
     <Container>
       <div className={styles.content}>
@@ -28,12 +31,12 @@ export function AuthContent({ mode, children }: AuthContentProps) {
         {children}
 
         <p className={styles.footer}>
-          {mode === "login" ? (
-            <Link href="/auth/register" className={styles.footerLink}>
+          {mode === AUTH_MODE.LOGIN ? (
+            <Link href={AUTH_ROUTES.REGISTER} className={styles.footerLink}>
               Don&apos;t have an account? Register
             </Link>
           ) : (
-            <Link href="/auth/login" className={styles.footerLink}>
+            <Link href={AUTH_ROUTES.LOGIN} className={styles.footerLink}>
               Already have an account? Login
             </Link>
           )}
