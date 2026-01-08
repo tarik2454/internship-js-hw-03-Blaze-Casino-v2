@@ -5,7 +5,6 @@ import { AuthForm } from "@/module/auth/components/AuthForm";
 import { useLogin } from "@/module/auth/hooks/useLogin";
 import { LoginSchemaDto } from "@/module/auth/auth.schema";
 import { toast } from "react-toastify";
-
 import { useRouter } from "next/navigation";
 import { AUTH_MODE } from "@/module/auth/auth.constants";
 
