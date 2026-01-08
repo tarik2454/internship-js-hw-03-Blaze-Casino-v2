@@ -28,7 +28,6 @@ api.interceptors.response.use(
         error.message ||
         "An unexpected error occurred";
 
-      // Handle 401 Unauthorized
       if (status === 401) {
         localStorage.removeItem("accessToken");
       }
