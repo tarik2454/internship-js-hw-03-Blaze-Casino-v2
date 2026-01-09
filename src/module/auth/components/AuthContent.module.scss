@@ -1,5 +1,11 @@
 @use "@/styles/index" as *;
 
+.container {
+  max-width: 393px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
 .content {
   padding: 32px;
   padding: 40px;

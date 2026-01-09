@@ -1,0 +1,28 @@
+import { api } from "@/shared/api/axios";
+import { LoginResponse, RegisterResponse } from "./session.types";
+import { LoginSchemaDto, RegisterSchemaDto } from "../auth/auth.schema";
+import { SESSION_ROUTES } from "./session.constants";
+
+export const sessionApi = {
+  login: async (dto: LoginSchemaDto): Promise<LoginResponse> => {
+    const { data } = await api.post<LoginResponse>(SESSION_ROUTES.LOGIN, dto);
+
+    if (data.accessToken) {
+      localStorage.setItem("accessToken", data.accessToken);
+    }
+    return data;
+  },
+
+  register: async (dto: RegisterSchemaDto): Promise<RegisterResponse> => {
+    const { data } = await api.post<RegisterResponse>(
+      SESSION_ROUTES.REGISTER,
+      dto,
+    );
+    return data;
+  },
+
+  logout: async (): Promise<void> => {
+    await api.post(SESSION_ROUTES.LOGOUT);
+    localStorage.removeItem("accessToken");
+  },
+};

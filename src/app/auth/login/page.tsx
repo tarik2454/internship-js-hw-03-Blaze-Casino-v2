@@ -2,10 +2,10 @@
 
 import { AuthContent } from "@/module/auth/components/AuthContent";
 import { AuthForm } from "@/module/auth/components/AuthForm";
-import { useLogin } from "@/module/auth/hooks/useAuth";
+import { useLogin } from "@/module/session/useSession";
 import { LoginSchemaDto } from "@/module/auth/auth.schema";
 import { useRouter } from "next/navigation";
-import { AUTH_MODE } from "@/module/auth/auth.constants";
+import { SESSION_MODE } from "@/module/session/session.constants";
 import { usePopup } from "@/app/providers/PopupProvider";
 
 export default function LoginPage() {
@@ -33,8 +33,8 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthContent mode={AUTH_MODE.LOGIN}>
-      <AuthForm mode={AUTH_MODE.LOGIN} onSubmit={handleSubmit} />
+    <AuthContent mode={SESSION_MODE.LOGIN}>
+      <AuthForm mode={SESSION_MODE.LOGIN} onSubmit={handleSubmit} />
     </AuthContent>
   );
 }

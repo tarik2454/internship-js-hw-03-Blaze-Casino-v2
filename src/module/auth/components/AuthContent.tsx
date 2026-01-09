@@ -1,19 +1,22 @@
 import { ReactNode } from "react";
-import { Container } from "@/shared/components/Container";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./AuthContent.module.scss";
-import { AUTH_MODE, AUTH_ROUTES, AuthMode } from "@/module/auth/auth.constants";
+import { SessionMode } from "@/module/session/session.constants";
+import {
+  SESSION_ROUTES,
+  SESSION_MODE,
+} from "@/module/session/session.constants";
 
 export function AuthContent({
   mode,
   children,
 }: {
-  mode: AuthMode;
+  mode: SessionMode;
   children: ReactNode;
 }) {
   return (
-    <Container>
+    <div className={styles.container}>
       <div className={styles.content}>
         <Image
           src="/images/logo/logo-register.svg"
@@ -30,12 +33,12 @@ export function AuthContent({
         {children}
 
         <p className={styles.footer}>
-          {mode === AUTH_MODE.LOGIN ? (
-            <Link href={AUTH_ROUTES.REGISTER} className={styles.footerLink}>
+          {mode === SESSION_MODE.LOGIN ? (
+            <Link href={SESSION_ROUTES.REGISTER} className={styles.footerLink}>
               Don&apos;t have an account? Register
             </Link>
           ) : (
-            <Link href={AUTH_ROUTES.LOGIN} className={styles.footerLink}>
+            <Link href={SESSION_ROUTES.LOGIN} className={styles.footerLink}>
               Already have an account? Login
             </Link>
           )}
@@ -45,6 +48,6 @@ export function AuthContent({
           </span>
         </p>
       </div>
-    </Container>
+    </div>
   );
 }

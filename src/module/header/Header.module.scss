@@ -42,14 +42,38 @@
   }
 }
 
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 54px;
+}
+
+.userInfoContent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .balance {
   display: flex;
+  z-index: 1;
+  position: absolute;
+  top: -2px;
+  left: 50%;
   align-items: center;
   padding: 14px 24px;
   gap: 8px;
+  transform: translateX(-50%);
   border: 1px solid var(--color-grey-bd);
   border-radius: var(--radius-1000);
   font-weight: 600;
+
+  @include minWidth(xl) {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+  }
 }
 
 .groupButtons {
@@ -62,7 +86,14 @@
   }
 }
 
+.profileButton {
+  padding: 8px;
+}
+
 .logoutButton {
+  display: flex;
+  align-items: center;
   padding: 9px 16px !important;
+  gap: 2px;
   color: var(--color-text-primary);
 }

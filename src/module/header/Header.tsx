@@ -8,6 +8,12 @@ import { NavToggleIcon } from "@/shared/icons/nav-toggle";
 import { useState } from "react";
 import { MobileMenu } from "./mobile-menu/MobileMenu";
 import { Button } from "@/shared/components/Button";
+import { SettingProfileIcon } from "@/shared/icons/setting-profile";
+import { LogoutIcon } from "@/shared/icons/logout";
+import { useLogout } from "../session/useSession";
+import { usePopup } from "@/app/providers/PopupProvider";
+import { SESSION_ROUTES } from "../session/session.constants";
+import { useRouter } from "next/navigation";
 
 export function Header() {
   const [menuVisibility, setMenuVisibility] = useState<"hidden" | "visible">(
@@ -20,6 +26,21 @@ export function Header() {
 
   const closeMenu = () => setMenuVisibility("hidden");
 
+  const { mutate: logoutMutation } = useLogout();
+  const { showPopup } = usePopup();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logoutMutation(undefined, {
+      onSuccess: () => {
+        showPopup({ message: "Logout successful", type: "success" });
+        router.push(SESSION_ROUTES.LOGIN);
+      },
+      onError: (error) => {
+        showPopup({ message: error.message || "Logout failed", type: "error" });
+      },
+    });
+  };
   return (
     <>
       <header className={styles.header}>
@@ -40,31 +61,37 @@ export function Header() {
               <NavToggleIcon />
             </Button>
 
-            <div className={styles.balance}>
-              <Image
-                src="/images/header/dollar.svg"
-                alt="Dollar"
-                width={24}
-                height={24}
-              />
-              <span>10.000</span>
-            </div>
+            <div className={styles.userInfo}>
+              <div className={styles.userInfoContent}>
+                <div className={styles.balance}>
+                  <Image
+                    src="/images/header/dollar.svg"
+                    alt="Dollar"
+                    width={24}
+                    height={24}
+                  />
+                  <span>10.000</span>
+                </div>
+                <Image
+                  src="/images/header/user.svg"
+                  alt="User"
+                  width={32}
+                  height={32}
+                />
+              </div>
 
-            <Image
-              src="/images/header/user.svg"
-              alt="User"
-              width={32}
-              height={32}
-            />
-
-            <div className={styles.groupButtons}>
-              <Button className={styles.profileButton}>Profile</Button>
-              <Button
-                className={styles.logoutButton}
-                stylesVariant="yellowGradient"
-              >
-                Logout
-              </Button>
+              <div className={styles.groupButtons}>
+                <Button className={styles.profileButton}>
+                  <SettingProfileIcon />
+                </Button>
+                <Button
+                  className={styles.logoutButton}
+                  stylesVariant="yellowGradient"
+                  onClick={handleLogout}
+                >
+                  Logout <LogoutIcon />
+                </Button>
+              </div>
             </div>
           </div>
         </Container>
