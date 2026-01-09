@@ -25,7 +25,7 @@ export function MobileMenu({
   }, [menuVisibility]);
 
   return (
-    <div className={styles.mobileMenu}>
+    <>
       <div
         className={cx(styles.overlay, {
           [styles.isVisible]: menuVisibility === "visible",
@@ -48,10 +48,10 @@ export function MobileMenu({
 
         <div className={styles.mobileMenuContent}>
           <div className={styles.mobileMenuHeader}>
-            <h2 className={styles.mobileMenuTitle}>Menu</h2>
+            <h2 className={styles.mobileMenuTitle}></h2>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -14,7 +14,7 @@
 }
 
 .overlay {
-  z-index: 900;
+  z-index: 9;
   position: fixed;
   top: 0;
   left: 0;
@@ -35,7 +35,7 @@
 }
 
 .mobileMenuWrapper {
-  z-index: 1000;
+  z-index: 10;
   position: fixed;
   top: 0;
   left: 0;
@@ -56,6 +56,10 @@
 }
 
 .closeMenuButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 16px;
   border: none;
   background: none;
   color: #fff;
