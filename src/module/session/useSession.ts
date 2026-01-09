@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { sessionApi } from "./session.api";
 import { LoginSchemaDto, RegisterSchemaDto } from "../auth/auth.schema";
-import { queryKeys } from "@/shared/api/keys";
-import { ApiError } from "@/shared/api/error.types";
+import { queryKeys } from "@/config-api/keys";
+import { ApiError } from "@/config-api/error.types";
 import { LoginResponse, RegisterResponse } from "./session.types";
 
 export function useLogin() {

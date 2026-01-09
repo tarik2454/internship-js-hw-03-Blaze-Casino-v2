@@ -1,4 +1,4 @@
-import { api } from "@/shared/api/axios";
+import { api } from "@/config-api/axios";
 import { LoginResponse, RegisterResponse } from "./session.types";
 import { LoginSchemaDto, RegisterSchemaDto } from "../auth/auth.schema";
 import { SESSION_ROUTES } from "./session.constants";
