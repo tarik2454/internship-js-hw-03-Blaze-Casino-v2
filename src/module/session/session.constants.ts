@@ -1,7 +1,7 @@
 export const SESSION_ROUTES = {
-  LOGIN: "/auth/login",
-  REGISTER: "/auth/register",
-  LOGOUT: "/auth/logout",
+  LOGIN: "/api/auth/login",
+  REGISTER: "/api/auth/register",
+  LOGOUT: "/api/auth/logout",
 } as const;
 
 export const SESSION_MODE = {
