@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { SESSION_ROUTES } from "@/module/session/session.constants";
+import { ROUTES } from "@/shared/constants/routes";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
@@ -14,7 +14,7 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
-      router.push(SESSION_ROUTES.LOGIN);
+      router.push(ROUTES.LOGIN);
     }
   }, [router]);
 

@@ -3,10 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./AuthContent.module.scss";
 import { SessionMode } from "@/module/session/session.constants";
-import {
-  SESSION_ROUTES,
-  SESSION_MODE,
-} from "@/module/session/session.constants";
+import { SESSION_MODE } from "@/module/session/session.constants";
+import { ROUTES } from "@/shared/constants/routes";
 
 export function AuthContent({
   mode,
@@ -34,11 +32,11 @@ export function AuthContent({
 
         <p className={styles.footer}>
           {mode === SESSION_MODE.LOGIN ? (
-            <Link href={SESSION_ROUTES.REGISTER} className={styles.footerLink}>
+            <Link href={ROUTES.REGISTER} className={styles.footerLink}>
               Don&apos;t have an account? Register
             </Link>
           ) : (
-            <Link href={SESSION_ROUTES.LOGIN} className={styles.footerLink}>
+            <Link href={ROUTES.LOGIN} className={styles.footerLink}>
               Already have an account? Login
             </Link>
           )}

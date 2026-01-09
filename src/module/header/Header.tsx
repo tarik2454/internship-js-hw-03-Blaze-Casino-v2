@@ -1,4 +1,3 @@
-// Header.tsx
 "use client";
 
 import { Container } from "@/shared/components/Container";
@@ -12,8 +11,8 @@ import { SettingProfileIcon } from "@/shared/icons/setting-profile";
 import { LogoutIcon } from "@/shared/icons/logout";
 import { useLogout } from "../session/useSession";
 import { usePopup } from "@/app/providers/PopupProvider";
-import { SESSION_ROUTES } from "../session/session.constants";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/shared/constants/routes";
 
 export function Header() {
   const [menuVisibility, setMenuVisibility] = useState<"hidden" | "visible">(
@@ -34,7 +33,7 @@ export function Header() {
     logoutMutation(undefined, {
       onSuccess: () => {
         showPopup({ message: "Logout successful", type: "success" });
-        router.push(SESSION_ROUTES.LOGIN);
+        router.push(ROUTES.LOGIN);
       },
       onError: (error) => {
         showPopup({ message: error.message || "Logout failed", type: "error" });

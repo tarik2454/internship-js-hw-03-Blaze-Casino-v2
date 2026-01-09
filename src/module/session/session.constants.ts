@@ -7,7 +7,6 @@ export const SESSION_ROUTES = {
 export const SESSION_MODE = {
   LOGIN: "login",
   REGISTER: "register",
-  LOGOUT: "logout",
 } as const;
 
 export type SessionMode = (typeof SESSION_MODE)[keyof typeof SESSION_MODE];

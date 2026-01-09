@@ -7,6 +7,7 @@ import { LoginSchemaDto } from "@/module/auth/auth.schema";
 import { useRouter } from "next/navigation";
 import { SESSION_MODE } from "@/module/session/session.constants";
 import { usePopup } from "@/app/providers/PopupProvider";
+import { ROUTES } from "@/shared/constants/routes";
 
 export default function LoginPage() {
   const { mutate: handleLogin } = useLogin();
@@ -20,7 +21,7 @@ export default function LoginPage() {
           message: "Login successful",
           type: "success",
         });
-        router.push("/");
+        router.push(ROUTES.HOME);
       },
       onError: (error) => {
         console.log(error);

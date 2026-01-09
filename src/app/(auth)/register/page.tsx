@@ -6,10 +6,8 @@ import { useRegister } from "@/module/session/useSession";
 import { RegisterSchemaDto } from "@/module/auth/auth.schema";
 import { useRouter } from "next/navigation";
 import { usePopup } from "@/app/providers/PopupProvider";
-import {
-  SESSION_MODE,
-  SESSION_ROUTES,
-} from "@/module/session/session.constants";
+import { SESSION_MODE } from "@/module/session/session.constants";
+import { ROUTES } from "@/shared/constants/routes";
 
 export default function RegisterPage() {
   const { mutate: handleRegister } = useRegister();
@@ -23,7 +21,7 @@ export default function RegisterPage() {
           message: "Registration successful. Please login.",
           type: "success",
         });
-        router.push(SESSION_ROUTES.LOGIN);
+        router.push(ROUTES.LOGIN);
       },
       onError: (error) => {
         showPopup({
