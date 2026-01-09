@@ -8,10 +8,9 @@ export default function PortalLayout({
 }) {
   return (
     <ProtectedLayout>
-      <main>
-        <Header />
-        {children}
-      </main>
+      <Header />
+
+      <main>{children}</main>
     </ProtectedLayout>
   );
 }
