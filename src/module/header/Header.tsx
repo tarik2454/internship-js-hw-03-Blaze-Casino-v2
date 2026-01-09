@@ -1,3 +1,4 @@
+// Header.tsx
 "use client";
 
 import { Container } from "@/shared/components/Container";
@@ -15,6 +16,8 @@ export function Header() {
   const toggleMenu = () => {
     setMenuVisibility((prev) => (prev === "hidden" ? "visible" : "hidden"));
   };
+
+  const closeMenu = () => setMenuVisibility("hidden");
 
   return (
     <header className={styles.header}>
@@ -37,8 +40,9 @@ export function Header() {
       </Container>
 
       <ToggleMenu
-        visibility={menuVisibility}
-        setVisibility={setMenuVisibility}
+        menuVisibility={menuVisibility}
+        toggleMenu={toggleMenu}
+        closeMenu={closeMenu}
       />
     </header>
   );

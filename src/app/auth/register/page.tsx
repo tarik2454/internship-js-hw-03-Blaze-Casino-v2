@@ -2,7 +2,7 @@
 
 import { AuthForm } from "@/module/auth/components/AuthForm";
 import { AuthContent } from "@/module/auth/components/AuthContent";
-import { useRegister } from "@/module/auth/hooks/useRegister";
+import { useRegister } from "@/module/auth/hooks/useAuth";
 import { RegisterSchemaDto } from "@/module/auth/auth.schema";
 import { useRouter } from "next/navigation";
 import { AUTH_ROUTES } from "@/module/auth/auth.routes";
