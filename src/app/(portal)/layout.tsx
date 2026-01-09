@@ -1,4 +1,5 @@
 import { Header } from "@/module/header/Header";
+import ProtectedLayout from "../providers/ProtectedLayout";
 
 export default function PortalLayout({
   children,
@@ -6,9 +7,11 @@ export default function PortalLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main>
-      <Header />
-      {children}
-    </main>
+    <ProtectedLayout>
+      <main>
+        <Header />
+        {children}
+      </main>
+    </ProtectedLayout>
   );
 }
