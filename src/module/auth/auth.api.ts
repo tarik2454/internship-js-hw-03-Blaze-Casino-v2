@@ -1,7 +1,7 @@
 import { api } from "@/shared/api/axios";
 import { LoginResponse, RegisterResponse } from "./auth.types";
 import { LoginSchemaDto, RegisterSchemaDto } from "./auth.schema";
-import { AUTH_ROUTES } from "./auth.routes";
+import { AUTH_ROUTES } from "./auth.constants";
 
 export const authApi = {
   login: async (dto: LoginSchemaDto): Promise<LoginResponse> => {

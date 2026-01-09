@@ -5,9 +5,8 @@ import { AuthContent } from "@/module/auth/components/AuthContent";
 import { useRegister } from "@/module/auth/hooks/useAuth";
 import { RegisterSchemaDto } from "@/module/auth/auth.schema";
 import { useRouter } from "next/navigation";
-import { AUTH_ROUTES } from "@/module/auth/auth.routes";
-import { AUTH_MODE } from "@/module/auth/auth.constants";
 import { usePopup } from "@/app/providers/PopupProvider";
+import { AUTH_MODE, AUTH_ROUTES } from "@/module/auth/auth.constants";
 
 export default function RegisterPage() {
   const { mutate: handleRegister } = useRegister();

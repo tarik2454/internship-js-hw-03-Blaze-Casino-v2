@@ -1,4 +1,17 @@
-/* ToggleMenu.module.scss */
+@use "@/styles/index" as *;
+
+.mobileMenu {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  @include minWidth(xl) {
+    display: none;
+  }
+}
 
 .overlay {
   z-index: 900;
@@ -7,28 +20,28 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0); // прозрачный изначально
+  background: transparent;
   opacity: 0;
   pointer-events: none;
   transition:
     background 0.3s ease,
     opacity 0.3s ease;
 
-  &.visible {
+  &.isVisible {
     background: rgba(0, 0, 0, 0.5);
     opacity: 1;
     pointer-events: auto;
   }
 }
 
-.toggleMenu {
+.mobileMenuWrapper {
   z-index: 1000;
   position: fixed;
   top: 0;
-  right: 0;
+  left: 0;
   width: 300px;
   height: 100%;
-  transform: translateX(100%);
+  transform: translateX(-100%);
   background: #111;
   color: #fff;
   opacity: 0;
@@ -36,23 +49,13 @@
     transform 0.3s ease,
     opacity 0.3s ease;
 
-  &.open {
+  &.isOpen {
     transform: translateX(0);
     opacity: 1;
   }
 }
 
-.toggleMenuContent {
-  padding: 20px;
-}
-
-.toggleMenuHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.toggleMenuButton {
+.closeMenuButton {
   border: none;
   background: none;
   color: #fff;

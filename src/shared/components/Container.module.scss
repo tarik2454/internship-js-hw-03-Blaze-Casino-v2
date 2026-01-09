@@ -9,7 +9,7 @@
 
 @include minWidth(xl) {
   .container {
-    max-width: 1440px;
+    min-width: 1440px;
     padding: 0 48px;
   }
 }

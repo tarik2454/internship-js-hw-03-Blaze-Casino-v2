@@ -1,22 +1,20 @@
-// ToggleMenu.tsx
 "use client";
 
 import { useEffect } from "react";
-import styles from "./ToggleMenu.module.scss";
+import styles from "./MobileMenu.module.scss";
 import { cx } from "@/shared/utils/classNames";
 
-interface ToggleMenuProps {
+interface MobileMenuProps {
   menuVisibility: "hidden" | "visible";
   toggleMenu: () => void;
   closeMenu: () => void;
 }
 
-export function ToggleMenu({
+export function MobileMenu({
   menuVisibility,
   toggleMenu,
   closeMenu,
-}: ToggleMenuProps) {
-  // Блокируем скролл при открытом меню
+}: MobileMenuProps) {
   useEffect(() => {
     document.documentElement.style.overflow =
       menuVisibility === "visible" ? "hidden" : "auto";
@@ -27,36 +25,33 @@ export function ToggleMenu({
   }, [menuVisibility]);
 
   return (
-    <>
-      {/* Overlay */}
+    <div className={styles.mobileMenu}>
       <div
         className={cx(styles.overlay, {
-          [styles.visible]: menuVisibility === "visible",
+          [styles.isVisible]: menuVisibility === "visible",
         })}
         onClick={closeMenu}
       />
 
-      {/* Side menu */}
       <div
-        className={cx(styles.toggleMenu, {
-          [styles.open]: menuVisibility === "visible",
+        className={cx(styles.mobileMenuWrapper, {
+          [styles.isOpen]: menuVisibility === "visible",
         })}
       >
         <button
-          className={styles.toggleMenuButton}
+          className={styles.closeMenuButton}
           onClick={toggleMenu}
           aria-label="Close menu"
         >
           ×
         </button>
 
-        <div className={styles.toggleMenuContent}>
-          <div className={styles.toggleMenuHeader}>
-            <h2 className={styles.toggleMenuTitle}>Menu</h2>
+        <div className={styles.mobileMenuContent}>
+          <div className={styles.mobileMenuHeader}>
+            <h2 className={styles.mobileMenuTitle}>Menu</h2>
           </div>
-          {/* Здесь можно добавить пункты меню */}
         </div>
       </div>
-    </>
+    </div>
   );
 }

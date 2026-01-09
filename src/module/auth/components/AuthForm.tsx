@@ -2,7 +2,7 @@
 
 import { Input } from "@/shared/components/Input";
 import styles from "./AuthForm.module.scss";
-import Button from "@/shared/components/Button";
+import { Button } from "@/shared/components/Button";
 import {
   useForm,
   SubmitHandler,

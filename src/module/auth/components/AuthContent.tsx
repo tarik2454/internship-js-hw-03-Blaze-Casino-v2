@@ -3,8 +3,7 @@ import { Container } from "@/shared/components/Container";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./AuthContent.module.scss";
-import { AUTH_ROUTES } from "../auth.routes";
-import { AUTH_MODE, AuthMode } from "../auth.constants";
+import { AUTH_MODE, AUTH_ROUTES, AuthMode } from "@/module/auth/auth.constants";
 
 export function AuthContent({
   mode,

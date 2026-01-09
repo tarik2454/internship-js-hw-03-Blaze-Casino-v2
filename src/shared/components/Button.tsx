@@ -17,7 +17,7 @@ const variantClassesMap = {
   yellowGradient: styles.yellowGradient,
 };
 
-export default function Button({
+export function Button({
   ariaLabel = "",
   children,
   className = "",

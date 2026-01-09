@@ -1,15 +1,7 @@
 @use "@/styles/index" as *;
 
 .button {
-  @include flexCenter;
-  width: 100%;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-
-  &:disabled {
-    cursor: not-allowed;
-  }
+  color: var(--color-text-primary);
 }
 
 .redGradient {
