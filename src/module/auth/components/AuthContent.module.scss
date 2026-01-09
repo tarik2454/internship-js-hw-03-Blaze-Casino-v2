@@ -4,6 +4,11 @@
   max-width: 393px;
   margin: 0 auto;
   padding: 0 16px;
+
+  @include minWidth(xl) {
+    max-width: 494px;
+    padding: 0 16px;
+  }
 }
 
 .content {
