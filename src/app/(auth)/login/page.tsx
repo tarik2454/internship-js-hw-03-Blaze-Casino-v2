@@ -1,11 +1,11 @@
 "use client";
 
-import { AuthContent } from "@/module/auth/components/AuthContent";
+import { AuthContent } from "@/module/auth/AuthContent";
 import { AuthForm } from "@/module/auth/components/AuthForm";
-import { useLogin } from "@/module/session/useSession";
+import { useLogin } from "@/config-api/session/useSession";
 import { LoginSchemaDto } from "@/module/auth/auth.schema";
 import { useRouter } from "next/navigation";
-import { SESSION_MODE } from "@/module/session/session.constants";
+import { SESSION_MODE } from "@/config-api/session/session.constants";
 import { usePopup } from "@/app/providers/PopupProvider";
 import { ROUTES } from "@/shared/constants/routes";
 

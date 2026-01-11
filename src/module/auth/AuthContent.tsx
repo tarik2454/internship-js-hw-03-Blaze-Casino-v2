@@ -2,8 +2,10 @@ import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./AuthContent.module.scss";
-import { SessionMode } from "@/module/session/session.constants";
-import { SESSION_MODE } from "@/module/session/session.constants";
+import {
+  SESSION_MODE,
+  SessionMode,
+} from "@/config-api/session/session.constants";
 import { ROUTES } from "@/shared/constants/routes";
 
 export function AuthContent({

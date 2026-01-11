@@ -9,7 +9,7 @@ import { MobileMenu } from "./mobile-menu/MobileMenu";
 import { Button } from "@/shared/components/Button";
 import { SettingProfileIcon } from "@/shared/icons/setting-profile";
 import { LogoutIcon } from "@/shared/icons/logout";
-import { useLogout } from "../session/useSession";
+import { useLogout } from "@/config-api/session/useSession";
 import { usePopup } from "@/app/providers/PopupProvider";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/shared/constants/routes";
@@ -19,7 +19,7 @@ export function Header() {
     "hidden",
   );
 
-  const toggleMenu = () => {
+  const handleToggleMenu = () => {
     setMenuVisibility((prev) => (prev === "hidden" ? "visible" : "hidden"));
   };
 
@@ -36,10 +36,14 @@ export function Header() {
         router.push(ROUTES.LOGIN);
       },
       onError: (error) => {
-        showPopup({ message: error.message || "Logout failed", type: "error" });
+        showPopup({
+          message: error.message || "Logout failed",
+          type: "error",
+        });
       },
     });
   };
+
   return (
     <>
       <header className={styles.header}>
@@ -56,7 +60,10 @@ export function Header() {
               <span>Casino</span>
             </div>
 
-            <Button className={styles.toggleMenuButton} onClick={toggleMenu}>
+            <Button
+              className={styles.toggleMenuButton}
+              onClick={handleToggleMenu}
+            >
               <NavToggleIcon />
             </Button>
 
@@ -98,7 +105,7 @@ export function Header() {
 
       <MobileMenu
         menuVisibility={menuVisibility}
-        toggleMenu={toggleMenu}
+        toggleMenu={handleToggleMenu}
         closeMenu={closeMenu}
       />
     </>
