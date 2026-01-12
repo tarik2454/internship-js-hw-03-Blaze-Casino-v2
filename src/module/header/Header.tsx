@@ -18,16 +18,15 @@ export function Header() {
   const [menuVisibility, setMenuVisibility] = useState<"hidden" | "visible">(
     "hidden",
   );
+  const { mutate: logoutMutation } = useLogout();
+  const { showPopup } = usePopup();
+  const router = useRouter();
 
   const handleToggleMenu = () => {
     setMenuVisibility((prev) => (prev === "hidden" ? "visible" : "hidden"));
   };
 
   const closeMenu = () => setMenuVisibility("hidden");
-
-  const { mutate: logoutMutation } = useLogout();
-  const { showPopup } = usePopup();
-  const router = useRouter();
 
   const handleLogout = () => {
     logoutMutation(undefined, {
@@ -71,7 +70,7 @@ export function Header() {
               <div className={styles.userInfoContent}>
                 <div className={styles.balance}>
                   <Image
-                    src="/images/header/dollar.svg"
+                    src="/images/common/dollar.svg"
                     alt="Dollar"
                     width={24}
                     height={24}

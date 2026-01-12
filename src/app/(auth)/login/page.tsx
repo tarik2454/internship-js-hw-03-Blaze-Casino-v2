@@ -1,6 +1,6 @@
 "use client";
 
-import { AuthContent } from "@/module/auth/AuthContent";
+import { Auth } from "@/module/auth/Auth";
 import { AuthForm } from "@/module/auth/components/AuthForm";
 import { useLogin } from "@/config-api/session/useSession";
 import { LoginSchemaDto } from "@/module/auth/auth.schema";
@@ -34,8 +34,8 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthContent mode={SESSION_MODE.LOGIN}>
+    <Auth mode={SESSION_MODE.LOGIN}>
       <AuthForm mode={SESSION_MODE.LOGIN} onSubmit={handleSubmit} />
-    </AuthContent>
+    </Auth>
   );
 }

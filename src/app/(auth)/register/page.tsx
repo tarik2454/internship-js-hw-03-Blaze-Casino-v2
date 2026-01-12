@@ -1,7 +1,7 @@
 "use client";
 
 import { AuthForm } from "@/module/auth/components/AuthForm";
-import { AuthContent } from "@/module/auth/AuthContent";
+import { Auth } from "@/module/auth/Auth";
 import { useRegister } from "@/config-api/session/useSession";
 import { RegisterSchemaDto } from "@/module/auth/auth.schema";
 import { useRouter } from "next/navigation";
@@ -33,8 +33,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <AuthContent mode={SESSION_MODE.REGISTER}>
+    <Auth mode={SESSION_MODE.REGISTER}>
       <AuthForm mode={SESSION_MODE.REGISTER} onSubmit={handleSubmit} />
-    </AuthContent>
+    </Auth>
   );
 }
