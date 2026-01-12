@@ -1,12 +1,13 @@
 "use client";
 
-import { AuthContent } from "@/module/auth/components/AuthContent";
+import { AuthContent } from "@/module/auth/AuthContent";
 import { AuthForm } from "@/module/auth/components/AuthForm";
-import { useLogin } from "@/module/auth/hooks/useLogin";
+import { useLogin } from "@/config-api/session/useSession";
 import { LoginSchemaDto } from "@/module/auth/auth.schema";
 import { useRouter } from "next/navigation";
-import { AUTH_MODE } from "@/module/auth/auth.constants";
+import { SESSION_MODE } from "@/config-api/session/session.constants";
 import { usePopup } from "@/app/providers/PopupProvider";
+import { ROUTES } from "@/shared/constants/routes";
 
 export default function LoginPage() {
   const { mutate: handleLogin } = useLogin();
@@ -20,7 +21,7 @@ export default function LoginPage() {
           message: "Login successful",
           type: "success",
         });
-        router.push("/");
+        router.push(ROUTES.HOME);
       },
       onError: (error) => {
         console.log(error);
@@ -33,8 +34,8 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthContent mode={AUTH_MODE.LOGIN}>
-      <AuthForm mode={AUTH_MODE.LOGIN} onSubmit={handleSubmit} />
+    <AuthContent mode={SESSION_MODE.LOGIN}>
+      <AuthForm mode={SESSION_MODE.LOGIN} onSubmit={handleSubmit} />
     </AuthContent>
   );
 }
