@@ -3,17 +3,24 @@
 import { useEffect } from "react";
 import styles from "./MobileMenu.module.scss";
 import { cx } from "@/shared/utils/classNames";
+import { Logo } from "@/shared/components/Logo";
+import { LogoutIcon } from "@/shared/icons/logout";
+import { Button } from "@/shared/components/Button";
+import { InvertoryIcon } from "@/shared/icons/invertory";
+import { SettingsIcon } from "@/shared/icons/settings";
 
 interface MobileMenuProps {
   menuVisibility: "hidden" | "visible";
   toggleMenu: () => void;
   closeMenu: () => void;
+  handleLogout: () => void;
 }
 
 export function MobileMenu({
   menuVisibility,
   toggleMenu,
   closeMenu,
+  handleLogout,
 }: MobileMenuProps) {
   useEffect(() => {
     document.documentElement.style.overflow =
@@ -46,11 +53,28 @@ export function MobileMenu({
           ×
         </button>
 
-        <div className={styles.mobileMenuContent}>
+        <div>
           <div className={styles.mobileMenuHeader}>
-            <h2 className={styles.mobileMenuTitle}></h2>
+            <Logo className={styles.mobileMenuLogo} />
+          </div>
+
+          <div className={styles.mobileMenuButtons}>
+            <Button className={styles.mobileMenuButton}>
+              <InvertoryIcon /> Invertory
+            </Button>
+            <Button className={styles.mobileMenuButton}>
+              <SettingsIcon /> Settings
+            </Button>
           </div>
         </div>
+
+        <Button
+          className={styles.logoutButton}
+          stylesVariant="yellowGradient"
+          onClick={handleLogout}
+        >
+          Logout <LogoutIcon />
+        </Button>
       </div>
     </>
   );
