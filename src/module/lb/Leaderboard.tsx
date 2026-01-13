@@ -4,6 +4,7 @@ import { Section } from "@/shared/components/Section";
 import styles from "./Leaderboard.module.scss";
 import Image from "next/image";
 import { useLeaderboard } from "@/config-api/leaderboard/useLeaderboard";
+import { getRankContent } from "./leaderboard.utils";
 
 export function Leaderboard() {
   const { data, isError, error } = useLeaderboard();
@@ -26,38 +27,7 @@ export function Leaderboard() {
       <ul className={styles.leaderboardList}>
         {data?.players.map((player) => {
           const isCurrentUser = player.username === data.currentUser?.username;
-          let rankContent;
-
-          if (player.rank === 1) {
-            rankContent = (
-              <Image
-                src="/images/leaderboard/first-place.svg"
-                alt="First Place"
-                width={32}
-                height={32}
-              />
-            );
-          } else if (player.rank === 2) {
-            rankContent = (
-              <Image
-                src="/images/leaderboard/second-place.svg"
-                alt="Second Place"
-                width={32}
-                height={32}
-              />
-            );
-          } else if (player.rank === 3) {
-            rankContent = (
-              <Image
-                src="/images/leaderboard/third-place.svg"
-                alt="Third Place"
-                width={32}
-                height={32}
-              />
-            );
-          } else {
-            rankContent = player.rank;
-          }
+          const rank = getRankContent(player.rank);
 
           return (
             <li
@@ -65,7 +35,7 @@ export function Leaderboard() {
               className={`${styles.leaderboardItem} ${isCurrentUser ? styles.currentUserItem : ""}`}
             >
               <div className={styles.itemFirstPartContent}>
-                <div className={styles.itemFirstBlock}>{rankContent}</div>
+                <div className={styles.itemFirstBlock}>{rank}</div>
                 <div className={styles.itemSecondBlock}>
                   <span className={styles.itemName}>{player.username}</span>
                   <span className={styles.itemGamesPlayed}>
