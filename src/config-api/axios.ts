@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ApiException } from "./error.types";
+import { getCookie } from "@/shared/utils/cookies";
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -9,7 +10,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accessToken");
+  const token = getCookie("accessToken");
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -26,10 +27,6 @@ api.interceptors.response.use(
         error.response?.data?.error ||
         error.message ||
         "An unexpected error occurred";
-
-      if (status === 401) {
-        localStorage.removeItem("accessToken");
-      }
 
       throw new ApiException(message, status, error.response?.data);
     }

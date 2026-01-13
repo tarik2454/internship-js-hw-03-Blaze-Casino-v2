@@ -42,10 +42,6 @@ export function Auth({
               Already have an account? Login
             </Link>
           )}
-
-          <span className={styles.footerText}>
-            Your account data is stored locally in your browser
-          </span>
         </p>
       </div>
     </div>

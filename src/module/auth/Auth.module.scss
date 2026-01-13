@@ -9,11 +9,11 @@
 
   @include minWidth(xl) {
     max-width: 494px;
-    padding: 0 16px;
   }
 }
 
 .content {
+  width: 100%;
   padding: 32px;
   padding: 40px;
   border-radius: var(--radius-16);
