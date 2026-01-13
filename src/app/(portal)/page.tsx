@@ -1,4 +1,4 @@
-import { ListGames } from "@/module/list-games/ListGames";
+import { GamesList } from "@/module/list-games/GamesList";
 import { Container } from "@/shared/components/Container";
 import { Chat } from "@/module/chat/Chat";
 import { Leaderboard } from "@/module/lb";
@@ -24,7 +24,7 @@ export default async function Home() {
     <PageWrapper>
       <Container>
         <div className={styles.page}>
-          <ListGames />
+          <GamesList />
           <HydrationBoundary state={dehydrate(queryClient)}>
             <Leaderboard />
           </HydrationBoundary>
