@@ -11,16 +11,16 @@ interface ProtectedLayoutProps {
 
 export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
   const router = useRouter();
-  const { isError, isLoading } = useCurrentUser();
+  const { data, isError, isLoading } = useCurrentUser();
 
   useEffect(() => {
-    if (!isLoading && isError) {
+    if (!isLoading && (isError || !data)) {
       router.push(ROUTES.LOGIN);
     }
-  }, [isLoading, isError, router]);
+  }, [isLoading, isError, data, router]);
 
-  if (isLoading) {
-    return null; // Or a loading spinner
+  if (isLoading || isError || !data) {
+    return null;
   }
 
   return <>{children}</>;
