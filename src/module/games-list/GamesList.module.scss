@@ -1,5 +1,9 @@
 @use "@/styles/index" as *;
 
+.gamesListSection {
+  padding-top: 35px;
+}
+
 .gamesList {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
