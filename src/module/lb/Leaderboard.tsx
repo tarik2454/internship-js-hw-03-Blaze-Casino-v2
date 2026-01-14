@@ -5,6 +5,7 @@ import styles from "./Leaderboard.module.scss";
 import Image from "next/image";
 import { useLeaderboard } from "@/config-api/leaderboard/useLeaderboard";
 import { getRankContent } from "./leaderboard.utils";
+import { LeaderboardItem } from "./components/LeaderboardItem";
 
 export function Leaderboard() {
   const { data, isError, error } = useLeaderboard();
@@ -30,34 +31,12 @@ export function Leaderboard() {
           const rank = getRankContent(player.rank);
 
           return (
-            <li
+            <LeaderboardItem
               key={player.username}
-              className={`${styles.leaderboardItem} ${isCurrentUser ? styles.currentUserItem : ""}`}
-            >
-              <div className={styles.itemFirstPartContent}>
-                <div className={styles.itemFirstBlock}>{rank}</div>
-                <div className={styles.itemSecondBlock}>
-                  <span className={styles.itemName}>{player.username}</span>
-                  <span className={styles.itemGamesPlayed}>
-                    {player.gamesPlayed} games
-                  </span>
-                </div>
-              </div>
-              <div className={styles.itemThirdBlock}>
-                <span className={styles.itemTotalWagered}>
-                  <Image
-                    src="/images/common/dollar.svg"
-                    alt="Dollar"
-                    width={16}
-                    height={16}
-                  />
-                  {player.totalWagered}
-                </span>
-                <span className={styles.itemWinRate}>
-                  {player.winRate}% win
-                </span>
-              </div>
-            </li>
+              player={player}
+              isCurrentUser={isCurrentUser}
+              rank={rank}
+            />
           );
         })}
       </ul>

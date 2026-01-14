@@ -22,9 +22,12 @@ export function GamesList() {
                   <p className={styles.itemDescription}>{description}</p>
                 </div>
 
-                <Link href={href}>
-                  <Button className={styles.itemButton}>
-                    <span>Play</span>
+                <Link href={href} className={styles.itemLink}>
+                  <Button
+                    stylesVariant="redGradient"
+                    className={styles.itemButton}
+                  >
+                    Free play
                   </Button>
                 </Link>
               </div>
