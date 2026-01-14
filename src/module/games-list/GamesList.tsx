@@ -16,8 +16,8 @@ export function GamesList() {
             <div className={styles.itemContent}>
               <span className={styles.itemTag}>{tag}</span>
 
-              <div>
-                <div>
+              <div className={styles.itemDetails}>
+                <div className={styles.itemDetailsContent}>
                   <h2 className={styles.itemName}>{name}</h2>
                   <p className={styles.itemDescription}>{description}</p>
                 </div>

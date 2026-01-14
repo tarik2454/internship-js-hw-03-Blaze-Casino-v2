@@ -49,9 +49,29 @@
   line-height: 1.3;
 }
 
+.itemDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemDetailsContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
 .itemName {
   font-weight: 900;
   font-size: 32px;
   line-height: 1.3;
   font-family: var(--font-satoshi-900);
+}
+
+.itemDescription {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
 }

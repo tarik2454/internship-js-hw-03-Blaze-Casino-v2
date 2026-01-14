@@ -1,4 +1,4 @@
-import { GamesList } from "@/module/list-games/GamesList";
+import { GamesList } from "@/module/games-list/GamesList";
 import { Container } from "@/shared/components/Container";
 import { Chat } from "@/module/chat/Chat";
 import { Leaderboard } from "@/module/lb";

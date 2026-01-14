@@ -24,7 +24,6 @@ export default async function PortalLayout({
     <HydrationBoundary state={dehydrate(queryClient)}>
       <ProtectedLayout>
         <Header />
-
         <main>{children}</main>
       </ProtectedLayout>
     </HydrationBoundary>
