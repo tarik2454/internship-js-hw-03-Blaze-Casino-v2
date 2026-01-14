@@ -1,0 +1,16 @@
+@use "@/styles/index" as *;
+
+.listGames {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+
+  @include minWidth(xl) {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+}
+
+.listGamesItem {
+  box-shadow: 0px 0px 100px 1px #ffffff4d;
+}

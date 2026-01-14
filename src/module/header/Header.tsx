@@ -13,21 +13,25 @@ import { useLogout } from "@/config-api/session/useSession";
 import { usePopup } from "@/app/providers/PopupProvider";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/shared/constants/routes";
+import { useLeaderboard } from "@/config-api/leaderboard/useLeaderboard";
+import { Logo } from "@/shared/components/Logo";
 
 export function Header() {
   const [menuVisibility, setMenuVisibility] = useState<"hidden" | "visible">(
     "hidden",
   );
+  const { showPopup } = usePopup();
+  const router = useRouter();
+  const { mutate: logoutMutation } = useLogout();
+  const { data: leaderboardData } = useLeaderboard();
+
+  const currentUserAvatar = leaderboardData?.currentUser?.avatarURL;
 
   const handleToggleMenu = () => {
     setMenuVisibility((prev) => (prev === "hidden" ? "visible" : "hidden"));
   };
 
   const closeMenu = () => setMenuVisibility("hidden");
-
-  const { mutate: logoutMutation } = useLogout();
-  const { showPopup } = usePopup();
-  const router = useRouter();
 
   const handleLogout = () => {
     logoutMutation(undefined, {
@@ -49,16 +53,7 @@ export function Header() {
       <header className={styles.header}>
         <Container>
           <div className={styles.headerContent}>
-            <div className={styles.headerLogo}>
-              <span>Blaze</span>
-              <Image
-                src="/images/logo/logo-site.svg"
-                alt="Blaze Casino"
-                width={40}
-                height={17}
-              />
-              <span>Casino</span>
-            </div>
+            <Logo className={styles.headerLogo} />
 
             <Button
               className={styles.toggleMenuButton}
@@ -71,19 +66,29 @@ export function Header() {
               <div className={styles.userInfoContent}>
                 <div className={styles.balance}>
                   <Image
-                    src="/images/header/dollar.svg"
+                    src="/images/common/dollar.svg"
                     alt="Dollar"
                     width={24}
                     height={24}
                   />
                   <span>10.000</span>
                 </div>
-                <Image
-                  src="/images/header/user.svg"
-                  alt="User"
-                  width={32}
-                  height={32}
-                />
+                {currentUserAvatar ? (
+                  <Image
+                    src={currentUserAvatar}
+                    alt="User Avatar"
+                    width={40}
+                    height={40}
+                    className={styles.userAvatar}
+                  />
+                ) : (
+                  <Image
+                    src="/images/header/user.svg"
+                    alt="User Avatar"
+                    width={32}
+                    height={32}
+                  />
+                )}
               </div>
 
               <div className={styles.groupButtons}>
@@ -107,6 +112,7 @@ export function Header() {
         menuVisibility={menuVisibility}
         toggleMenu={handleToggleMenu}
         closeMenu={closeMenu}
+        handleLogout={handleLogout}
       />
     </>
   );

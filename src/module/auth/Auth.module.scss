@@ -1,7 +1,9 @@
 @use "@/styles/index" as *;
 
 .container {
+  @include flexCenter;
   max-width: 393px;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 0 16px;
 

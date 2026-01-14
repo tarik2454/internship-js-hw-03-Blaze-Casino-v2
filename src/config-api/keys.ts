@@ -8,6 +8,7 @@ export const queryKeys = {
     register: ["auth", "register"],
     logout: ["auth", "logout"],
   },
+  leaderboard: ["leaderboard"],
 };
 
 export const queryKeyFactories = {
@@ -17,5 +18,8 @@ export const queryKeyFactories = {
   games: {
     detail: (id: string) => [...queryKeys.games, id],
     history: (userId: string) => [...queryKeys.games, "history", userId],
+  },
+  leaderboard: {
+    all: ["leaderboard"],
   },
 };
