@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { ROUTES } from "@/shared/constants/routes";
 import { useLeaderboard } from "@/config-api/leaderboard/useLeaderboard";
 import { Logo } from "@/shared/components/Logo";
+import { useCurrentUser } from "@/config-api/user/useUser";
 
 export function Header() {
   const [menuVisibility, setMenuVisibility] = useState<"hidden" | "visible">(
@@ -24,8 +25,10 @@ export function Header() {
   const router = useRouter();
   const { mutate: logoutMutation } = useLogout();
   const { data: leaderboardData } = useLeaderboard();
+  const { data: userData } = useCurrentUser();
 
-  const currentUserAvatar = leaderboardData?.currentUser?.avatarURL;
+  const currentUserAvatar =
+    userData?.avatarURL || leaderboardData?.currentUser?.avatarURL;
 
   const handleToggleMenu = () => {
     setMenuVisibility((prev) => (prev === "hidden" ? "visible" : "hidden"));
@@ -71,7 +74,11 @@ export function Header() {
                     width={24}
                     height={24}
                   />
-                  <span>10.000</span>
+                  <span>
+                    {userData?.balance !== undefined
+                      ? userData.balance.toLocaleString().replace(/,/g, ".")
+                      : "0"}
+                  </span>
                 </div>
                 {currentUserAvatar ? (
                   <Image

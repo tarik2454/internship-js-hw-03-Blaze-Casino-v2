@@ -1,16 +1,31 @@
 import { Header } from "@/module/header/Header";
 import ProtectedLayout from "../providers/ProtectedLayout";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { getQueryClient } from "../providers/getQueryClient";
+import { userApi } from "@/config-api/user/user.api";
+import { queryKeys } from "@/config-api/keys";
+import { cookies } from "next/headers";
 
-export default function PortalLayout({
+export default async function PortalLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <ProtectedLayout>
-      <Header />
+  const queryClient = getQueryClient();
+  const cookieStore = await cookies();
+  const token = cookieStore.get("accessToken")?.value;
 
-      <main>{children}</main>
-    </ProtectedLayout>
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.user,
+    queryFn: () => userApi.getCurrentUser(token),
+  });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ProtectedLayout>
+        <Header />
+        <main>{children}</main>
+      </ProtectedLayout>
+    </HydrationBoundary>
   );
 }

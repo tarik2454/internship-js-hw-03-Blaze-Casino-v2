@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/shared/constants/routes";
+import { useCurrentUser } from "@/config-api/user/useUser";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
@@ -10,13 +11,17 @@ interface ProtectedLayoutProps {
 
 export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
   const router = useRouter();
+  const { data, isError, isLoading } = useCurrentUser();
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
+    if (!isLoading && (isError || !data)) {
       router.push(ROUTES.LOGIN);
     }
-  }, [router]);
+  }, [isLoading, isError, data, router]);
+
+  if (isLoading || isError || !data) {
+    return null;
+  }
 
   return <>{children}</>;
 }

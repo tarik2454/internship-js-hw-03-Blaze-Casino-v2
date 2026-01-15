@@ -6,4 +6,7 @@ export const ROUTES = {
   PROFILE: "/profile",
   LEADERBOARD: "/leaderboard",
   CRASH: "/crash",
+  CASE: "/case",
+  MINES: "/mines",
+  PLINKO: "/plinko",
 } as const;

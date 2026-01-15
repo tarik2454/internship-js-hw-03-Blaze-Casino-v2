@@ -1,7 +1,9 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactNode, useState, useEffect } from "react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactNode, useEffect } from "react";
+import { getQueryClient } from "./getQueryClient";
+import { QueryClient } from "@tanstack/react-query";
 
 // TypeScript declaration for browser DevTools
 declare global {
@@ -11,25 +13,16 @@ declare global {
 }
 
 export function ReactQueryProvider({ children }: { children: ReactNode }) {
-  const [client] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            retry: 1,
-            refetchOnWindowFocus: false,
-            staleTime: 60 * 1000,
-          },
-        },
-      }),
-  );
+  const queryClient = getQueryClient();
 
   // Expose QueryClient to browser DevTools
   useEffect(() => {
     if (typeof window !== "undefined") {
-      window.__TANSTACK_QUERY_CLIENT__ = client;
+      window.__TANSTACK_QUERY_CLIENT__ = queryClient;
     }
-  }, [client]);
+  }, [queryClient]);
 
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
 }
