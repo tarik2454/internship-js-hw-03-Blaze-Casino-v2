@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { Query, useMutation, useQueryClient } from "@tanstack/react-query";
 import { sessionApi } from "./session.api";
 import { LoginSchemaDto, RegisterSchemaDto } from "@/module/auth/auth.schema";
 import { queryKeys } from "@/config-api/keys";
@@ -20,8 +20,20 @@ export function useRegister() {
 }
 
 export function useLogout() {
+  const queryClient = useQueryClient();
+
   return useMutation<void, ApiError>({
     mutationKey: queryKeys.auth.logout,
     mutationFn: () => sessionApi.logout(),
+
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.user,
+      });
+
+      queryClient.removeQueries({
+        predicate: (query: Query) => !query.queryKey.includes("public"),
+      });
+    },
   });
 }
