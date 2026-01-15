@@ -10,8 +10,10 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
+  if (typeof window === "undefined") return config;
+
   const token = getCookie("accessToken");
-  if (token && config.headers) {
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
