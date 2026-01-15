@@ -1,8 +1,68 @@
+"use client";
+
+import { useRef, FormEvent, useEffect } from "react";
 import Image from "next/image";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import styles from "./Chat.module.scss";
 import { ArrowTop } from "@/shared/icons/arrow-top";
+import { useUsers } from "@/config-api/user/useUser";
+import { useChat } from "./useChat";
+import { ROOMS } from "./chat.constants";
 
-export async function Chat() {
+export function Chat() {
+  const {
+    messages,
+    room,
+    onlineCount,
+    currentUser,
+    sendMessage,
+    handleRoomChange,
+  } = useChat();
+
+  const { data: usersData } = useUsers();
+  const totalUsers = usersData?.length || 0;
+
+  const parentRef = useRef<HTMLDivElement>(null);
+  const messageInputRef = useRef<HTMLInputElement>(null);
+
+  const virtualizer = useVirtualizer({
+    count: messages.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 120,
+    overscan: 5,
+    gap: 32,
+  });
+
+  // Auto-scroll logic in useEffect
+  useEffect(() => {
+    if (messages.length > 0) {
+      virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
+    }
+  }, [messages.length, virtualizer]);
+
+  const handleSendMessage = (e: FormEvent) => {
+    e.preventDefault();
+    if (!messageInputRef.current) return;
+
+    const val = messageInputRef.current.value.trim();
+    if (!val) return;
+
+    sendMessage(val);
+    messageInputRef.current.value = "";
+  };
+
+  const formatTime = (iso: string) => {
+    const date = new Date(iso);
+    if (isNaN(date.getTime())) {
+      return "00:00 AM";
+    }
+    return new Intl.DateTimeFormat("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(date);
+  };
+
   return (
     <section className={styles.chat}>
       <div className={styles.chatTitleWrapper}>
@@ -14,66 +74,88 @@ export async function Chat() {
         />
       </div>
 
+      <div className={styles.roomButtons}>
+        {ROOMS.map((r) => (
+          <button
+            key={r.id}
+            className={room === r.id ? styles.activeRoomButton : ""}
+            onClick={() => handleRoomChange(r.id)}
+          >
+            {r.name}
+          </button>
+        ))}
+      </div>
+
       <ul className={styles.usersList}>
-        <li className={styles.userItem}>250 online</li>
-        <li className={styles.userItem}>250 online</li>
-        <li className={styles.userItem}>250 online</li>
+        <li className={styles.userItem}>{totalUsers} users total</li>
+        <li className={styles.userItem}>{onlineCount} users online</li>
       </ul>
 
-      <ul className={styles.chatList}>
-        <li className={styles.chatItem}>
-          <div className={styles.messageHeader}>
-            <Image
-              src="/images/header/user.svg"
-              alt="User avatar"
-              width={44}
-              height={44}
-              className={styles.messageUserAvatar}
-            />
-            <div className={styles.messageUserName}>John Doe</div>
-            <div className={styles.messageTime}>12:00</div>
-          </div>
-          <p className={styles.messageContent}>Hello</p>
-        </li>
-        <li className={styles.chatItem}>
-          <div className={styles.messageHeader}>
-            <Image
-              src="/images/header/user.svg"
-              alt="User avatar"
-              width={44}
-              height={44}
-              className={styles.messageUserAvatar}
-            />
-            <div className={styles.messageUserName}>John Doe</div>
-            <div className={styles.messageTime}>12:00</div>
-          </div>
-          <p className={styles.messageContent}>Hello</p>
-        </li>
-        <li className={styles.chatItem}>
-          <div className={styles.messageHeader}>
-            <Image
-              src="/images/header/user.svg"
-              alt="User avatar"
-              width={44}
-              height={44}
-              className={styles.messageUserAvatar}
-            />
-            <div className={styles.messageUserName}>John Doe</div>
-            <div className={styles.messageTime}>12:00</div>
-          </div>
-          <p className={styles.messageContent}>Hello</p>
-        </li>
-      </ul>
+      <div ref={parentRef} className={styles.chatListContainer}>
+        <div
+          className={styles.chatList}
+          style={{
+            height: `${virtualizer.getTotalSize()}px`,
+            width: "100%",
+            position: "relative",
+          }}
+        >
+          {virtualizer.getVirtualItems().map((virtualItem) => {
+            const msg = messages[virtualItem.index];
+            if (!msg) return null;
 
-      <form className={styles.chatForm}>
+            return (
+              <li
+                key={virtualItem.index}
+                className={`${styles.chatItem} ${msg.username === currentUser?.username ? styles.myChatItem : ""}`}
+                data-index={virtualItem.index}
+                ref={virtualizer.measureElement}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  transform: `translateY(${virtualItem.start}px)`,
+                }}
+              >
+                <div className={styles.messageHeader}>
+                  <Image
+                    src={
+                      msg.avatarURL ??
+                      (msg.username === currentUser?.username
+                        ? currentUser?.avatarURL
+                        : "/images/header/user.svg") ??
+                      "/images/header/user.svg"
+                    }
+                    alt="User avatar"
+                    width={44}
+                    height={44}
+                    className={styles.messageUserAvatar}
+                  />
+                  <div className={styles.messageUserName}>
+                    {msg.username || currentUser?.username || "Unknown"}
+                  </div>
+                  <div className={styles.messageTime}>
+                    {formatTime(msg.createdAt)}
+                  </div>
+                </div>
+                <p className={styles.messageContent}>{msg.text}</p>
+              </li>
+            );
+          })}
+        </div>
+      </div>
+
+      <form className={styles.chatForm} onSubmit={handleSendMessage}>
         <input
           type="text"
           id="chat-message"
           name="message"
           placeholder="Write a message..."
           className={styles.chatInput}
+          ref={messageInputRef}
         />
-        <button className={styles.chatButton}>
+        <button type="submit" className={styles.chatButton}>
           <ArrowTop />
         </button>
       </form>
