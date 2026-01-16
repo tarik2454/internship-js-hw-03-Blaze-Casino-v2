@@ -1,19 +1,19 @@
 @use "@/styles/index" as *;
 
-// .chatOverlay {
-//   display: none;
-//   z-index: 1;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   height: 100%;
-//   background: #00000080;
+.chatOverlay {
+  display: none;
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #00000080;
 
-//   &.visible {
-//     display: none;
-//   }
-// }
+  &.visible {
+    display: block;
+  }
+}
 
 .chatWrapper {
   display: none;
@@ -51,7 +51,7 @@
 }
 
 .chat {
-  max-width: 362px;
+  max-width: 345px;
 
   @include minWidth(xl) {
     max-width: none;
@@ -125,6 +125,7 @@
 
 .chatForm {
   @include flexBetween;
+  z-index: 10;
   position: fixed;
   bottom: 38px;
   left: 50%;
@@ -149,12 +150,11 @@
   padding: 12px 16px;
   border: none;
   border-radius: var(--radius-1000);
-  background: var(--color-blue-e8);
+  background: #7c7ce854;
   color: var(--color-text-primary);
   font-weight: 500;
   font-size: 14px;
   line-height: 1.4;
-  opacity: var(--opacity-33);
 
   &::placeholder {
     color: var(--color-text-primary);
@@ -165,14 +165,13 @@
   padding: 10px;
   border: none;
   border-radius: var(--radius-100);
-  background: var(--color-blue-e8);
+  background: #7c7ce854;
   cursor: pointer;
-  opacity: var(--opacity-33);
 }
 
 .chatButtonMobileWrapper {
   display: flex;
-  z-index: 9999;
+  z-index: 1;
   position: fixed;
   bottom: 39px;
   left: 50%;

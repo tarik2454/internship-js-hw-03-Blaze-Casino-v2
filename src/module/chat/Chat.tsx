@@ -71,10 +71,6 @@ export function Chat() {
 
   return (
     <>
-      {/* <div
-        className={cx(styles.chatOverlay, { [styles.visible]: isVisible })}
-        onClick={handleOpenChat}
-      ></div> */}
       <div className={cx(styles.chatWrapper, { [styles.visible]: isVisible })}>
         <Section className={styles.chat}>
           <div className={styles.chatTitleWrapper}>
@@ -147,6 +143,11 @@ export function Chat() {
           </form>
         </Section>
       </div>
+
+      <div
+        className={cx(styles.chatOverlay, { [styles.visible]: isVisible })}
+        onClick={handleOpenChat}
+      ></div>
 
       <div className={styles.chatButtonMobileWrapper}>
         <Button
