@@ -104,7 +104,7 @@
 }
 
 .chatListContainer {
-  height: 650px;
+  height: 240px;
   margin-bottom: 16px;
   padding: 8px;
   overflow-y: auto;
@@ -114,12 +114,16 @@
   }
 
   &::-webkit-scrollbar-track {
-    background: transparent;
+    background: red;
   }
 
   &::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background: var(--color-blue-54);
+  }
+
+  @include minWidth(xl) {
+    height: 650px;
   }
 }
 

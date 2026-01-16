@@ -54,6 +54,16 @@ export function Chat() {
     }
   }, [messages.length, virtualizer]);
 
+  // Прокрутка к последнему сообщению при открытии мобильного чата
+  useEffect(() => {
+    if (isVisible && messages.length > 0) {
+      // Небольшая задержка для корректной работы виртуализатора после отображения
+      setTimeout(() => {
+        virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
+      }, 100);
+    }
+  }, [isVisible, messages.length, virtualizer]);
+
   const handleSendMessage = (e: FormEvent) => {
     e.preventDefault();
     if (!messageInputRef.current) return;
