@@ -48,11 +48,21 @@ export function Chat() {
 
   const virtualizer = useChatVirtualizer();
 
+  // Диагностика: логируем изменения сообщений
   useEffect(() => {
-    if (messages.length > 0) {
-      virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
-    }
-  }, [messages.length, virtualizer]);
+    console.log("🔄 Chat messages updated:", {
+      total: messages.length,
+      firstMessage: messages[0],
+      lastMessage: messages[messages.length - 1],
+    });
+  }, [messages]);
+
+  // Временно отключено для диагностики
+  // useEffect(() => {
+  //   if (messages.length > 0) {
+  //     virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
+  //   }
+  // }, [messages.length, virtualizer]);
 
   // Прокрутка к последнему сообщению при открытии мобильного чата
   useEffect(() => {
@@ -120,21 +130,30 @@ export function Chat() {
                 position: "relative",
               }}
             >
-              {virtualizer.getVirtualItems().map((virtualItem) => {
-                const msg = messages[virtualItem.index];
-                if (!msg) return null;
+              {(() => {
+                const virtualItems = virtualizer.getVirtualItems();
+                console.log("🎨 Virtualizer rendering:", {
+                  totalMessages: messages.length,
+                  virtualItemsCount: virtualItems.length,
+                  virtualItemsIndexes: virtualItems.map((v) => v.index),
+                  scrollOffset: parentRef.current?.scrollTop,
+                });
+                return virtualItems.map((virtualItem) => {
+                  const msg = messages[virtualItem.index];
+                  if (!msg) return null;
 
-                return (
-                  <ChatItem
-                    key={msg._id}
-                    msg={msg}
-                    currentUser={currentUser}
-                    virtualItem={virtualItem}
-                    virtualizer={virtualizer}
-                    formatTime={formatTime}
-                  />
-                );
-              })}
+                  return (
+                    <ChatItem
+                      key={msg._id}
+                      msg={msg}
+                      currentUser={currentUser}
+                      virtualItem={virtualItem}
+                      virtualizer={virtualizer}
+                      formatTime={formatTime}
+                    />
+                  );
+                });
+              })()}
             </div>
           </div>
 
