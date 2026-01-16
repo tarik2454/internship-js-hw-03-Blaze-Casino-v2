@@ -8,6 +8,7 @@ import { ArrowTop } from "@/shared/icons/arrow-top";
 import { useUsers } from "@/config-api/user/useUser";
 import { useChat } from "./useChat";
 import { ROOMS } from "./chat.constants";
+import { cx } from "@/shared/utils/classNames";
 
 export function Chat() {
   const {
@@ -30,7 +31,7 @@ export function Chat() {
     getScrollElement: () => parentRef.current,
     estimateSize: () => 120,
     overscan: 5,
-    gap: 32,
+    gap: 16,
   });
 
   // Auto-scroll logic in useEffect
@@ -78,7 +79,9 @@ export function Chat() {
         {ROOMS.map((r) => (
           <button
             key={r.id}
-            className={room === r.id ? styles.activeRoomButton : ""}
+            className={cx(styles.roomButton, {
+              [styles.activeRoomButton]: room === r.id,
+            })}
             onClick={() => handleRoomChange(r.id)}
           >
             {r.name}
@@ -87,8 +90,8 @@ export function Chat() {
       </div>
 
       <ul className={styles.usersList}>
-        <li className={styles.userItem}>{totalUsers} users total</li>
-        <li className={styles.userItem}>{onlineCount} users online</li>
+        <li className={styles.userItem}>{onlineCount} online</li>
+        <li className={styles.userItem}>{totalUsers} friends</li>
       </ul>
 
       <div ref={parentRef} className={styles.chatListContainer}>
@@ -107,7 +110,9 @@ export function Chat() {
             return (
               <li
                 key={virtualItem.index}
-                className={`${styles.chatItem} ${msg.username === currentUser?.username ? styles.myChatItem : ""}`}
+                className={cx(styles.chatItem, {
+                  [styles.myChatItem]: msg.username === currentUser?.username,
+                })}
                 data-index={virtualItem.index}
                 ref={virtualizer.measureElement}
                 style={{

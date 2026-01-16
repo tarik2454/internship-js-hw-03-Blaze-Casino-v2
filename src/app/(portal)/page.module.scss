@@ -7,7 +7,7 @@
   gap: 40px;
 
   @include minWidth(xl) {
-    grid-template-columns: 292px 2fr 292px;
+    grid-template-columns: 292px 2fr 266px;
     gap: 93px;
 
     > :nth-child(1) {
