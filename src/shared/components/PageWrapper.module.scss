@@ -1,5 +1,7 @@
 @use "@/styles/index" as *;
 
 .pageWrapper {
+  position: relative;
   padding-top: 146px;
+  padding-bottom: 54px;
 }

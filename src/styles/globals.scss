@@ -12,6 +12,10 @@ body {
   overflow-x: hidden;
 }
 
+main {
+  width: 100%;
+}
+
 body {
   background: linear-gradient(180deg, #0f0c29 0%, #312c5f 50%, #24243e 100%);
   color: var(--color-text-primary);
@@ -21,10 +25,6 @@ body {
   font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-main {
-  width: 100%;
 }
 
 a {

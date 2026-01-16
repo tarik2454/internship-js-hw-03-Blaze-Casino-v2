@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { GamesList } from "@/module/games-list/GamesList";
 import { Container } from "@/shared/components/Container";
 import { Chat } from "@/module/chat/Chat";
@@ -9,8 +10,6 @@ import { getQueryClient } from "../providers/getQueryClient";
 import { leaderboardApi } from "@/config-api/leaderboard/leaderboard.api";
 import { queryKeyFactories } from "@/config-api/keys";
 import { cookies } from "next/headers";
-import { Button } from "@/shared/components/Button";
-import { MessageIcon } from "@/shared/icons/message";
 
 export default async function Home() {
   const queryClient = getQueryClient();
@@ -23,25 +22,18 @@ export default async function Home() {
   });
 
   return (
-    <>
-      <PageWrapper>
-        <Container>
-          <div className={styles.page}>
-            <GamesList />
-            <HydrationBoundary state={dehydrate(queryClient)}>
-              <Leaderboard />
-            </HydrationBoundary>
+    <PageWrapper>
+      <Container>
+        <div className={styles.page}>
+          <GamesList />
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <Leaderboard />
+          </HydrationBoundary>
+          <Suspense key="chat-suspense" fallback={null}>
             <Chat />
-          </div>
-        </Container>
-      </PageWrapper>
-
-      <Button
-        stylesVariant="yellowGradient"
-        className={styles.chatButtonMobile}
-      >
-        <MessageIcon />
-      </Button>
-    </>
+          </Suspense>
+        </div>
+      </Container>
+    </PageWrapper>
   );
 }
