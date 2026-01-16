@@ -10,6 +10,8 @@ import { useChat } from "./useChat";
 import { ROOMS } from "./chat.constants";
 import { cx } from "@/shared/utils/classNames";
 
+import { ChatItem } from "./components/ChatItem";
+
 export function Chat() {
   const {
     messages,
@@ -108,44 +110,14 @@ export function Chat() {
             if (!msg) return null;
 
             return (
-              <li
+              <ChatItem
                 key={virtualItem.index}
-                className={cx(styles.chatItem, {
-                  [styles.myChatItem]: msg.username === currentUser?.username,
-                })}
-                data-index={virtualItem.index}
-                ref={virtualizer.measureElement}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  transform: `translateY(${virtualItem.start}px)`,
-                }}
-              >
-                <div className={styles.messageHeader}>
-                  <Image
-                    src={
-                      msg.avatarURL ??
-                      (msg.username === currentUser?.username
-                        ? currentUser?.avatarURL
-                        : "/images/header/user.svg") ??
-                      "/images/header/user.svg"
-                    }
-                    alt="User avatar"
-                    width={44}
-                    height={44}
-                    className={styles.messageUserAvatar}
-                  />
-                  <div className={styles.messageUserName}>
-                    {msg.username || currentUser?.username || "Unknown"}
-                  </div>
-                  <div className={styles.messageTime}>
-                    {formatTime(msg.createdAt)}
-                  </div>
-                </div>
-                <p className={styles.messageContent}>{msg.text}</p>
-              </li>
+                msg={msg}
+                currentUser={currentUser}
+                virtualItem={virtualItem}
+                virtualizer={virtualizer}
+                formatTime={formatTime}
+              />
             );
           })}
         </div>
