@@ -9,8 +9,11 @@ import { useUsers } from "@/config-api/user/useUser";
 import { useChat } from "./useChat";
 import { ROOMS } from "./chat.constants";
 import { cx } from "@/shared/utils/classNames";
-
+import { formatTime } from "./utils";
 import { ChatItem } from "./components/ChatItem";
+import { Section } from "@/shared/components/Section";
+import { MessageIcon } from "@/shared/icons/message";
+import { Button } from "@/shared/components/Button";
 
 export function Chat() {
   const {
@@ -36,7 +39,6 @@ export function Chat() {
     gap: 16,
   });
 
-  // Auto-scroll logic in useEffect
   useEffect(() => {
     if (messages.length > 0) {
       virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
@@ -54,88 +56,85 @@ export function Chat() {
     messageInputRef.current.value = "";
   };
 
-  const formatTime = (iso: string) => {
-    const date = new Date(iso);
-    if (isNaN(date.getTime())) {
-      return "00:00 AM";
-    }
-    return new Intl.DateTimeFormat("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }).format(date);
-  };
-
   return (
-    <section className={styles.chat}>
-      <div className={styles.chatTitleWrapper}>
-        <Image
-          src="/images/chat/chat-title.svg"
-          alt="Chat title"
-          width={100}
-          height={18}
-        />
-      </div>
-
-      <div className={styles.roomButtons}>
-        {ROOMS.map((r) => (
-          <button
-            key={r.id}
-            className={cx(styles.roomButton, {
-              [styles.activeRoomButton]: room === r.id,
-            })}
-            onClick={() => handleRoomChange(r.id)}
-          >
-            {r.name}
-          </button>
-        ))}
-      </div>
-
-      <ul className={styles.usersList}>
-        <li className={styles.userItem}>{onlineCount} online</li>
-        <li className={styles.userItem}>{totalUsers} friends</li>
-      </ul>
-
-      <div ref={parentRef} className={styles.chatListContainer}>
-        <div
-          className={styles.chatList}
-          style={{
-            height: `${virtualizer.getTotalSize()}px`,
-            width: "100%",
-            position: "relative",
-          }}
-        >
-          {virtualizer.getVirtualItems().map((virtualItem) => {
-            const msg = messages[virtualItem.index];
-            if (!msg) return null;
-
-            return (
-              <ChatItem
-                key={virtualItem.index}
-                msg={msg}
-                currentUser={currentUser}
-                virtualItem={virtualItem}
-                virtualizer={virtualizer}
-                formatTime={formatTime}
-              />
-            );
-          })}
+    <div>
+      <Section className={styles.chat}>
+        <div className={styles.chatTitleWrapper}>
+          <Image
+            src="/images/chat/chat-title.svg"
+            alt="Chat title"
+            width={100}
+            height={18}
+          />
         </div>
-      </div>
 
-      <form className={styles.chatForm} onSubmit={handleSendMessage}>
-        <input
-          type="text"
-          id="chat-message"
-          name="message"
-          placeholder="Write a message..."
-          className={styles.chatInput}
-          ref={messageInputRef}
-        />
-        <button type="submit" className={styles.chatButton}>
-          <ArrowTop />
-        </button>
-      </form>
-    </section>
+        <div className={styles.roomButtons}>
+          {ROOMS.map((r) => (
+            <button
+              key={r.id}
+              className={cx(styles.roomButton, {
+                [styles.activeRoomButton]: room === r.id,
+              })}
+              onClick={() => handleRoomChange(r.id)}
+            >
+              {r.name}
+            </button>
+          ))}
+        </div>
+
+        <ul className={styles.usersList}>
+          <li className={styles.userItem}>{onlineCount} online</li>
+          <li className={styles.userItem}>{totalUsers} friends</li>
+        </ul>
+
+        <div ref={parentRef} className={styles.chatListContainer}>
+          <div
+            className={styles.chatList}
+            style={{
+              height: `${virtualizer.getTotalSize()}px`,
+              width: "100%",
+              position: "relative",
+            }}
+          >
+            {virtualizer.getVirtualItems().map((virtualItem) => {
+              const msg = messages[virtualItem.index];
+              if (!msg) return null;
+
+              return (
+                <ChatItem
+                  key={virtualItem.index}
+                  msg={msg}
+                  currentUser={currentUser}
+                  virtualItem={virtualItem}
+                  virtualizer={virtualizer}
+                  formatTime={formatTime}
+                />
+              );
+            })}
+          </div>
+        </div>
+
+        <form className={styles.chatForm} onSubmit={handleSendMessage}>
+          <input
+            type="text"
+            id="chat-message"
+            name="message"
+            placeholder="Write a message..."
+            className={styles.chatInput}
+            ref={messageInputRef}
+          />
+          <button type="submit" className={styles.chatButton}>
+            <ArrowTop />
+          </button>
+        </form>
+      </Section>
+
+      <Button
+        stylesVariant="yellowGradient"
+        className={styles.chatButtonMobile}
+      >
+        <MessageIcon />
+      </Button>
+    </div>
   );
 }
