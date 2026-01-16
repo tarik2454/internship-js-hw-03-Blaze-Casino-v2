@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, FormEvent, useEffect } from "react";
+import { useRef, FormEvent, useEffect, useState } from "react";
 import Image from "next/image";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import styles from "./Chat.module.scss";
@@ -16,6 +16,7 @@ import { MessageIcon } from "@/shared/icons/message";
 import { Button } from "@/shared/components/Button";
 
 export function Chat() {
+  "use no memo";
   const {
     messages,
     room,
@@ -31,13 +32,21 @@ export function Chat() {
   const parentRef = useRef<HTMLDivElement>(null);
   const messageInputRef = useRef<HTMLInputElement>(null);
 
-  const virtualizer = useVirtualizer({
-    count: messages.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 120,
-    overscan: 5,
-    gap: 16,
-  });
+  const [isVisible, setIsVisible] = useState(false);
+
+  function useChatVirtualizer() {
+    "use no memo";
+    return useVirtualizer({
+      count: messages.length,
+      getScrollElement: () => parentRef.current,
+      estimateSize: () => 120,
+      getItemKey: (index) => messages[index]?._id || index,
+      overscan: 3,
+      gap: 16,
+    });
+  }
+
+  const virtualizer = useChatVirtualizer();
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -56,85 +65,98 @@ export function Chat() {
     messageInputRef.current.value = "";
   };
 
+  const handleOpenChat = () => {
+    setIsVisible(!isVisible);
+  };
+
   return (
-    <div>
-      <Section className={styles.chat}>
-        <div className={styles.chatTitleWrapper}>
-          <Image
-            src="/images/chat/chat-title.svg"
-            alt="Chat title"
-            width={100}
-            height={18}
-          />
-        </div>
-
-        <div className={styles.roomButtons}>
-          {ROOMS.map((r) => (
-            <button
-              key={r.id}
-              className={cx(styles.roomButton, {
-                [styles.activeRoomButton]: room === r.id,
-              })}
-              onClick={() => handleRoomChange(r.id)}
-            >
-              {r.name}
-            </button>
-          ))}
-        </div>
-
-        <ul className={styles.usersList}>
-          <li className={styles.userItem}>{onlineCount} online</li>
-          <li className={styles.userItem}>{totalUsers} friends</li>
-        </ul>
-
-        <div ref={parentRef} className={styles.chatListContainer}>
-          <div
-            className={styles.chatList}
-            style={{
-              height: `${virtualizer.getTotalSize()}px`,
-              width: "100%",
-              position: "relative",
-            }}
-          >
-            {virtualizer.getVirtualItems().map((virtualItem) => {
-              const msg = messages[virtualItem.index];
-              if (!msg) return null;
-
-              return (
-                <ChatItem
-                  key={virtualItem.index}
-                  msg={msg}
-                  currentUser={currentUser}
-                  virtualItem={virtualItem}
-                  virtualizer={virtualizer}
-                  formatTime={formatTime}
-                />
-              );
-            })}
+    <>
+      {/* <div
+        className={cx(styles.chatOverlay, { [styles.visible]: isVisible })}
+        onClick={handleOpenChat}
+      ></div> */}
+      <div className={cx(styles.chatWrapper, { [styles.visible]: isVisible })}>
+        <Section className={styles.chat}>
+          <div className={styles.chatTitleWrapper}>
+            <Image
+              src="/images/chat/chat-title.svg"
+              alt="Chat title"
+              width={100}
+              height={18}
+            />
           </div>
-        </div>
 
-        <form className={styles.chatForm} onSubmit={handleSendMessage}>
-          <input
-            type="text"
-            id="chat-message"
-            name="message"
-            placeholder="Write a message..."
-            className={styles.chatInput}
-            ref={messageInputRef}
-          />
-          <button type="submit" className={styles.chatButton}>
-            <ArrowTop />
-          </button>
-        </form>
-      </Section>
+          <div className={styles.roomButtons}>
+            {ROOMS.map((r) => (
+              <button
+                key={r.id}
+                className={cx(styles.roomButton, {
+                  [styles.activeRoomButton]: room === r.id,
+                })}
+                onClick={() => handleRoomChange(r.id)}
+              >
+                {r.name}
+              </button>
+            ))}
+          </div>
 
-      <Button
-        stylesVariant="yellowGradient"
-        className={styles.chatButtonMobile}
-      >
-        <MessageIcon />
-      </Button>
-    </div>
+          <ul className={styles.usersList}>
+            <li className={styles.userItem}>{onlineCount} online</li>
+            <li className={styles.userItem}>{totalUsers} friends</li>
+          </ul>
+
+          <div ref={parentRef} className={styles.chatListContainer}>
+            <div
+              className={styles.chatList}
+              style={{
+                height: `${virtualizer.getTotalSize()}px`,
+                width: "100%",
+                position: "relative",
+              }}
+            >
+              {virtualizer.getVirtualItems().map((virtualItem) => {
+                const msg = messages[virtualItem.index];
+                if (!msg) return null;
+
+                return (
+                  <ChatItem
+                    key={msg._id}
+                    msg={msg}
+                    currentUser={currentUser}
+                    virtualItem={virtualItem}
+                    virtualizer={virtualizer}
+                    formatTime={formatTime}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          <form className={styles.chatForm} onSubmit={handleSendMessage}>
+            <input
+              type="text"
+              id="chat-message"
+              name="message"
+              placeholder="Write a message..."
+              className={styles.chatInput}
+              ref={messageInputRef}
+            />
+            <button type="submit" className={styles.chatButton}>
+              <ArrowTop />
+            </button>
+          </form>
+        </Section>
+      </div>
+
+      <div className={styles.chatButtonMobileWrapper}>
+        <Button
+          stylesVariant="yellowGradient"
+          className={styles.chatButtonMobile}
+          onClick={handleOpenChat}
+        >
+          <MessageIcon />
+        </Button>
+      </div>
+    </>
   );
 }

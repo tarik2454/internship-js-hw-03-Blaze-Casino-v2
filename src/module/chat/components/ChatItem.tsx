@@ -1,5 +1,6 @@
 "use client";
 
+import { memo, useCallback, useRef, useLayoutEffect } from "react";
 import Image from "next/image";
 import { VirtualItem, Virtualizer } from "@tanstack/react-virtual";
 import { ChatMessage } from "../chat.types";
@@ -15,6 +16,54 @@ interface ChatItemProps {
   formatTime: (iso: string) => string;
 }
 
+/**
+ * Внутренний компонент с тяжелой версткой.
+ * Он НЕ перерендеривается при скролле.
+ */
+const ChatItemContent = memo(
+  ({
+    msg,
+    currentUser,
+    formatTime,
+  }: {
+    msg: ChatMessage;
+    currentUser: CurrentUserResponse | null | undefined;
+    formatTime: (iso: string) => string;
+  }) => {
+    return (
+      <>
+        <div className={styles.messageHeader}>
+          <Image
+            src={
+              msg.avatarURL ??
+              (msg.username === currentUser?.username
+                ? currentUser?.avatarURL
+                : "/images/header/user.svg") ??
+              "/images/header/user.svg"
+            }
+            alt="User avatar"
+            width={44}
+            height={44}
+            className={styles.messageUserAvatar}
+          />
+          <div className={styles.messageUserName}>
+            {msg.username || currentUser?.username || "Unknown"}
+          </div>
+          <div className={styles.messageTime}>{formatTime(msg.createdAt)}</div>
+        </div>
+        <p className={styles.messageContent}>{msg.text}</p>
+      </>
+    );
+  },
+);
+
+ChatItemContent.displayName = "ChatItemContent";
+
+/**
+ * Внешний контейнер.
+ * Он отвечает за позицию и рендерится при скролле (быстро),
+ * но не заставляет перерендериваться внутренний контент.
+ */
 export function ChatItem({
   msg,
   currentUser,
@@ -22,16 +71,26 @@ export function ChatItem({
   virtualizer,
   formatTime,
 }: ChatItemProps) {
+  "use no memo";
+  const virtualizerRef = useRef(virtualizer);
+
+  useLayoutEffect(() => {
+    virtualizerRef.current = virtualizer;
+  }, [virtualizer]);
+
+  const measureRef = useCallback((node: HTMLLIElement | null) => {
+    if (node) {
+      virtualizerRef.current.measureElement(node);
+    }
+  }, []);
+
   return (
     <li
-      key={virtualItem.index}
       className={cx(styles.chatItem, {
         [styles.myChatItem]: msg.username === currentUser?.username,
       })}
       data-index={virtualItem.index}
-      ref={(node) => {
-        if (node) virtualizer.measureElement(node);
-      }}
+      ref={measureRef}
       style={{
         position: "absolute",
         top: 0,
@@ -40,26 +99,11 @@ export function ChatItem({
         transform: `translateY(${virtualItem.start}px)`,
       }}
     >
-      <div className={styles.messageHeader}>
-        <Image
-          src={
-            msg.avatarURL ??
-            (msg.username === currentUser?.username
-              ? currentUser?.avatarURL
-              : "/images/header/user.svg") ??
-            "/images/header/user.svg"
-          }
-          alt="User avatar"
-          width={44}
-          height={44}
-          className={styles.messageUserAvatar}
-        />
-        <div className={styles.messageUserName}>
-          {msg.username || currentUser?.username || "Unknown"}
-        </div>
-        <div className={styles.messageTime}>{formatTime(msg.createdAt)}</div>
-      </div>
-      <p className={styles.messageContent}>{msg.text}</p>
+      <ChatItemContent
+        msg={msg}
+        currentUser={currentUser}
+        formatTime={formatTime}
+      />
     </li>
   );
 }
