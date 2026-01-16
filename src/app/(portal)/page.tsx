@@ -9,6 +9,8 @@ import { getQueryClient } from "../providers/getQueryClient";
 import { leaderboardApi } from "@/config-api/leaderboard/leaderboard.api";
 import { queryKeyFactories } from "@/config-api/keys";
 import { cookies } from "next/headers";
+import { Button } from "@/shared/components/Button";
+import { MessageIcon } from "@/shared/icons/message";
 
 export default async function Home() {
   const queryClient = getQueryClient();
@@ -21,16 +23,25 @@ export default async function Home() {
   });
 
   return (
-    <PageWrapper>
-      <Container>
-        <div className={styles.page}>
-          <GamesList />
-          <HydrationBoundary state={dehydrate(queryClient)}>
-            <Leaderboard />
-          </HydrationBoundary>
-          <Chat />
-        </div>
-      </Container>
-    </PageWrapper>
+    <>
+      <PageWrapper>
+        <Container>
+          <div className={styles.page}>
+            <GamesList />
+            <HydrationBoundary state={dehydrate(queryClient)}>
+              <Leaderboard />
+            </HydrationBoundary>
+            <Chat />
+          </div>
+        </Container>
+      </PageWrapper>
+
+      <Button
+        stylesVariant="yellowGradient"
+        className={styles.chatButtonMobile}
+      >
+        <MessageIcon />
+      </Button>
+    </>
   );
 }
