@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState, startTransition } from "react";
 import { usePathname } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 import { getCookie } from "@/shared/utils/cookies";
@@ -13,10 +13,11 @@ import {
 import { ROUTE_TO_ROOM } from "./chat.constants";
 
 export function useChat() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [onlineCount, setOnlineCount] = useState<number>(0);
-
   const pathname = usePathname();
+  const { data: currentUser } = useCurrentUser();
+
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [onlineCount, setOnlineCount] = useState(0);
   const [room, setRoom] = useState<string>(
     () => ROUTE_TO_ROOM[pathname] || "general",
   );
@@ -24,21 +25,23 @@ export function useChat() {
   const socketRef = useRef<Socket | null>(null);
   const roomRef = useRef(room);
 
-  const { data: currentUser } = useCurrentUser();
-
+  /* ---------------- roomRef sync ---------------- */
   useEffect(() => {
     roomRef.current = room;
   }, [room]);
 
+  /* ---------------- room from route ---------------- */
   useEffect(() => {
     const targetRoom = ROUTE_TO_ROOM[pathname];
-    if (targetRoom && targetRoom !== room) {
+    if (!targetRoom || targetRoom === roomRef.current) return;
+
+    startTransition(() => {
       setMessages([]);
       setRoom(targetRoom);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    });
   }, [pathname]);
 
+  /* ---------------- socket init (depends on token) ---------------- */
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -46,50 +49,62 @@ export function useChat() {
     if (!token) return;
 
     const socketUrl = process.env.NEXT_PUBLIC_API_URL || "/";
-    const s = io(socketUrl, { auth: { token } });
-    socketRef.current = s;
-
-    s.on("connect", () => {
-      s.emit("chat:join", { roomId: roomRef.current });
+    const socket = io(socketUrl, {
+      auth: { token },
+      transports: ["websocket"],
     });
 
-    s.on("chat:history", (data: ChatHistoryResponse) => {
+    socketRef.current = socket;
+
+    socket.on("connect", () => {
+      socket.emit("chat:join", { roomId: roomRef.current });
+    });
+
+    socket.on("chat:history", (data: ChatHistoryResponse) => {
       if (data.roomId === roomRef.current) {
         setMessages(data.messages);
       }
     });
 
-    s.on("message", (msg: ChatMessage) => {
+    socket.on("message", (msg: ChatMessage) => {
       if (msg.roomId === roomRef.current) {
-        setMessages((prev) => [...prev, msg]);
+        setMessages((prev) => {
+          // защита от дублей
+          if (prev.some((m) => m._id === msg._id)) return prev;
+          return [...prev, msg];
+        });
       }
     });
 
-    s.on("chat:error", (err: { message: string }) => {
-      console.error("Chat error:", err.message);
-    });
-
-    s.on("chat:stats", (data: ChatStatsResponse) => {
+    socket.on("chat:stats", (data: ChatStatsResponse) => {
       setOnlineCount(data.onlineCount);
     });
 
+    socket.on("chat:error", (err: { message: string }) => {
+      console.error("Chat error:", err.message);
+    });
+
     return () => {
-      s.disconnect();
+      socket.disconnect();
+      socketRef.current = null;
     };
-  }, []);
+  }, [currentUser?._id]); // ← важно: переподключение после логина
 
+  /* ---------------- room change ---------------- */
   useEffect(() => {
-    const s = socketRef.current;
-    if (!s || !s.connected) return;
+    const socket = socketRef.current;
+    if (!socket || !socket.connected) return;
 
-    s.emit("chat:join", { roomId: room });
+    socket.emit("chat:join", { roomId: room });
 
     return () => {
-      s.emit("chat:leave", { roomId: room });
+      socket.emit("chat:leave", { roomId: room });
     };
   }, [room]);
 
+  /* ---------------- actions ---------------- */
   const sendMessage = (text: string) => {
+    if (!text.trim()) return;
     if (!socketRef.current || !currentUser) return;
 
     socketRef.current.emit("chat:message", {
@@ -101,9 +116,12 @@ export function useChat() {
   };
 
   const handleRoomChange = (newRoom: string) => {
-    if (newRoom === room) return;
-    setMessages([]);
-    setRoom(newRoom);
+    if (newRoom === roomRef.current) return;
+
+    startTransition(() => {
+      setMessages([]);
+      setRoom(newRoom);
+    });
   };
 
   return {
