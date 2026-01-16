@@ -13,22 +13,23 @@ import {
 import { ROUTE_TO_ROOM } from "./chat.constants";
 
 export function useChat() {
-  const pathname = usePathname();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [onlineCount, setOnlineCount] = useState<number>(0);
+
+  const pathname = usePathname();
   const [room, setRoom] = useState<string>(
     () => ROUTE_TO_ROOM[pathname] || "general",
   );
-  const roomRef = useRef(room);
-  const socketRef = useRef<Socket | null>(null);
-  const { data: currentUser } = useCurrentUser();
-  const [onlineCount, setOnlineCount] = useState<number>(0);
 
-  // Sync roomRef with room state
+  const socketRef = useRef<Socket | null>(null);
+  const roomRef = useRef(room);
+
+  const { data: currentUser } = useCurrentUser();
+
   useEffect(() => {
     roomRef.current = room;
   }, [room]);
 
-  // Handle route-based room switching
   useEffect(() => {
     const targetRoom = ROUTE_TO_ROOM[pathname];
     if (targetRoom && targetRoom !== room) {
@@ -38,7 +39,6 @@ export function useChat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  // Socket initialization
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -78,7 +78,6 @@ export function useChat() {
     };
   }, []);
 
-  // Room transition logic
   useEffect(() => {
     const s = socketRef.current;
     if (!s || !s.connected) return;
