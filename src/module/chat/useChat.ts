@@ -17,7 +17,7 @@ export function useChat() {
   const { data: currentUser } = useCurrentUser();
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [onlineCount, setOnlineCount] = useState(0);
+  const [onlineCounts, setOnlineCounts] = useState<Record<string, number>>({});
   const [room, setRoom] = useState<string>(
     () => ROUTE_TO_ROOM[pathname] || "general",
   );
@@ -97,7 +97,10 @@ export function useChat() {
     });
 
     socket.on("chat:stats", (data: ChatStatsResponse) => {
-      setOnlineCount(data.onlineCount);
+      setOnlineCounts((prev) => ({
+        ...prev,
+        [roomRef.current]: data.onlineCount,
+      }));
     });
 
     socket.on("chat:error", (err: { message: string }) => {
@@ -143,6 +146,8 @@ export function useChat() {
       setRoom(newRoom);
     });
   };
+
+  const onlineCount = onlineCounts[room] ?? 0;
 
   return {
     messages,
