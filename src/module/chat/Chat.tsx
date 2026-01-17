@@ -57,22 +57,17 @@ export function Chat() {
     });
   }, [messages]);
 
-  // Временно отключено для диагностики
-  // useEffect(() => {
-  //   if (messages.length > 0) {
-  //     virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
-  //   }
-  // }, [messages.length, virtualizer]);
 
-  // Прокрутка к последнему сообщению при открытии мобильного чата
+
+
+
   useEffect(() => {
-    if (isVisible && messages.length > 0) {
-      // Небольшая задержка для корректной работы виртуализатора после отображения
-      setTimeout(() => {
-        virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
-      }, 100);
+    if (messages.length > 0) {
+      virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
     }
-  }, [isVisible, messages.length, virtualizer]);
+  }, [messages.length, virtualizer]);
+
+
 
   const handleSendMessage = (e: FormEvent) => {
     e.preventDefault();
