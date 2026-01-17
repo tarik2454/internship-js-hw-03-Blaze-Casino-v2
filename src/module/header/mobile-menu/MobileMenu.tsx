@@ -23,11 +23,12 @@ export function MobileMenu({
   handleLogout,
 }: MobileMenuProps) {
   useEffect(() => {
+    const originalOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow =
       menuVisibility === "visible" ? "hidden" : "auto";
 
     return () => {
-      document.documentElement.style.overflow = "auto";
+      document.documentElement.style.overflow = originalOverflow;
     };
   }, [menuVisibility]);
 
