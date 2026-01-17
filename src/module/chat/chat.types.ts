@@ -17,3 +17,8 @@ export interface ChatHistoryResponse {
 export interface ChatStatsResponse {
   onlineCount: number;
 }
+
+export interface ChatRoomUsersResponse {
+  roomId: string;
+  activeUsers: number;
+}

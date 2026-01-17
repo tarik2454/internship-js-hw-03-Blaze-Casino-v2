@@ -8,7 +8,7 @@ import { useCurrentUser } from "@/config-api/user/useUser";
 import {
   ChatMessage,
   ChatHistoryResponse,
-  ChatStatsResponse,
+  ChatRoomUsersResponse,
 } from "./chat.types";
 import { ROUTE_TO_ROOM } from "./chat.constants";
 
@@ -75,10 +75,10 @@ export function useChat() {
       }
     });
 
-    socket.on("chat:stats", (data: ChatStatsResponse) => {
+    socket.on("chat:room:users", (data: ChatRoomUsersResponse) => {
       setOnlineCounts((prev) => ({
         ...prev,
-        [roomRef.current]: data.onlineCount,
+        [data.roomId]: data.activeUsers,
       }));
     });
 
