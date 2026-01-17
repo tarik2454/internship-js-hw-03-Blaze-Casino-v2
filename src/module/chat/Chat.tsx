@@ -7,7 +7,6 @@ import styles from "./Chat.module.scss";
 import { ArrowTop } from "@/shared/icons/arrow-top";
 import { useUsers } from "@/config-api/user/useUser";
 import { useChat } from "./useChat";
-// import { ROOMS } from "./chat.constants";
 import { cx } from "@/shared/utils/classNames";
 import { formatTime } from "./utils";
 import { ChatItem } from "./components/ChatItem";
@@ -17,14 +16,7 @@ import { Button } from "@/shared/components/Button";
 
 export function Chat() {
   "use no memo";
-  const {
-    messages,
-    // room,
-    onlineCount,
-    currentUser,
-    sendMessage,
-    // handleRoomChange,
-  } = useChat();
+  const { messages, onlineCount, currentUser, sendMessage } = useChat();
 
   const { data: usersData } = useUsers();
   const totalUsers = usersData?.length || 0;
@@ -52,7 +44,7 @@ export function Chat() {
     if (messages.length > 0) {
       virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
     }
-  }, [messages.length, virtualizer]);
+  }, [messages.length, virtualizer, isVisible]);
 
   const handleSendMessage = (e: FormEvent) => {
     e.preventDefault();
@@ -81,20 +73,6 @@ export function Chat() {
               height={18}
             />
           </div>
-
-          {/* <div className={styles.roomButtons}>
-            {ROOMS.map((r) => (
-              <button
-                key={r.id}
-                className={cx(styles.roomButton, {
-                  [styles.activeRoomButton]: room === r.id,
-                })}
-                onClick={() => handleRoomChange(r.id)}
-              >
-                {r.name}
-              </button>
-            ))}
-          </div> */}
 
           <ul className={styles.usersList}>
             <li className={styles.userItem}>{onlineCount} online</li>
