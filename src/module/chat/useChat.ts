@@ -25,12 +25,10 @@ export function useChat() {
   const socketRef = useRef<Socket | null>(null);
   const roomRef = useRef(room);
 
-  /* ---------------- roomRef sync ---------------- */
   useEffect(() => {
     roomRef.current = room;
   }, [room]);
 
-  /* ---------------- room from route ---------------- */
   useEffect(() => {
     const targetRoom = ROUTE_TO_ROOM[pathname];
     if (!targetRoom || targetRoom === roomRef.current) return;
@@ -41,7 +39,6 @@ export function useChat() {
     });
   }, [pathname]);
 
-  /* ---------------- socket init (depends on token) ---------------- */
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -61,36 +58,18 @@ export function useChat() {
     });
 
     socket.on("chat:history", (data: ChatHistoryResponse) => {
-      console.log("📨 Received chat:history:", {
-        roomId: data.roomId,
-        currentRoom: roomRef.current,
-        messagesCount: data.messages.length,
-        firstMessage: data.messages[0],
-        lastMessage: data.messages[data.messages.length - 1],
-      });
-
       if (data.roomId === roomRef.current) {
         setMessages(data.messages);
-        console.log("✅ Messages set to state:", data.messages.length);
       }
     });
 
     socket.on("message", (msg: ChatMessage) => {
-      console.log("💬 Received new message:", {
-        roomId: msg.roomId,
-        currentRoom: roomRef.current,
-        username: msg.username,
-        text: msg.text,
-      });
-
       if (msg.roomId === roomRef.current) {
         setMessages((prev) => {
-          // защита от дублей
           if (prev.some((m) => m._id === msg._id)) {
-            console.log("⚠️ Duplicate message detected, skipping:", msg._id);
             return prev;
           }
-          console.log("✅ Adding message to state. Total:", prev.length + 1);
+
           return [...prev, msg];
         });
       }
@@ -111,9 +90,8 @@ export function useChat() {
       socket.disconnect();
       socketRef.current = null;
     };
-  }, [currentUser?._id]); // ← важно: переподключение после логина
+  }, [currentUser?._id]);
 
-  /* ---------------- room change ---------------- */
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket || !socket.connected) return;
@@ -125,7 +103,6 @@ export function useChat() {
     };
   }, [room]);
 
-  /* ---------------- actions ---------------- */
   const sendMessage = (text: string) => {
     if (!text.trim()) return;
     if (!socketRef.current || !currentUser) return;

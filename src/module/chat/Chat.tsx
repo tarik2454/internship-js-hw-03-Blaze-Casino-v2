@@ -7,7 +7,7 @@ import styles from "./Chat.module.scss";
 import { ArrowTop } from "@/shared/icons/arrow-top";
 import { useUsers } from "@/config-api/user/useUser";
 import { useChat } from "./useChat";
-import { ROOMS } from "./chat.constants";
+// import { ROOMS } from "./chat.constants";
 import { cx } from "@/shared/utils/classNames";
 import { formatTime } from "./utils";
 import { ChatItem } from "./components/ChatItem";
@@ -19,11 +19,11 @@ export function Chat() {
   "use no memo";
   const {
     messages,
-    room,
+    // room,
     onlineCount,
     currentUser,
     sendMessage,
-    handleRoomChange,
+    // handleRoomChange,
   } = useChat();
 
   const { data: usersData } = useUsers();
@@ -48,26 +48,11 @@ export function Chat() {
 
   const virtualizer = useChatVirtualizer();
 
-  // Диагностика: логируем изменения сообщений
-  useEffect(() => {
-    console.log("🔄 Chat messages updated:", {
-      total: messages.length,
-      firstMessage: messages[0],
-      lastMessage: messages[messages.length - 1],
-    });
-  }, [messages]);
-
-
-
-
-
   useEffect(() => {
     if (messages.length > 0) {
       virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
     }
   }, [messages.length, virtualizer]);
-
-
 
   const handleSendMessage = (e: FormEvent) => {
     e.preventDefault();
@@ -97,7 +82,7 @@ export function Chat() {
             />
           </div>
 
-          <div className={styles.roomButtons}>
+          {/* <div className={styles.roomButtons}>
             {ROOMS.map((r) => (
               <button
                 key={r.id}
@@ -109,7 +94,7 @@ export function Chat() {
                 {r.name}
               </button>
             ))}
-          </div>
+          </div> */}
 
           <ul className={styles.usersList}>
             <li className={styles.userItem}>{onlineCount} online</li>
@@ -127,12 +112,7 @@ export function Chat() {
             >
               {(() => {
                 const virtualItems = virtualizer.getVirtualItems();
-                console.log("🎨 Virtualizer rendering:", {
-                  totalMessages: messages.length,
-                  virtualItemsCount: virtualItems.length,
-                  virtualItemsIndexes: virtualItems.map((v) => v.index),
-                  scrollOffset: parentRef.current?.scrollTop,
-                });
+
                 return virtualItems.map((virtualItem) => {
                   const msg = messages[virtualItem.index];
                   if (!msg) return null;
