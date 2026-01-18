@@ -52,9 +52,11 @@
     width: 100%;
     max-width: none;
     padding: 0;
+    transform: none;
     border-radius: 0;
     background: transparent;
     opacity: 1;
+    pointer-events: auto;
   }
 }
 

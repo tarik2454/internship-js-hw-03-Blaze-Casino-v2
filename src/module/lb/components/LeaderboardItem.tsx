@@ -40,7 +40,7 @@ export function LeaderboardItem({
             width={16}
             height={16}
           />
-          {player.totalWagered}
+          {Math.round(player.totalWagered)}
         </span>
         <span className={styles.itemWinRate}>{player.winRate}% win</span>
       </div>
