@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 import { getCookie } from "@/shared/utils/cookies";
 import { useCurrentUser } from "@/config-api/user/useUser";
+import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
 import {
   ChatMessage,
   ChatHistoryResponse,
@@ -15,6 +16,7 @@ import { ROUTE_TO_ROOM } from "./chat.constants";
 export function useChat() {
   const pathname = usePathname();
   const { data: currentUser } = useCurrentUser();
+  const { showPopup } = usePopup();
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [onlineCounts, setOnlineCounts] = useState<Record<string, number>>({});
@@ -24,6 +26,7 @@ export function useChat() {
 
   const socketRef = useRef<Socket | null>(null);
   const roomRef = useRef(room);
+  const currentJoinedRoomRef = useRef<string | null>(null);
 
   useEffect(() => {
     roomRef.current = room;
@@ -46,6 +49,7 @@ export function useChat() {
     if (!token) return;
 
     const socketUrl = process.env.NEXT_PUBLIC_API_URL || "/";
+
     const socket = io(socketUrl, {
       auth: { token },
       transports: ["websocket"],
@@ -54,7 +58,10 @@ export function useChat() {
     socketRef.current = socket;
 
     socket.on("connect", () => {
-      socket.emit("chat:join", { roomId: roomRef.current });
+      if (roomRef.current && currentJoinedRoomRef.current !== roomRef.current) {
+        socket.emit("chat:join", { roomId: roomRef.current });
+        currentJoinedRoomRef.current = roomRef.current;
+      }
     });
 
     socket.on("chat:history", (data: ChatHistoryResponse) => {
@@ -84,9 +91,18 @@ export function useChat() {
 
     socket.on("chat:error", (err: { message: string }) => {
       console.error("Chat error:", err.message);
+      showPopup({
+        message: err.message,
+        type: POPUP_TYPE.ERROR,
+        autoCloseDelay: 5000,
+      });
     });
 
     return () => {
+      if (socket.connected && currentJoinedRoomRef.current) {
+        socket.emit("chat:leave", { roomId: currentJoinedRoomRef.current });
+        currentJoinedRoomRef.current = null;
+      }
       socket.disconnect();
       socketRef.current = null;
     };
@@ -96,15 +112,22 @@ export function useChat() {
     const socket = socketRef.current;
     if (!socket || !socket.connected) return;
 
-    socket.emit("chat:join", { roomId: room });
+    if (currentJoinedRoomRef.current !== room) {
+      socket.emit("chat:join", { roomId: room });
+      currentJoinedRoomRef.current = room;
+    }
 
     return () => {
-      socket.emit("chat:leave", { roomId: room });
+      if (socket.connected && currentJoinedRoomRef.current) {
+        socket.emit("chat:leave", { roomId: currentJoinedRoomRef.current });
+        currentJoinedRoomRef.current = null;
+      }
     };
   }, [room]);
 
   const sendMessage = (text: string) => {
     if (!text.trim()) return;
+
     if (!socketRef.current || !currentUser) return;
 
     socketRef.current.emit("chat:message", {
