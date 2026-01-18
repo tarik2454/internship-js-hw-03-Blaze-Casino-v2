@@ -64,6 +64,10 @@ export function useChat() {
       }
     });
 
+    socket.on("connect_error", () => {});
+
+    socket.on("disconnect", () => {});
+
     socket.on("chat:history", (data: ChatHistoryResponse) => {
       if (data.roomId === roomRef.current) {
         setMessages(data.messages);
@@ -102,7 +106,11 @@ export function useChat() {
         socket.emit("chat:leave", { roomId: currentJoinedRoomRef.current });
         currentJoinedRoomRef.current = null;
       }
-      socket.disconnect();
+      if (socket.connected) {
+        socket.disconnect();
+      } else {
+        socket.close();
+      }
       socketRef.current = null;
     };
   }, [currentUser?._id]);
@@ -114,7 +122,11 @@ export function useChat() {
         socket.emit("chat:leave", { roomId: currentJoinedRoomRef.current });
         currentJoinedRoomRef.current = null;
       }
-      socket.disconnect();
+      if (socket.connected) {
+        socket.disconnect();
+      } else {
+        socket.close();
+      }
       socketRef.current = null;
     }
   }, [currentUser]);
