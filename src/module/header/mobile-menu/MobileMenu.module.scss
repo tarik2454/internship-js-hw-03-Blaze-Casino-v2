@@ -23,9 +23,7 @@
   background: transparent;
   opacity: 0;
   pointer-events: none;
-  transition:
-    background 0.3s ease,
-    opacity 0.3s ease;
+  transition: var(--transition-300);
 
   &.isVisible {
     background: #00000080;
@@ -53,9 +51,7 @@
   box-shadow: 4px 0px 8px 0px #00000040;
 
   opacity: 0;
-  transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
+  transition: var(--transition-300);
 
   &.isOpen {
     transform: translateX(0);
