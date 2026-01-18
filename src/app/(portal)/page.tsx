@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { GamesList } from "@/module/games-list/GamesList";
 import { Container } from "@/shared/components/Container";
 import { Chat } from "@/module/chat/Chat";
@@ -29,9 +28,7 @@ export default async function Home() {
           <HydrationBoundary state={dehydrate(queryClient)}>
             <Leaderboard />
           </HydrationBoundary>
-          <Suspense key="chat-suspense" fallback={null}>
-            <Chat />
-          </Suspense>
+          <Chat />
         </div>
       </Container>
     </PageWrapper>

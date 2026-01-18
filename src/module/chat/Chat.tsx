@@ -11,6 +11,7 @@ import { cx } from "@/shared/utils/classNames";
 import { formatTime } from "./utils";
 import { ChatItem } from "./components/ChatItem";
 import { Section } from "@/shared/components/Section";
+
 import { MessageIcon } from "@/shared/icons/message";
 import { Button } from "@/shared/components/Button";
 
@@ -25,12 +26,17 @@ export function Chat() {
   const messageInputRef = useRef<HTMLInputElement>(null);
 
   const [isVisible, setIsVisible] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   function useChatVirtualizer() {
     "use no memo";
     return useVirtualizer({
       count: messages.length,
-      getScrollElement: () => parentRef.current,
+      getScrollElement: () => (isMounted ? parentRef.current : null),
       estimateSize: () => 120,
       getItemKey: (index) => messages[index]?._id || index,
       overscan: 3,
@@ -80,34 +86,40 @@ export function Chat() {
           </ul>
 
           <div ref={parentRef} className={styles.chatListContainer}>
-            <div
-              className={styles.chatList}
-              style={{
-                height: `${virtualizer.getTotalSize()}px`,
-                width: "100%",
-                position: "relative",
-              }}
-            >
-              {(() => {
-                const virtualItems = virtualizer.getVirtualItems();
+            {isMounted ? (
+              <div
+                className={styles.chatList}
+                style={{
+                  height: `${virtualizer.getTotalSize()}px`,
+                  width: "100%",
+                  position: "relative",
+                }}
+              >
+                {(() => {
+                  const virtualItems = virtualizer.getVirtualItems();
 
-                return virtualItems.map((virtualItem) => {
-                  const msg = messages[virtualItem.index];
-                  if (!msg) return null;
+                  return virtualItems.map((virtualItem) => {
+                    const msg = messages[virtualItem.index];
+                    if (!msg) return null;
 
-                  return (
-                    <ChatItem
-                      key={msg._id}
-                      msg={msg}
-                      currentUser={currentUser}
-                      virtualItem={virtualItem}
-                      virtualizer={virtualizer}
-                      formatTime={formatTime}
-                    />
-                  );
-                });
-              })()}
-            </div>
+                    return (
+                      <ChatItem
+                        key={msg._id}
+                        msg={msg}
+                        currentUser={currentUser}
+                        virtualItem={virtualItem}
+                        virtualizer={virtualizer}
+                        formatTime={formatTime}
+                      />
+                    );
+                  });
+                })()}
+              </div>
+            ) : (
+              <div className={styles.chatList} style={{ width: "100%" }}>
+                {/* Placeholder during SSR/hydration */}
+              </div>
+            )}
           </div>
 
           <form className={styles.chatForm} onSubmit={handleSendMessage}>
