@@ -53,13 +53,17 @@ export function Chat() {
         scrollElement.offsetHeight > 0 && scrollElement.offsetWidth > 0;
 
       if (isContainerReady) {
-        requestAnimationFrame(() => {
+        const animationFrameId = requestAnimationFrame(() => {
           try {
             virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
           } catch (error) {
             console.error(error);
           }
         });
+
+        return () => {
+          cancelAnimationFrame(animationFrameId);
+        };
       }
     }
   }, [messages.length, virtualizer, isMounted]);
