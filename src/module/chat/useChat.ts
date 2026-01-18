@@ -108,10 +108,27 @@ export function useChat() {
   }, [currentUser?._id]);
 
   useEffect(() => {
+    if (!currentUser && socketRef.current) {
+      const socket = socketRef.current;
+      if (socket.connected && currentJoinedRoomRef.current) {
+        socket.emit("chat:leave", { roomId: currentJoinedRoomRef.current });
+        currentJoinedRoomRef.current = null;
+      }
+      socket.disconnect();
+      socketRef.current = null;
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
     const socket = socketRef.current;
     if (!socket || !socket.connected) return;
 
+    const previousRoom = currentJoinedRoomRef.current;
+
     if (currentJoinedRoomRef.current !== room) {
+      if (previousRoom) {
+        socket.emit("chat:leave", { roomId: previousRoom });
+      }
       socket.emit("chat:join", { roomId: room });
       currentJoinedRoomRef.current = room;
     }
@@ -127,7 +144,7 @@ export function useChat() {
   const sendMessage = (text: string) => {
     if (!text.trim()) return;
 
-    if (!socketRef.current || !currentUser) return;
+    if (!socketRef.current || !currentUser || !currentUser._id) return;
 
     socketRef.current.emit("chat:message", {
       roomId: room,
