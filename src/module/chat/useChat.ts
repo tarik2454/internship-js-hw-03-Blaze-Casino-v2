@@ -90,7 +90,6 @@ export function useChat() {
     });
 
     socket.on("chat:error", (err: { message: string }) => {
-      console.error("Chat error:", err.message);
       showPopup({
         message: err.message,
         type: POPUP_TYPE.ERROR,

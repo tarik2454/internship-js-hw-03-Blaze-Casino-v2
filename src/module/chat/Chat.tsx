@@ -47,10 +47,34 @@ export function Chat() {
   const virtualizer = useChatVirtualizer();
 
   useEffect(() => {
-    if (messages.length > 0) {
-      virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
+    if (messages.length > 0 && isMounted && parentRef.current) {
+      const scrollElement = parentRef.current;
+      const isContainerReady =
+        scrollElement.offsetHeight > 0 && scrollElement.offsetWidth > 0;
+
+      if (isContainerReady) {
+        requestAnimationFrame(() => {
+          try {
+            virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
+          } catch (error) {
+            console.error(error);
+          }
+        });
+      }
     }
-  }, [messages.length, virtualizer, isVisible]);
+  }, [messages.length, virtualizer, isMounted]);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
+    if (isVisible) {
+      const originalOverflow = document.documentElement.style.overflow;
+      document.documentElement.style.overflow = "hidden";
+      return () => {
+        document.documentElement.style.overflow = originalOverflow;
+      };
+    }
+  }, [isVisible, isMounted]);
 
   const handleSendMessage = (e: FormEvent) => {
     e.preventDefault();
@@ -69,7 +93,10 @@ export function Chat() {
 
   return (
     <>
-      <div className={cx(styles.chatWrapper, { [styles.visible]: isVisible })}>
+      <div
+        className={cx(styles.chatWrapper, { [styles.visible]: isVisible })}
+        onClick={(e) => e.stopPropagation()}
+      >
         <Section className={styles.chat}>
           <div className={styles.chatTitleWrapper}>
             <Image
@@ -116,9 +143,7 @@ export function Chat() {
                 })()}
               </div>
             ) : (
-              <div className={styles.chatList} style={{ width: "100%" }}>
-                {/* Placeholder during SSR/hydration */}
-              </div>
+              <div className={styles.chatList} style={{ width: "100%" }}></div>
             )}
           </div>
 
