@@ -40,27 +40,34 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       const refreshToken = getCookie("refreshToken");
-      if (refreshToken) {
-        try {
-          const { data } = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`,
-            { refreshToken },
-          );
-
-          setCookie("accessToken", data.accessToken);
-          originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
-
-          return api(originalRequest);
-        } catch {
-          deleteCookie("accessToken");
-          deleteCookie("refreshToken");
-
-          if (typeof window !== "undefined") {
-            window.location.href = "/login";
-          }
-
-          throw new ApiException("Session expired. Please login again.", 401);
+      if (!refreshToken) {
+        deleteCookie("accessToken");
+        deleteCookie("refreshToken");
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
         }
+        throw new ApiException("Session expired. Please login again.", 401);
+      }
+
+      try {
+        const { data } = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`,
+          { refreshToken },
+        );
+
+        setCookie("accessToken", data.accessToken);
+        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+
+        return api(originalRequest);
+      } catch {
+        deleteCookie("accessToken");
+        deleteCookie("refreshToken");
+
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
+
+        throw new ApiException("Session expired. Please login again.", 401);
       }
     }
 
