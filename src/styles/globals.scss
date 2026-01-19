@@ -55,6 +55,14 @@ button {
   }
 }
 
+input {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

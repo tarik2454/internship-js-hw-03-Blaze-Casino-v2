@@ -98,7 +98,7 @@ export function Chat() {
   return (
     <>
       <div
-        className={cx(styles.chatWrapper, { [styles.visible]: isVisible })}
+        className={cx(styles.chatWrapper, { [styles.isVisible]: isVisible })}
         onClick={(e) => e.stopPropagation()}
       >
         <Section className={styles.chat}>
@@ -168,7 +168,7 @@ export function Chat() {
       </div>
 
       <div
-        className={cx(styles.chatOverlay, { [styles.visible]: isVisible })}
+        className={cx(styles.chatOverlay, { [styles.isVisible]: isVisible })}
         onClick={handleOpenChat}
       ></div>
 

@@ -1,7 +1,7 @@
 @use "@/styles/index" as *;
 
 .chatOverlay {
-  z-index: 11;
+  z-index: 10;
   position: fixed;
   top: 0;
   left: 0;
@@ -12,7 +12,7 @@
   pointer-events: none;
   transition: var(--transition-300);
 
-  &.visible {
+  &.isVisible {
     background: #00000080;
     opacity: 1;
     pointer-events: auto;
@@ -21,7 +21,7 @@
 
 .chatWrapper {
   display: flex;
-  z-index: 12;
+  z-index: 11;
   position: fixed;
   top: 168px;
   bottom: 0;
@@ -37,7 +37,7 @@
   pointer-events: none;
   transition: var(--transition-300);
 
-  &.visible {
+  &.isVisible {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
