@@ -1,0 +1,110 @@
+@use "@/styles/index" as *;
+
+.crushSection {
+  margin-bottom: 16px;
+
+  @include minWidth(xl) {
+    margin-bottom: 40px;
+  }
+}
+
+.crushWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  @include minWidth(xl) {
+    flex-direction: row;
+  }
+}
+
+.crushArea {
+  @include flexCenter;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 361px;
+  border-radius: var(--radius-16);
+  background: #423e6980;
+}
+
+.crushAreaValue {
+  color: var(--color-text-secondary);
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 1.3;
+  font-family: var(--font-satoshi-900);
+}
+
+.crushAreaDescription {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.settingsPanelWrapper {
+  padding: 24px 32px;
+  border-radius: var(--radius-16);
+  background: #423e6980;
+}
+
+.settingsPanelTitle {
+  margin-bottom: 32px;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 1.3;
+  font-family: var(--font-satoshi-900);
+}
+
+.settingsPanel {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 32px;
+  gap: 24px;
+}
+
+.label {
+  margin-bottom: 8px;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.dollarIcon {
+  position: absolute;
+  top: 40px;
+  left: 10px;
+}
+
+.inputBetAmount {
+  padding-left: 44px !important;
+}
+
+.buttonsWrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  padding-bottom: 32px;
+  gap: 16px;
+  border-bottom: 1px solid var(--color-grey-bd);
+}
+
+.resultsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.resultItem {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.resultValue {
+  color: var(--color-green-1e);
+  font-weight: 600;
+  line-height: 1.3;
+}

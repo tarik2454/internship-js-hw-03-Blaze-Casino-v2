@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, startTransition } from "react";
 import { usePathname } from "next/navigation";
 import { io, Socket } from "socket.io-client";
-import { getCookie } from "@/shared/utils/cookies";
+import { getCookie } from "@/config-api/cookies";
 import { useCurrentUser } from "@/config-api/user/useUser";
 import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
 import {

@@ -1,7 +1,7 @@
 import { GamesList } from "@/module/games-list/GamesList";
 import { Container } from "@/shared/components/Container";
 import { Chat } from "@/module/chat/Chat";
-import { Leaderboard } from "@/module/lb";
+import { Leaderboard } from "@/module/leaderboard/Leaderboard";
 import styles from "./page.module.scss";
 import { PageWrapper } from "@/shared/components/PageWrapper";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";

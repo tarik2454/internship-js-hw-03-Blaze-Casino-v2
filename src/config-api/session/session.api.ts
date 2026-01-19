@@ -2,7 +2,7 @@ import { api } from "@/config-api/axios";
 import { LoginResponse, RegisterResponse } from "./session.types";
 import { LoginSchemaDto, RegisterSchemaDto } from "@/module/auth/auth.schema";
 import { SESSION_ROUTES } from "./session.constants";
-import { deleteCookie, setCookie } from "@/shared/utils/cookies";
+import { deleteCookie, setCookie } from "@/config-api/cookies";
 
 export const sessionApi = {
   login: async (dto: LoginSchemaDto): Promise<LoginResponse> => {
