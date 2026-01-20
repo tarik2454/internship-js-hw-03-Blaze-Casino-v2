@@ -1,11 +1,6 @@
 @use "@/styles/index" as *;
 
 .crushSection {
-  margin-bottom: 16px;
-
-  @include minWidth(xl) {
-    margin-bottom: 40px;
-  }
 }
 
 .crushWrapper {
