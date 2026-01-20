@@ -76,7 +76,9 @@ export function Header() {
                   />
                   <span>
                     {userData?.balance !== undefined
-                      ? userData.balance.toLocaleString().replace(/,/g, ".")
+                      ? userData.balance
+                          .toLocaleString("en-US")
+                          .replace(/,/g, ".")
                       : "0"}
                   </span>
                 </div>

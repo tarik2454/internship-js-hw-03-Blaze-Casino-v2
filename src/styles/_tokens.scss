@@ -9,10 +9,10 @@
   --color-text-secondary: #adb5bd;
   --color-bg-primary: #0f0c29;
   --color-bg-secondary: #423e69;
-
-  --color-black-22: #100f22;
+  --color-black-22: #151417;
   --color-blue-ff: #51a2ff;
   --color-blue-3f: #24243f;
+  --color-blue-e8: #7c7ce8;
   --color-violet-ff: #887bff;
   --color-red-21: #c62121;
   --color-green-1e: #82c91e;
@@ -25,6 +25,7 @@
 
   /* Opacity */
   --opacity-50: 0.5;
+  --opacity-33: 0.33;
 
   /* Shadows */
 
@@ -37,4 +38,5 @@
 
   /* Transitions */
   --transition-250: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-300: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }

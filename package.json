@@ -22,6 +22,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-query": "^5.90.16",
+    "@tanstack/react-virtual": "^3.13.18",
     "axios": "^1.13.2",
     "next": "16.1.1",
     "react": "19.2.3",
@@ -29,18 +30,20 @@
     "react-hook-form": "^7.70.0",
     "react-toastify": "^11.0.5",
     "sass": "^1.97.1",
+    "socket.io-client": "^4.8.3",
     "zod": "^4.3.5"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@typescript-eslint/parser": "^8.53.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "prettier": "^3.7.4",
+    "prettier": "^3.8.0",
     "prettier-plugin-css-order": "^2.2.0",
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   }
 }

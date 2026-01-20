@@ -1,7 +1,6 @@
 import {
   QueryClient,
   defaultShouldDehydrateQuery,
-  isServer,
 } from "@tanstack/react-query";
 
 function makeQueryClient() {
@@ -9,6 +8,8 @@ function makeQueryClient() {
     defaultOptions: {
       queries: {
         staleTime: 60 * 1000,
+        retry: 1,
+        refetchOnWindowFocus: false,
       },
       dehydrate: {
         // per default, only successful queries are dehydrated,
@@ -24,7 +25,7 @@ function makeQueryClient() {
 let browserQueryClient: QueryClient | undefined = undefined;
 
 export function getQueryClient() {
-  if (isServer) {
+  if (typeof window === "undefined") {
     // Server: always make a new query client
     return makeQueryClient();
   } else {

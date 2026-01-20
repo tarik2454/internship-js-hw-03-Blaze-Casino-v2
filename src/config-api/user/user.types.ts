@@ -1,4 +1,5 @@
 export interface CurrentUserResponse {
+  _id?: string;
   username: string;
   email: string;
   balance: number;
