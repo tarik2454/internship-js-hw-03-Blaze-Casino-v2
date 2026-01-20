@@ -17,7 +17,7 @@ export function HistoryPanel() {
   const { data: history, isLoading, error } = useGameHistory();
 
   return (
-    <Section>
+    <Section className={styles.historySection}>
       <Container>
         <h2 className={styles.historyPanelTitle}>Game history</h2>
         {isLoading && <div>Loading...</div>}

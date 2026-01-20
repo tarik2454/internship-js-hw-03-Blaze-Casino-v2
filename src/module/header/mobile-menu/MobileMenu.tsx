@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import styles from "./MobileMenu.module.scss";
 import { cx } from "@/shared/utils/classNames";
 import { Logo } from "@/shared/components/Logo";
@@ -8,42 +7,35 @@ import { LogoutIcon } from "@/shared/icons/logout";
 import { Button } from "@/shared/components/Button";
 import { InvertoryIcon } from "@/shared/icons/invertory";
 import { SettingsIcon } from "@/shared/icons/settings";
+import { useLockBodyScroll } from "@/shared/hooks/useLockBodyScroll";
 
 interface MobileMenuProps {
-  menuVisibility: "hidden" | "visible";
+  isVisible: boolean;
   toggleMenu: () => void;
   closeMenu: () => void;
   handleLogout: () => void;
 }
 
 export function MobileMenu({
-  menuVisibility,
+  isVisible,
   toggleMenu,
   closeMenu,
   handleLogout,
 }: MobileMenuProps) {
-  useEffect(() => {
-    const originalOverflow = document.documentElement.style.overflow;
-    document.documentElement.style.overflow =
-      menuVisibility === "visible" ? "hidden" : "auto";
-
-    return () => {
-      document.documentElement.style.overflow = originalOverflow;
-    };
-  }, [menuVisibility]);
+  useLockBodyScroll(isVisible);
 
   return (
     <>
       <div
         className={cx(styles.overlay, {
-          [styles.isVisible]: menuVisibility === "visible",
+          [styles.isVisible]: isVisible,
         })}
         onClick={closeMenu}
       />
 
       <div
         className={cx(styles.mobileMenuWrapper, {
-          [styles.isOpen]: menuVisibility === "visible",
+          [styles.isVisible]: isVisible,
         })}
       >
         <button

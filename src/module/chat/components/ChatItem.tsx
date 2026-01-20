@@ -16,10 +16,6 @@ interface ChatItemProps {
   formatTime: (iso: string) => string;
 }
 
-/**
- * Внутренний компонент с тяжелой версткой.
- * Он НЕ перерендеривается при скролле.
- */
 const ChatItemContent = memo(
   ({
     msg,
@@ -59,11 +55,6 @@ const ChatItemContent = memo(
 
 ChatItemContent.displayName = "ChatItemContent";
 
-/**
- * Внешний контейнер.
- * Он отвечает за позицию и рендерится при скролле (быстро),
- * но не заставляет перерендериваться внутренний контент.
- */
 export function ChatItem({
   msg,
   currentUser,

@@ -1,1 +1,9 @@
 @use "@/styles/index" as *;
+
+.historyPanelSection {
+  margin-top: 16px;
+
+  @include minWidth(xl) {
+    margin-top: 40px;
+  }
+}

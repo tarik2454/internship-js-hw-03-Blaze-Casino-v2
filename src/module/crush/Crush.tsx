@@ -16,7 +16,7 @@ export function Crush() {
               <p className={styles.crushAreaDescription}>Waiting for bets...</p>
             </div>
 
-            <div className={styles.settingsPanelWrapper}>
+            <aside className={styles.settingsPanelWrapper}>
               <p className={styles.settingsPanelTitle}>Crash Configuration</p>
               <div className={styles.settingsPanel}>
                 <div className={styles.inputWrapper}>
@@ -64,7 +64,7 @@ export function Crush() {
                   <span className={styles.resultValue}>0.00$</span>
                 </p>
               </div>
-            </div>
+            </aside>
           </div>
         </Container>
       </Section>
