@@ -1,7 +1,3 @@
-export interface CrashHistoryResponse {
-  bets: CrashBet[];
-}
-
 export interface CrashBet {
   betId: string;
   gameId: string;
@@ -11,4 +7,35 @@ export interface CrashBet {
   status: "won" | "lost";
   crashPoint: number;
   createdAt: string;
+}
+
+export interface CrashHistoryResponse {
+  bets: CrashBet[];
+}
+
+export interface CrashBetRequest {
+  amount: number;
+  autoCashout?: number;
+}
+
+export interface CrashBetResponse {
+  betId: string;
+  amount: number;
+  gameId: string;
+}
+
+export interface CrashCashoutResponse {
+  multiplier: number;
+  winAmount: number;
+}
+
+export interface CrashCurrentResponse {
+  gameId: string;
+  state: "waiting" | "running" | "crashed";
+  multiplier?: number;
+  serverSeedHash: string;
+  myBet?: {
+    betId: string;
+    amount: number;
+  };
 }

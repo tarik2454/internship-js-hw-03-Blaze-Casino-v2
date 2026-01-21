@@ -10,18 +10,41 @@ import Image from "next/image";
 import { Switch } from "@/shared/components/Switch";
 import { DollarBtnIcon } from "@/shared/icons/dollar-btn";
 import { WalletBtnIcon } from "@/shared/icons/wallet-btn";
+import { useCrashSocket } from "@/config-api/crash/ws/useCrashSocket";
+import { useCrashBet } from "@/config-api/crash/useCrash";
+import { useCrashCashout } from "@/config-api/crash/useCrash";
+import { cx } from "@/shared/utils/classNames";
 
 export function Crush() {
   const [isAuto, setIsAuto] = useState(false);
+
+  const { multiplier, isRunning, canBet, crashPoint, gameId, betId } =
+    useCrashSocket();
+  console.log("multiplier", multiplier);
+  console.log("crashPoint", crashPoint);
+  console.log("isRunning", isRunning);
+
+  const { mutate: placeBet } = useCrashBet();
+  const { mutate: cashout } = useCrashCashout();
 
   return (
     <>
       <Section className={styles.crushSection}>
         <Container>
           <div className={styles.crushWrapper}>
-            <div className={styles.crushArea}>
-              <p className={styles.crushAreaValue}>1.00X</p>
-              <p className={styles.crushAreaDescription}>Waiting for bets...</p>
+            <div
+              className={cx(styles.crushArea, isRunning && styles.isRunning)}
+            >
+              {isRunning ? (
+                <p className={styles.crushAreaValue}>{multiplier}X</p>
+              ) : (
+                <>
+                  <p className={styles.crushAreaValue}>1.00X</p>
+                  <p className={styles.crushAreaDescription}>
+                    Waiting for bets...
+                  </p>
+                </>
+              )}
             </div>
 
             <aside className={styles.settingsPanelWrapper}>
@@ -75,6 +98,8 @@ export function Crush() {
                 <Button
                   stylesVariant="redGradient"
                   className={styles.actionButton}
+                  onClick={() => placeBet({ amount: 10, autoCashout: 2 })}
+                  disabled={!canBet}
                 >
                   Place Bet
                   <span className={styles.actionButtonIcon}>
@@ -84,6 +109,8 @@ export function Crush() {
                 <Button
                   stylesVariant="yellowGradient"
                   className={styles.actionButton}
+                  onClick={() => betId && cashout(betId)}
+                  disabled={!isRunning || !betId}
                 >
                   Cashout
                   <span className={styles.actionButtonIcon}>

@@ -18,6 +18,11 @@
   min-height: 361px;
   border-radius: var(--radius-16);
   background: #423e6980;
+
+  &.isRunning {
+    background: url("/images/crash/crash-bg.svg") no-repeat center center;
+    background-size: cover;
+  }
 }
 
 .crushAreaValue {

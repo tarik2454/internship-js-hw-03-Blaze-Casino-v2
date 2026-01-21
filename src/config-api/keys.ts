@@ -26,9 +26,10 @@ export const queryKeyFactories = {
   crash: {
     history: (limit: number = 10, offset: number = 0) => [
       ...queryKeys.crash,
-      "bet/history",
+      "history",
       limit,
       offset,
     ],
+    getCurrent: () => [...queryKeys.crash, "current"],
   },
 };
