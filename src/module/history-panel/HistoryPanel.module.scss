@@ -1,9 +1,105 @@
 @use "@/styles/index" as *;
 
-.historyPanelSection {
+.historySection {
   margin-top: 16px;
 
   @include minWidth(xl) {
     margin-top: 40px;
   }
+}
+
+.historyPanelTitle {
+  margin-bottom: 16px;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 1.3;
+  font-family: var(--font-satoshi-900);
+}
+
+.historyTableWrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-16);
+  background: transparent;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-blue-3f);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: var(--color-bg-secondary);
+  }
+}
+
+.historyTable {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: separate;
+  border-spacing: 0 4px;
+  table-layout: fixed;
+
+  th,
+  td {
+    padding: 12px 16px;
+    line-height: 1.5;
+    text-align: left;
+  }
+}
+
+.historyHeader {
+  padding: 16px 32px;
+  background: #adb5bd33;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.historyItem {
+  transition: var(--transition-250);
+
+  &:hover td {
+    background: #7c7ce830;
+  }
+
+  td:first-child {
+    border-radius: var(--radius-8) 0 0 var(--radius-8);
+  }
+
+  td:last-child {
+    border-radius: 0 var(--radius-8) var(--radius-8) 0;
+  }
+}
+
+.historyDate {
+  color: var(--color-text-primary);
+}
+
+.historyAmount {
+  color: var(--color-text-primary);
+}
+
+.historyMultiplier {
+  color: var(--color-green-1e);
+}
+
+.historyCrash {
+  color: var(--color-text-primary);
+}
+
+.historyWin {
+  color: var(--color-green-1e);
+}
+
+.statusWon {
+  color: var(--color-green-1e);
+  text-transform: capitalize;
+}
+
+.statusLost {
+  color: var(--color-red-21);
+  text-transform: capitalize;
 }

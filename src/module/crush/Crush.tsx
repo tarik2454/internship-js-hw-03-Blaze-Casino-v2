@@ -1,11 +1,19 @@
+"use client";
+
+import { useState } from "react";
 import { Container } from "@/shared/components/Container";
 import { Section } from "@/shared/components/Section";
 import styles from "./Crush.module.scss";
 import { Input } from "@/shared/components/Input";
 import { Button } from "@/shared/components/Button";
 import Image from "next/image";
+import { Switch } from "@/shared/components/Switch";
+import { DollarBtnIcon } from "@/shared/icons/dollar-btn";
+import { WalletBtnIcon } from "@/shared/icons/wallet-btn";
 
 export function Crush() {
+  const [isAuto, setIsAuto] = useState(false);
+
   return (
     <>
       <Section className={styles.crushSection}>
@@ -28,6 +36,13 @@ export function Crush() {
                     inputClassName={styles.inputBetAmount}
                     stylesVariant="gameInput"
                   />
+
+                  <div className={styles.betButtonsWrapper}>
+                    <Button className={styles.betButton}>1/2</Button>
+                    <Button className={styles.betButton}>x2</Button>
+                    <Button className={styles.betButton}>Max</Button>
+                  </div>
+
                   <Image
                     src="/images/common/dollar.svg"
                     alt="Dollar"
@@ -46,12 +61,35 @@ export function Crush() {
                     inputClassName={styles.inputAutoCashout}
                     stylesVariant="gameInput"
                   />
+
+                  <Switch
+                    checked={isAuto}
+                    onChange={setIsAuto}
+                    disabled={false}
+                    className={styles.switchCashout}
+                  />
                 </div>
               </div>
 
-              <div className={styles.buttonsWrapper}>
-                <Button stylesVariant="redGradient">Place bet</Button>
-                <Button stylesVariant="yellowGradient">Cashout</Button>
+              <div className={styles.actionButtonsWrapper}>
+                <Button
+                  stylesVariant="redGradient"
+                  className={styles.actionButton}
+                >
+                  Place Bet
+                  <span className={styles.actionButtonIcon}>
+                    <DollarBtnIcon />
+                  </span>
+                </Button>
+                <Button
+                  stylesVariant="yellowGradient"
+                  className={styles.actionButton}
+                >
+                  Cashout
+                  <span className={styles.actionButtonIcon}>
+                    <WalletBtnIcon />
+                  </span>
+                </Button>
               </div>
 
               <div className={styles.resultsWrapper}>
