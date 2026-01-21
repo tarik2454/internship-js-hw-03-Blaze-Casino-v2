@@ -27,13 +27,14 @@ export function useGameHistory(limit = 10, offset = 0) {
         case "crash":
           return crashApi.getHistory(limit, offset);
         case "case":
+        // TODO: Implement history for other games
         case "mines":
         case "plinko":
-          // TODO: Implement history for other games
           return crashApi.getHistory(limit, offset);
         default:
           return crashApi.getHistory(limit, offset);
       }
     },
+    refetchOnWindowFocus: true,
   });
 }

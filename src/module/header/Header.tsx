@@ -16,7 +16,7 @@ import { ROUTES } from "@/shared/constants/routes";
 import { useLeaderboard } from "@/config-api/leaderboard/useLeaderboard";
 import { Logo } from "@/shared/components/Logo";
 import { useCurrentUser } from "@/config-api/user/useUser";
-import { useLockBodyScroll } from "@/shared/hooks/useLockBodyScroll";
+import Link from "next/link";
 
 export function Header() {
   const [isVisible, setIsVisible] = useState(false);
@@ -55,7 +55,9 @@ export function Header() {
       <header className={styles.header}>
         <Container>
           <div className={styles.headerContent}>
-            <Logo className={styles.headerLogo} />
+            <Link href={ROUTES.HOME}>
+              <Logo className={styles.headerLogo} />
+            </Link>
 
             <Button
               className={styles.toggleMenuButton}
