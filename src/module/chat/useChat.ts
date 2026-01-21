@@ -9,9 +9,12 @@ import {
   ChatMessage,
   ChatHistoryResponse,
   ChatRoomUsersResponse,
-} from "./chat.types";
-import { ROUTE_TO_ROOM } from "./chat.constants";
-import { ChatSocketService, createChatSocket } from "./chat.service";
+} from "@/config-api/chat/chat.types";
+import { ROUTE_TO_ROOM } from "@/config-api/chat/chat.constants";
+import {
+  ChatSocketService,
+  createChatSocket,
+} from "@/config-api/chat/chat.service";
 
 export function useChat() {
   const pathname = usePathname();
