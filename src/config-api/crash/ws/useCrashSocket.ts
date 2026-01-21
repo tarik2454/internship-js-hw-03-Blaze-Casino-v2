@@ -58,13 +58,11 @@ export function useCrashSocket() {
   }, [currentGame?.gameId]);
 
   // Состояние игры берём напрямую с сервера
-  const isRunning = currentGame?.state === "running";
   const canBet = currentGame?.state === "waiting" && !currentGame?.myBet;
 
   return {
     multiplier,
     elapsed,
-    isRunning,
     canBet,
     crashPoint,
     gameId: currentGame?.gameId,

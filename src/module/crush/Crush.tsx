@@ -18,11 +18,11 @@ import { cx } from "@/shared/utils/classNames";
 export function Crush() {
   const [isAuto, setIsAuto] = useState(false);
 
-  const { multiplier, isRunning, canBet, crashPoint, gameId, betId } =
+  const { multiplier, canBet, crashPoint, gameId, betId, gameState } =
     useCrashSocket();
-  console.log("multiplier", multiplier);
-  console.log("crashPoint", crashPoint);
-  console.log("isRunning", isRunning);
+
+  // Форматируем multiplier для отображения
+  const displayMultiplier = multiplier.toFixed(2);
 
   const { mutate: placeBet } = useCrashBet();
   const { mutate: cashout } = useCrashCashout();
@@ -33,17 +33,22 @@ export function Crush() {
         <Container>
           <div className={styles.crushWrapper}>
             <div
-              className={cx(styles.crushArea, isRunning && styles.isRunning)}
+              className={cx(
+                styles.crushArea,
+                gameState === "running" && styles.isRunning,
+                gameState === "crashed" && crashPoint && styles.crashed,
+              )}
             >
-              {isRunning ? (
-                <p className={styles.crushAreaValue}>{multiplier}X</p>
-              ) : (
-                <>
-                  <p className={styles.crushAreaValue}>1.00X</p>
-                  <p className={styles.crushAreaDescription}>
-                    Waiting for bets...
-                  </p>
-                </>
+              <p className={styles.crushAreaValue}>
+                {crashPoint ? crashPoint.toFixed(2) : displayMultiplier}X
+              </p>
+              {gameState === "waiting" && (
+                <p className={styles.crushAreaDescription}>
+                  Waiting for bets...
+                </p>
+              )}
+              {gameState === "crashed" && crashPoint && (
+                <p className={styles.crushAreaDescription}>Crashed!</p>
               )}
             </div>
 
@@ -110,7 +115,7 @@ export function Crush() {
                   stylesVariant="yellowGradient"
                   className={styles.actionButton}
                   onClick={() => betId && cashout(betId)}
-                  disabled={!isRunning || !betId}
+                  disabled={gameState !== "running" || !betId}
                 >
                   Cashout
                   <span className={styles.actionButtonIcon}>
