@@ -1,4 +1,4 @@
-import { queryKeyFactories } from "../keys";
+import { queryKeyFactories, queryKeys } from "../keys";
 import { crashApi } from "./crash.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError } from "../error.types";
@@ -7,13 +7,21 @@ import {
   CrashBetResponse,
   CrashCashoutResponse,
   CrashCurrentResponse,
-  CrashHistoryResponse,
+  CrashUserHistoryResponse,
+  CrashGlobalHistoryResponse,
 } from "./crash.types";
 
-export function useCrashHistory() {
-  return useQuery<CrashHistoryResponse, ApiError>({
-    queryKey: queryKeyFactories.crash.history(10, 0),
-    queryFn: () => crashApi.getHistory(10, 0),
+export function useCrashGlobalHistory(limit: number = 10, offset: number = 0) {
+  return useQuery<CrashGlobalHistoryResponse, ApiError>({
+    queryKey: queryKeyFactories.crash.globalHistory(limit, offset),
+    queryFn: () => crashApi.getGlobalHistory(limit, offset),
+  });
+}
+
+export function useCrashUserHistory(limit: number = 10, offset: number = 0) {
+  return useQuery<CrashUserHistoryResponse, ApiError>({
+    queryKey: queryKeyFactories.crash.userHistory(limit, offset),
+    queryFn: () => crashApi.getUserHistory(limit, offset),
   });
 }
 
@@ -24,11 +32,15 @@ export function useCrashBet() {
     mutationFn: (betData: CrashBetRequest) => crashApi.postBet(betData),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeyFactories.crash.history(),
+        queryKey: queryKeyFactories.crash.userHistory(),
       });
       // Обновить текущую игру (это обновит betId и состояние)
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.crash.getCurrent(),
+      });
+      // Обновить баланс пользователя
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.user,
       });
     },
   });
@@ -48,10 +60,14 @@ export function useCrashCashout() {
     mutationFn: (betId: string) => crashApi.postCashout(betId),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeyFactories.crash.history(),
+        queryKey: queryKeyFactories.crash.userHistory(),
       });
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.crash.getCurrent(),
+      });
+      // Обновить баланс пользователя
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.user,
       });
     },
   });
