@@ -55,8 +55,8 @@ export function Header() {
       <header className={styles.header}>
         <Container>
           <div className={styles.headerContent}>
-            <Link href={ROUTES.HOME}>
-              <Logo className={styles.headerLogo} />
+            <Link href={ROUTES.HOME} className={styles.headerLogo}>
+              <Logo />
             </Link>
 
             <Button

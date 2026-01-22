@@ -3,7 +3,7 @@
 import { memo, useCallback, useRef, useLayoutEffect } from "react";
 import Image from "next/image";
 import { VirtualItem, Virtualizer } from "@tanstack/react-virtual";
-import { ChatMessage } from "@/config-api/chat/chat.types";
+import { ChatMessage } from "@/config-api/chat/chat.ws.types";
 import { CurrentUserResponse } from "@/config-api/user/user.types";
 import { cx } from "@/shared/utils/classNames";
 import styles from "./ChatItem.module.scss";
