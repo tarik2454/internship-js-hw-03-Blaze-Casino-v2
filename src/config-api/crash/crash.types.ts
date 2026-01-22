@@ -2,15 +2,26 @@ export interface CrashBet {
   betId: string;
   gameId: string;
   amount: number;
-  cashoutMultiplier: number;
-  winAmount: number;
+  cashoutMultiplier?: number;
+  winAmount?: number;
   status: "won" | "lost";
   crashPoint: number;
   createdAt: string;
 }
 
-export interface CrashHistoryResponse {
+export interface CrashUserHistoryResponse {
   bets: CrashBet[];
+}
+
+export interface CrashGlobalGame {
+  gameId: string;
+  crashPoint: number;
+  hash: string;
+  seed: string;
+}
+
+export interface CrashGlobalHistoryResponse {
+  games: CrashGlobalGame[];
 }
 
 export interface CrashBetRequest {

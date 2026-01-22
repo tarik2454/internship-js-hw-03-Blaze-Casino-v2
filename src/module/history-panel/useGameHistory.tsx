@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeyFactories } from "@/config-api/keys";
 import { ApiError } from "@/config-api/error.types";
-import { CrashHistoryResponse } from "@/config-api/crash/crash.types";
+import { CrashUserHistoryResponse } from "@/config-api/crash/crash.types";
 
 type GameType = "crash" | "case" | "mines" | "plinko";
 
@@ -20,19 +20,19 @@ export function useGameHistory(limit = 10, offset = 0) {
   const pathname = usePathname();
   const gameType = PATH_TO_GAME[pathname] || "crash";
 
-  return useQuery<CrashHistoryResponse, ApiError>({
-    queryKey: queryKeyFactories.crash.history(limit, offset),
+  return useQuery<CrashUserHistoryResponse, ApiError>({
+    queryKey: queryKeyFactories.crash.userHistory(limit, offset),
     queryFn: () => {
       switch (gameType) {
         case "crash":
-          return crashApi.getHistory(limit, offset);
+          return crashApi.getUserHistory(limit, offset);
         case "case":
         // TODO: Implement history for other games
         case "mines":
         case "plinko":
-          return crashApi.getHistory(limit, offset);
+          return crashApi.getUserHistory(limit, offset);
         default:
-          return crashApi.getHistory(limit, offset);
+          return crashApi.getUserHistory(limit, offset);
       }
     },
     refetchOnWindowFocus: true,

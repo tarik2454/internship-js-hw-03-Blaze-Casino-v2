@@ -1,4 +1,3 @@
-import { Container } from "@/shared/components/Container";
 import { PageWrapper } from "@/shared/components/PageWrapper";
 import { Crush } from "@/module/crush/Crush";
 import { HistoryPanel } from "@/module/history-panel/HistoryPanel";
@@ -14,8 +13,8 @@ export default async function CrashPage() {
   const token = cookieStore.get("accessToken")?.value;
 
   await queryClient.prefetchQuery({
-    queryKey: queryKeyFactories.crash.history(10, 0),
-    queryFn: () => crashApi.getHistory(10, 0, token),
+    queryKey: queryKeyFactories.crash.userHistory(10, 0),
+    queryFn: () => crashApi.getUserHistory(10, 0, token),
   });
 
   return (

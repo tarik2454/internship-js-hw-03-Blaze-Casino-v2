@@ -1,5 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys, queryKeyFactories } from "@/config-api/keys";
 import { Container } from "@/shared/components/Container";
 import { Section } from "@/shared/components/Section";
 import styles from "./Crush.module.scss";
@@ -59,8 +62,14 @@ const calculateRocketPosition = (
 };
 
 export function Crush() {
+  const queryClient = useQueryClient();
   const { multiplier, elapsed, canBet, crashPoint, gameId, betId, gameState } =
     useCrashSocket();
+
+  const [activeAutoCashout, setActiveAutoCashout] = useState<
+    number | undefined
+  >(undefined);
+  const [isAutoCashedOut, setIsAutoCashedOut] = useState(false);
 
   const displayMultiplier = multiplier.toFixed(2);
   const elapsedSeconds = Math.floor(elapsed / 1000);
@@ -72,6 +81,53 @@ export function Crush() {
   const { mutate: placeBet } = useCrashBet();
   const { mutate: cashout } = useCrashCashout();
 
+  // Определяем актуальное состояние игры
+  const currentGameState = crashPoint ? "crashed" : gameState;
+
+  // Обработчик ставки с сохранением autoCashout
+  const handlePlaceBet = (data: { amount: number; autoCashout?: number }) => {
+    placeBet(data, {
+      onSuccess: () => {
+        setActiveAutoCashout(data.autoCashout);
+        setIsAutoCashedOut(false);
+      },
+    });
+  };
+
+  // Эффект для проверки авто-кешаута на клиенте
+  useEffect(() => {
+    if (
+      betId &&
+      activeAutoCashout &&
+      multiplier >= activeAutoCashout &&
+      !isAutoCashedOut &&
+      currentGameState === "running"
+    ) {
+      setIsAutoCashedOut(true);
+      // Инвалидируем баланс пользователя
+      queryClient.invalidateQueries({ queryKey: queryKeys.user });
+      // Обновляем текущую игру
+      queryClient.invalidateQueries({
+        queryKey: queryKeyFactories.crash.getCurrent(),
+      });
+    }
+  }, [
+    multiplier,
+    activeAutoCashout,
+    betId,
+    isAutoCashedOut,
+    currentGameState,
+    queryClient,
+  ]);
+
+  // Сброс состояния при начале новой игры (waiting)
+  useEffect(() => {
+    if (currentGameState === "waiting") {
+      setIsAutoCashedOut(false);
+      // Не сбрасываем activeAutoCashout здесь, так как ставка может быть сделана в waiting
+    }
+  }, [currentGameState]);
+
   return (
     <>
       <Section className={styles.crushSection}>
@@ -80,12 +136,12 @@ export function Crush() {
             <div
               className={cx(
                 styles.crushArea,
-                gameState === "running" && styles.isRunning,
-                gameState === "crashed" && crashPoint && styles.crashed,
+                currentGameState === "running" && styles.isRunning,
+                currentGameState === "crashed" && crashPoint && styles.crashed,
               )}
             >
               {/* Ракета вынесена из centerArea для независимого позиционирования */}
-              {gameState === "running" && multiplier >= 1.0 && (
+              {currentGameState === "running" && multiplier >= 1.0 && (
                 <div
                   className={styles.rocket}
                   style={{
@@ -104,7 +160,7 @@ export function Crush() {
               )}
 
               {/* Шкала множителей слева */}
-              {gameState === "running" && (
+              {currentGameState === "running" && (
                 <div className={styles.multiplierScale}>
                   {multiplierLevels.map((level) => (
                     <div
@@ -125,18 +181,18 @@ export function Crush() {
                 <p className={styles.crushAreaValue}>
                   {crashPoint ? crashPoint.toFixed(2) : displayMultiplier}X
                 </p>
-                {gameState === "waiting" && (
+                {currentGameState === "waiting" && (
                   <p className={styles.crushAreaDescription}>
                     Waiting for bets...
                   </p>
                 )}
-                {gameState === "crashed" && crashPoint && (
+                {currentGameState === "crashed" && (
                   <p className={styles.crushAreaDescription}>Crashed!</p>
                 )}
               </div>
 
               {/* Шкала времени снизу */}
-              {gameState === "running" && (
+              {currentGameState === "running" && (
                 <div className={styles.timeScale}>
                   {timeLevels.map((seconds) => (
                     <div
@@ -155,9 +211,10 @@ export function Crush() {
 
             <SettingsPanel
               canBet={canBet}
-              gameState={gameState}
-              betId={betId}
-              onPlaceBet={() => placeBet({ amount: 10, autoCashout: 2 })}
+              gameState={currentGameState}
+              betId={isAutoCashedOut ? undefined : betId} // Скрываем кнопку если авто-кешаут сработал
+              multiplier={multiplier}
+              onPlaceBet={handlePlaceBet}
               onCashout={() => betId && cashout(betId)}
             />
           </div>

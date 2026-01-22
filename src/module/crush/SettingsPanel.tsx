@@ -1,19 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Input } from "@/shared/components/Input";
 import { Button } from "@/shared/components/Button";
 import Image from "next/image";
 import { Switch } from "@/shared/components/Switch";
 import { DollarBtnIcon } from "@/shared/icons/dollar-btn";
 import { WalletBtnIcon } from "@/shared/icons/wallet-btn";
+import { useCurrentUser } from "@/config-api/user/useUser";
 import styles from "./SettingsPanel.module.scss";
 
 interface SettingsPanelProps {
   canBet: boolean;
   gameState: "waiting" | "running" | "crashed" | undefined;
   betId: string | undefined;
-  onPlaceBet: () => void;
+  multiplier: number;
+  onPlaceBet: (data: { amount: number; autoCashout?: number }) => void;
   onCashout: () => void;
 }
 
@@ -21,10 +23,66 @@ export function SettingsPanel({
   canBet,
   gameState,
   betId,
+  multiplier,
   onPlaceBet,
   onCashout,
 }: SettingsPanelProps) {
+  const { data: user } = useCurrentUser();
+  const [amount, setAmount] = useState<number>(10);
+  const [autoCashout, setAutoCashout] = useState<string>("2.00");
   const [isAuto, setIsAuto] = useState(false);
+  const [isCashingOut, setIsCashingOut] = useState(false);
+
+  // Замораживаем множитель, если игра завершена или нет активной ставки
+  const activeMultiplier = useMemo(() => {
+    if (gameState === "crashed") return 0;
+    if (!betId && gameState === "running") return 1.0; // Пользователь уже мог забрать выигрыш
+    return multiplier;
+  }, [multiplier, gameState, betId]);
+
+  const potentialWin = useMemo(() => {
+    return (amount * activeMultiplier).toFixed(2);
+  }, [amount, activeMultiplier]);
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value);
+    setAmount(isNaN(value) ? 0 : value);
+  };
+
+  const handleHalf = () => setAmount((prev) => Math.max(0.1, prev / 2));
+  const handleDouble = () => setAmount((prev) => prev * 2);
+  const handleMax = () => {
+    if (user?.balance) {
+      setAmount(user.balance);
+    }
+  };
+
+  const handleAutoToggle = (checked: boolean) => {
+    setIsAuto(checked);
+    if (checked && !autoCashout) {
+      setAutoCashout("2.00");
+    }
+  };
+
+  const handlePlaceBet = () => {
+    const parsedAutoCashout = parseFloat(autoCashout.replace(",", "."));
+    onPlaceBet({
+      amount,
+      autoCashout:
+        isAuto && !isNaN(parsedAutoCashout) ? parsedAutoCashout : undefined,
+    });
+  };
+
+  const handleCashout = async () => {
+    setIsCashingOut(true);
+    try {
+      await onCashout();
+    } finally {
+      setIsCashingOut(false);
+    }
+  };
+
+  const inputsDisabled = !!betId;
 
   return (
     <aside className={styles.settingsPanelWrapper}>
@@ -38,12 +96,36 @@ export function SettingsPanel({
             labelClassName={styles.label}
             inputClassName={styles.inputBetAmount}
             stylesVariant="gameInput"
+            value={amount}
+            onChange={handleAmountChange}
+            disabled={inputsDisabled}
+            min={0.1}
+            max={10000}
+            step={0.1}
           />
 
           <div className={styles.betButtonsWrapper}>
-            <Button className={styles.betButton}>1/2</Button>
-            <Button className={styles.betButton}>x2</Button>
-            <Button className={styles.betButton}>Max</Button>
+            <Button
+              className={styles.betButton}
+              onClick={handleHalf}
+              disabled={inputsDisabled}
+            >
+              1/2
+            </Button>
+            <Button
+              className={styles.betButton}
+              onClick={handleDouble}
+              disabled={inputsDisabled}
+            >
+              x2
+            </Button>
+            <Button
+              className={styles.betButton}
+              onClick={handleMax}
+              disabled={inputsDisabled}
+            >
+              Max
+            </Button>
           </div>
 
           <Image
@@ -58,17 +140,21 @@ export function SettingsPanel({
         <div className={styles.inputWrapper}>
           <Input
             label="Auto Cashout (optional)"
-            type="number"
+            type="text"
+            inputMode="decimal"
             placeholder="e.g 2.00"
             labelClassName={styles.label}
             inputClassName={styles.inputAutoCashout}
             stylesVariant="gameInput"
+            value={autoCashout}
+            onChange={(e) => setAutoCashout(e.target.value)}
+            disabled={!isAuto || inputsDisabled}
           />
 
           <Switch
             checked={isAuto}
-            onChange={setIsAuto}
-            disabled={false}
+            onChange={handleAutoToggle}
+            disabled={inputsDisabled}
             className={styles.switchCashout}
           />
         </div>
@@ -78,7 +164,7 @@ export function SettingsPanel({
         <Button
           stylesVariant="redGradient"
           className={styles.actionButton}
-          onClick={onPlaceBet}
+          onClick={handlePlaceBet}
           disabled={!canBet}
         >
           Place Bet
@@ -89,10 +175,10 @@ export function SettingsPanel({
         <Button
           stylesVariant="yellowGradient"
           className={styles.actionButton}
-          onClick={onCashout}
-          disabled={gameState !== "running" || !betId}
+          onClick={handleCashout}
+          disabled={gameState !== "running" || !betId || isCashingOut}
         >
-          Cashout
+          {isCashingOut ? "Cashing out..." : "Cashout"}
           <span className={styles.actionButtonIcon}>
             <WalletBtnIcon />
           </span>
@@ -102,11 +188,13 @@ export function SettingsPanel({
       <div className={styles.resultsWrapper}>
         <p className={styles.resultItem}>
           Current Multiplier:
-          <span className={styles.resultValue}>1.00X</span>
+          <span className={styles.resultValue}>
+            {activeMultiplier.toFixed(2)}X
+          </span>
         </p>
         <p className={styles.resultItem}>
           Potential Win:
-          <span className={styles.resultValue}>0.00$</span>
+          <span className={styles.resultValue}>{potentialWin}$</span>
         </p>
       </div>
     </aside>

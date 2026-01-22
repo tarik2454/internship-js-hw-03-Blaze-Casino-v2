@@ -2,32 +2,48 @@ import { api } from "../axios";
 import { CRASH_ROUTES } from "./crash.constants";
 import {
   CrashBetResponse,
-  CrashHistoryResponse,
+  CrashUserHistoryResponse,
+  CrashGlobalHistoryResponse,
   CrashBetRequest,
   CrashCashoutResponse,
   CrashCurrentResponse,
 } from "./crash.types";
 
 export const crashApi = {
-  getHistory: async (
+  getGlobalHistory: async (
+    limit: number = 10,
+    offset: number = 0,
+  ): Promise<CrashGlobalHistoryResponse> => {
+    const config = {
+      params: { limit, offset },
+    };
+
+    const { data } = await api.get<CrashGlobalHistoryResponse>(
+      CRASH_ROUTES.GET_GLOBAL_HISTORY,
+      config,
+    );
+    return data;
+  },
+
+  getUserHistory: async (
     limit: number = 10,
     offset: number = 0,
     token?: string,
-  ): Promise<CrashHistoryResponse> => {
+  ): Promise<CrashUserHistoryResponse> => {
     const config = {
       params: { limit, offset },
       ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
     };
 
-    const { data } = await api.get<CrashHistoryResponse>(
-      CRASH_ROUTES.GET_HISTORY,
+    const { data } = await api.get<CrashUserHistoryResponse>(
+      CRASH_ROUTES.GET_USER_HISTORY,
       config,
     );
     return data;
   },
 
   postBet: async (
-    dto: CrashBetRequest,
+    betData: CrashBetRequest,
     token?: string,
   ): Promise<CrashBetResponse> => {
     const config = token
@@ -36,7 +52,7 @@ export const crashApi = {
 
     const { data } = await api.post<CrashBetResponse>(
       CRASH_ROUTES.POST_BET,
-      dto,
+      betData,
       config,
     );
     return data;
