@@ -92,6 +92,7 @@
 
   @include minWidth(xl) {
     height: 650px;
+    max-height: none;
   }
 }
 

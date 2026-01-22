@@ -3,7 +3,7 @@ import {
   ChatMessage,
   ChatHistoryResponse,
   ChatRoomUsersResponse,
-} from "./chat.types";
+} from "./chat.ws.types";
 
 export interface ChatSocketCallbacks {
   onConnect?: (roomId: string) => void;
