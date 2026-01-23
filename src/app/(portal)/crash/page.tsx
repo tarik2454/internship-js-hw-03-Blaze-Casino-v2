@@ -1,5 +1,5 @@
 import { PageWrapper } from "@/shared/components/PageWrapper";
-import { Crush } from "@/module/crush/Crush";
+import { Crash } from "@/module/crash/Crash";
 import { HistoryPanel } from "@/module/history-panel/HistoryPanel";
 import { queryKeyFactories } from "@/config-api/keys";
 import { getQueryClient } from "@/app/providers/getQueryClient";
@@ -19,7 +19,7 @@ export default async function CrashPage() {
 
   return (
     <PageWrapper>
-      <Crush />
+      <Crash />
       <HydrationBoundary state={dehydrate(queryClient)}>
         <HistoryPanel />
       </HydrationBoundary>

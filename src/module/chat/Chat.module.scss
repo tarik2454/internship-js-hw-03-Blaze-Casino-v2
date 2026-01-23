@@ -1,7 +1,7 @@
 @use "@/styles/index" as *;
 
 .chatOverlay {
-  z-index: 10;
+  z-index: 4;
   position: fixed;
   top: 0;
   left: 0;
@@ -17,11 +17,15 @@
     opacity: 1;
     pointer-events: auto;
   }
+
+  @include minWidth(xl) {
+    z-index: 1;
+  }
 }
 
 .chatWrapper {
   display: flex;
-  z-index: 11;
+  z-index: 5;
   position: fixed;
   top: 168px;
   bottom: 0;
@@ -45,6 +49,7 @@
 
   @include minWidth(xl) {
     display: flex;
+    z-index: 2;
     position: relative;
     top: 0;
     bottom: 0;
