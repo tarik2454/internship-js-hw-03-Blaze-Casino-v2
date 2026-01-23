@@ -1,6 +1,6 @@
 @use "@/styles/index" as *;
 
-.crushWrapper {
+.crashWrapper {
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
@@ -10,7 +10,7 @@
   }
 }
 
-.crushArea {
+.crashArea {
   position: relative;
   @include flexCenter;
   flex-direction: column;
@@ -39,9 +39,14 @@
   z-index: 1;
   flex-direction: column;
   overflow: visible;
+
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
-.crushAreaValue {
+.crashAreaValue {
   z-index: 2;
   position: relative;
   color: var(--color-text-secondary);
@@ -50,9 +55,17 @@
   line-height: 1.3;
   font-family: var(--font-satoshi-900);
   pointer-events: none;
+
+  &.win {
+    color: #4caf50;
+  }
+
+  &.lose {
+    color: #f44336;
+  }
 }
 
-.crushAreaDescription {
+.crashAreaDescription {
   z-index: 2;
   position: relative;
   color: var(--color-text-secondary);
@@ -60,6 +73,17 @@
   font-size: 32px;
   line-height: 1.3;
   pointer-events: none;
+}
+
+@keyframes fly {
+  from {
+    bottom: 2%;
+    left: 2%;
+  }
+  to {
+    bottom: 90%;
+    left: 90%;
+  }
 }
 
 .rocket {
@@ -71,7 +95,9 @@
   width: 60px;
   height: 80px;
   min-height: 80px;
+  animation: fly 10s linear forwards;
   pointer-events: none;
+  will-change: left, bottom;
 }
 
 .rocketImage {
@@ -86,45 +112,38 @@
   display: flex;
   z-index: 2;
   position: absolute;
-  bottom: 16px;
+  bottom: 55px;
   left: 16px;
   flex-direction: column-reverse;
-  max-height: calc(100% - 32px);
+  max-height: calc(100% - 55px);
   overflow-y: auto;
-  gap: 8px;
+  gap: 37px;
+  line-height: 1.3;
 
   &::-webkit-scrollbar {
-    width: 2px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 2px;
-    background: var(--color-text-secondary);
-    opacity: 0.3;
+    display: none;
   }
 }
 
 .timeScale {
   display: flex;
-  z-index: 2;
+  z-index: 1;
   position: absolute;
   bottom: 16px;
-  left: 50%;
-  padding-left: 80px; // Отступ от шкалы множителей
-  gap: 24px;
-  transform: translateX(-50%);
+  left: 16px;
+  max-width: calc(100% - 16px);
+  overflow-x: auto;
+  gap: 49px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .scaleItem {
-  color: var(--color-text-secondary);
-  font-size: 14px;
-  opacity: 0.5;
+  font-size: 18px;
+  line-height: 1.3;
   transition:
-    opacity 0.2s,
     color 0.2s,
     font-weight 0.2s;
 

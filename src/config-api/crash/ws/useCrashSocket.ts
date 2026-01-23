@@ -32,9 +32,11 @@ export function useCrashSocket() {
         setElapsed(data.elapsed);
       },
       onCrash: (data: GameCrashEvent) => {
+        console.log("WebSocket CRASH event:", data.crashPoint);
         setCrashPoint(data.crashPoint);
         // Загрузить следующую игру через 3 секунды
         setTimeout(() => {
+          console.log("Resetting after crash...");
           refetchCurrentGame();
           setCrashPoint(null);
           setMultiplier(1.0);
@@ -67,6 +69,7 @@ export function useCrashSocket() {
     crashPoint,
     gameId: currentGame?.gameId,
     betId: currentGame?.myBet?.betId,
+    betAmount: currentGame?.myBet?.amount,
     gameState: currentGame?.state,
   };
 }

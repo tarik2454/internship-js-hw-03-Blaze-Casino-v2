@@ -13,17 +13,6 @@ export interface CrashUserHistoryResponse {
   bets: CrashBet[];
 }
 
-export interface CrashGlobalGame {
-  gameId: string;
-  crashPoint: number;
-  hash: string;
-  seed: string;
-}
-
-export interface CrashGlobalHistoryResponse {
-  games: CrashGlobalGame[];
-}
-
 export interface CrashBetRequest {
   amount: number;
   autoCashout?: number;

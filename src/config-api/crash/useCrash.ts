@@ -8,15 +8,7 @@ import {
   CrashCashoutResponse,
   CrashCurrentResponse,
   CrashUserHistoryResponse,
-  CrashGlobalHistoryResponse,
 } from "./crash.types";
-
-export function useCrashGlobalHistory(limit: number = 10, offset: number = 0) {
-  return useQuery<CrashGlobalHistoryResponse, ApiError>({
-    queryKey: queryKeyFactories.crash.globalHistory(limit, offset),
-    queryFn: () => crashApi.getGlobalHistory(limit, offset),
-  });
-}
 
 export function useCrashUserHistory(limit: number = 10, offset: number = 0) {
   return useQuery<CrashUserHistoryResponse, ApiError>({

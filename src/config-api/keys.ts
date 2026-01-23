@@ -24,12 +24,6 @@ export const queryKeyFactories = {
     all: ["leaderboard"],
   },
   crash: {
-    globalHistory: (limit: number = 10, offset: number = 0) => [
-      ...queryKeys.crash,
-      "global-history",
-      limit,
-      offset,
-    ],
     userHistory: (limit: number = 10, offset: number = 0) => [
       ...queryKeys.crash,
       "user-history",

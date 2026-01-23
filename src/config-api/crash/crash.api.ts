@@ -3,28 +3,12 @@ import { CRASH_ROUTES } from "./crash.constants";
 import {
   CrashBetResponse,
   CrashUserHistoryResponse,
-  CrashGlobalHistoryResponse,
   CrashBetRequest,
   CrashCashoutResponse,
   CrashCurrentResponse,
 } from "./crash.types";
 
 export const crashApi = {
-  getGlobalHistory: async (
-    limit: number = 10,
-    offset: number = 0,
-  ): Promise<CrashGlobalHistoryResponse> => {
-    const config = {
-      params: { limit, offset },
-    };
-
-    const { data } = await api.get<CrashGlobalHistoryResponse>(
-      CRASH_ROUTES.GET_GLOBAL_HISTORY,
-      config,
-    );
-    return data;
-  },
-
   getUserHistory: async (
     limit: number = 10,
     offset: number = 0,
