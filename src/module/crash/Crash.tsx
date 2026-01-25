@@ -13,6 +13,7 @@ import { cx } from "@/shared/utils/classNames";
 import { SettingsPanel } from "./SettingsPanel";
 import { getMultiplierLevels, getTimeLevels } from "./crash.utils";
 import { Scale } from "./components/Scale";
+import Image from "next/image";
 
 export function Crash() {
   const queryClient = useQueryClient();
@@ -36,7 +37,7 @@ export function Crash() {
 
   const animationDelay = useMemo(() => {
     if (currentGameState === "running" && multiplier >= 1.0) {
-      const roundedElapsed = Math.floor(elapsed / 50) * 50;
+      const roundedElapsed = Math.floor(elapsed / 100) * 100;
       return `-${roundedElapsed}ms`;
     }
     return "0ms";
@@ -137,21 +138,47 @@ export function Crash() {
               {currentGameState === "running" &&
                 !gameResult &&
                 multiplier >= 1.0 && (
-                  <div
-                    className={styles.rocket}
-                    style={{
-                      animationDelay: animationDelay,
-                    }}
-                  >
-                    <img
-                      src="/images/crash/rocket.svg"
-                      alt="Rocket"
-                      className={styles.rocketImage}
-                      onError={(e) => {
-                        console.error("Failed to load rocket image", e);
+                  <>
+                    <div
+                      className={styles.rocket}
+                      style={{
+                        animationDelay: animationDelay,
                       }}
-                    />
-                  </div>
+                    >
+                      <Image
+                        src="/images/crash/rocket.svg"
+                        alt="Rocket"
+                        className={styles.rocketImage}
+                        fill={true}
+                      />
+                    </div>
+
+                    <div
+                      className={styles.planet1}
+                      style={{
+                        animationDelay: animationDelay,
+                      }}
+                    >
+                      <Image
+                        src="/images/crash/1.png "
+                        alt="Planet 1"
+                        fill={true}
+                      />
+                    </div>
+
+                    <div
+                      className={styles.planet2}
+                      style={{
+                        animationDelay: animationDelay,
+                      }}
+                    >
+                      <Image
+                        src="/images/crash/2.png"
+                        alt="Planet 2"
+                        fill={true}
+                      />
+                    </div>
+                  </>
                 )}
 
               <div className={styles.centerArea}>
