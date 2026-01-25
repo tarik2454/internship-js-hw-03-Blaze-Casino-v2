@@ -75,15 +75,12 @@
   pointer-events: none;
 }
 
-@keyframes fly {
-  from {
-    bottom: 2%;
-    left: 2%;
-  }
-  to {
-    bottom: 90%;
-    left: 90%;
-  }
+.rocketImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
 }
 
 .rocket {
@@ -95,15 +92,94 @@
   width: 60px;
   height: 80px;
   min-height: 80px;
-  animation: fly 10s linear forwards;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  background: transparent;
+  animation: flyRocket 10s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   pointer-events: none;
-  will-change: left, bottom;
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
 }
 
-.rocketImage {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  user-select: none;
+.planet1 {
+  display: flex;
+  z-index: 5;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  animation: planetMove1 10s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  pointer-events: none;
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+}
+
+.planet2 {
+  display: flex;
+  z-index: 5;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  animation: planetMove2 10s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  pointer-events: none;
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+}
+
+@keyframes planetMove1 {
+  0% {
+    bottom: 75%;
+    left: 75%;
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    bottom: 20%;
+    left: 15%;
+    transform: scale(0.5);
+    opacity: 0.2;
+  }
+}
+
+@keyframes planetMove2 {
+  0% {
+    bottom: 70%;
+    left: 80%;
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    bottom: 15%;
+    left: 45%;
+    transform: scale(0.6);
+    opacity: 0.3;
+  }
+}
+
+@keyframes flyRocket {
+  0% {
+    bottom: 10%;
+    left: 10%;
+    transform: scale(3);
+    opacity: 0.1;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    bottom: 70%;
+    left: 70%;
+    transform: scale(1);
+  }
 }

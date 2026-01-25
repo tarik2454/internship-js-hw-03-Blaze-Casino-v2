@@ -75,6 +75,7 @@ export function Header() {
                     width={24}
                     height={24}
                   />
+
                   <span>
                     {userData?.balance !== undefined
                       ? userData.balance
