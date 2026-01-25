@@ -12,19 +12,12 @@ import { useCrashCashout } from "@/config-api/crash/useCrash";
 import { cx } from "@/shared/utils/classNames";
 import { SettingsPanel } from "./SettingsPanel";
 import { getMultiplierLevels, getTimeLevels } from "./crash.utils";
+import { Scale } from "./components/Scale";
 
 export function Crash() {
   const queryClient = useQueryClient();
-  const {
-    multiplier,
-    elapsed,
-    canBet,
-    crashPoint,
-    gameId,
-    betId,
-    betAmount,
-    gameState,
-  } = useCrashSocket();
+  const { multiplier, elapsed, canBet, crashPoint, betId, gameState } =
+    useCrashSocket();
 
   const [activeAutoCashout, setActiveAutoCashout] = useState<
     number | undefined
@@ -39,30 +32,16 @@ export function Crash() {
   const displayMultiplier = multiplier.toFixed(2);
   const elapsedSeconds = Math.floor(elapsed / 1000);
 
-  // Определяем актуальное состояние игры
   const currentGameState = crashPoint ? "crashed" : gameState;
 
-  // Отладка состояния
-  console.log("State:", {
-    currentGameState,
-    gameResult,
-    isFirstLoad,
-    crashPoint,
-    betId,
-    gameState,
-  });
-
-  // Стабилизируем animationDelay через useMemo, чтобы избежать дергания
-  // Округляем до 50ms для плавности
   const animationDelay = useMemo(() => {
     if (currentGameState === "running" && multiplier >= 1.0) {
-      const roundedElapsed = Math.floor(elapsed / 50) * 50; // Округляем до 50ms
+      const roundedElapsed = Math.floor(elapsed / 50) * 50;
       return `-${roundedElapsed}ms`;
     }
     return "0ms";
   }, [elapsed, currentGameState, multiplier]);
 
-  // Динамические уровни шкал
   const multiplierLevels = useMemo(
     () => getMultiplierLevels(multiplier),
     [multiplier],
@@ -75,10 +54,9 @@ export function Crash() {
   const { mutate: placeBet } = useCrashBet();
   const { mutate: cashoutMutation } = useCrashCashout();
 
-  // Обработчик кешаута
   const handleCashout = () => {
     if (!betId) return;
-    setIsAutoCashedOut(true); // Помечаем сразу, чтобы краш не перезаписал результат
+    setIsAutoCashedOut(true);
     cashoutMutation(betId, {
       onSuccess: (data) => {
         setGameResult({ multiplier: data.multiplier, isWin: true });
@@ -86,9 +64,7 @@ export function Crash() {
     });
   };
 
-  // Обработчик ставки с сохранением autoCashout
   const handlePlaceBet = (data: { amount: number; autoCashout?: number }) => {
-    // Сбрасываем результат предыдущей игры при новой ставке
     setGameResult(null);
     placeBet(data, {
       onSuccess: () => {
@@ -98,7 +74,6 @@ export function Crash() {
     });
   };
 
-  // Эффект для проверки авто-кешаута на клиенте
   useEffect(() => {
     if (
       betId &&
@@ -109,9 +84,7 @@ export function Crash() {
     ) {
       setIsAutoCashedOut(true);
       setGameResult({ multiplier: activeAutoCashout, isWin: true });
-      // Инвалидируем баланс пользователя
       queryClient.invalidateQueries({ queryKey: queryKeys.user });
-      // Обновляем текущую игру
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.crash.getCurrent(),
       });
@@ -125,22 +98,18 @@ export function Crash() {
     queryClient,
   ]);
 
-  // Отслеживание первого захода на страницу
-  // Сбрасываем isFirstLoad после первого изменения состояния или после первой игры
   useEffect(() => {
     if (isFirstLoad && (currentGameState === "running" || gameResult)) {
       setIsFirstLoad(false);
     }
   }, [currentGameState, isFirstLoad, gameResult]);
 
-  // Сброс состояния при начале новой игры
   useEffect(() => {
     if (currentGameState === "waiting") {
       setIsAutoCashedOut(false);
     }
   }, [currentGameState]);
 
-  // Сохранение результата при краше (проигрыш)
   useEffect(() => {
     console.log("Crash effect:", { crashPoint, betId, isAutoCashedOut });
     if (crashPoint && betId && !isAutoCashedOut) {
@@ -165,7 +134,6 @@ export function Crash() {
                   styles.crashed,
               )}
             >
-              {/* Ракета вынесена из centerArea для независимого позиционирования */}
               {currentGameState === "running" &&
                 !gameResult &&
                 multiplier >= 1.0 && (
@@ -186,7 +154,6 @@ export function Crash() {
                   </div>
                 )}
 
-              {/* Центральная область с текстом */}
               <div className={styles.centerArea}>
                 <p
                   className={cx(
@@ -212,38 +179,20 @@ export function Crash() {
                 )}
               </div>
 
-              {/* Шкала множителей слева */}
               {currentGameState === "running" && !gameResult && (
-                <div className={styles.multiplierScale}>
-                  {multiplierLevels.map((level) => (
-                    <div
-                      key={level}
-                      className={cx(
-                        styles.scaleItem,
-                        multiplier >= level && styles.active,
-                      )}
-                    >
-                      {level.toFixed(1)}x
-                    </div>
-                  ))}
-                </div>
+                <Scale
+                  type="multiplier"
+                  levels={multiplierLevels}
+                  currentValue={multiplier}
+                />
               )}
 
-              {/* Шкала времени снизу */}
               {currentGameState === "running" && !gameResult && (
-                <div className={styles.timeScale}>
-                  {timeLevels.map((seconds) => (
-                    <div
-                      key={seconds}
-                      className={cx(
-                        styles.scaleItem,
-                        elapsedSeconds >= seconds && styles.active,
-                      )}
-                    >
-                      {seconds}s
-                    </div>
-                  ))}
-                </div>
+                <Scale
+                  type="time"
+                  levels={timeLevels}
+                  currentValue={elapsedSeconds}
+                />
               )}
             </div>
 
