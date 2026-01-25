@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys, queryKeyFactories } from "@/config-api/keys";
 import { Container } from "@/shared/components/Container";
@@ -9,11 +9,8 @@ import styles from "./Crash.module.scss";
 import { useCrashSocket } from "@/config-api/crash/ws/useCrashSocket";
 import { useCrashBet } from "@/config-api/crash/useCrash";
 import { useCrashCashout } from "@/config-api/crash/useCrash";
-import { cx } from "@/shared/utils/classNames";
 import { SettingsPanel } from "./SettingsPanel";
-import { getMultiplierLevels, getTimeLevels } from "./crash.utils";
-import { Scale } from "./components/Scale";
-import Image from "next/image";
+import { CrashGameDisplay } from "./components/CrashGameDisplay";
 
 export function Crash() {
   const queryClient = useQueryClient();
@@ -31,32 +28,12 @@ export function Crash() {
     isWin: boolean;
   } | null>(null);
 
-  const displayMultiplier = multiplier.toFixed(2);
-  const elapsedSeconds = Math.floor(elapsed / 1000);
-
   const currentGameState = crashPoint ? "crashed" : gameState;
-
-  const animationDelay = useMemo(() => {
-    if (currentGameState === "running" && multiplier >= 1.0) {
-      const roundedElapsed = Math.floor(elapsed / 100) * 100;
-      return `-${roundedElapsed}ms`;
-    }
-    return "0ms";
-  }, [elapsed, currentGameState, multiplier]);
-
-  const multiplierLevels = useMemo(
-    () => getMultiplierLevels(multiplier),
-    [multiplier],
-  );
-  const timeLevels = useMemo(
-    () => getTimeLevels(elapsedSeconds),
-    [elapsedSeconds],
-  );
 
   const { mutate: placeBet } = useCrashBet();
   const { mutate: cashoutMutation } = useCrashCashout();
 
-  const handleCashout = () => {
+  const handleCashout = useCallback(() => {
     if (!betId) return;
     setIsAutoCashedOut(true);
     cashoutMutation(betId, {
@@ -64,17 +41,20 @@ export function Crash() {
         setGameResult({ multiplier: data.multiplier, isWin: true });
       },
     });
-  };
+  }, [betId, cashoutMutation]);
 
-  const handlePlaceBet = (data: { amount: number; autoCashout?: number }) => {
-    setGameResult(null);
-    placeBet(data, {
-      onSuccess: () => {
-        setActiveAutoCashout(data.autoCashout);
-        setIsAutoCashedOut(false);
-      },
-    });
-  };
+  const handlePlaceBet = useCallback(
+    (data: { amount: number; autoCashout?: number }) => {
+      setGameResult(null);
+      placeBet(data, {
+        onSuccess: () => {
+          setActiveAutoCashout(data.autoCashout);
+          setIsAutoCashedOut(false);
+        },
+      });
+    },
+    [placeBet],
+  );
 
   useEffect(() => {
     if (
@@ -123,117 +103,13 @@ export function Crash() {
       <Section className={styles.crashSection}>
         <Container>
           <div className={styles.crashWrapper}>
-            <div
-              className={cx(
-                styles.crashArea,
-                currentGameState === "running" &&
-                  !gameResult &&
-                  styles.isRunning,
-                gameResult?.isWin && styles.isWin,
-                gameResult?.isWin === false && styles.isLose,
-              )}
-            >
-              {currentGameState === "running" &&
-                !gameResult &&
-                multiplier >= 1.0 && (
-                  <>
-                    <div
-                      className={styles.rocket}
-                      style={{
-                        animationDelay: animationDelay,
-                      }}
-                    >
-                      <Image
-                        src="/images/crash/rocket.svg"
-                        alt="Rocket"
-                        className={styles.rocketImage}
-                        fill={true}
-                      />
-                    </div>
-
-                    <div
-                      className={styles.planet1}
-                      style={{
-                        animationDelay: animationDelay,
-                      }}
-                    >
-                      <Image
-                        src="/images/crash/planet-1.png "
-                        alt="Planet 1"
-                        fill={true}
-                      />
-                    </div>
-
-                    <div
-                      className={styles.planet2}
-                      style={{
-                        animationDelay: animationDelay,
-                      }}
-                    >
-                      <Image
-                        src="/images/crash/planet-2.png"
-                        alt="Planet 2"
-                        fill={true}
-                      />
-                    </div>
-                  </>
-                )}
-
-              <div className={styles.centerArea}>
-                <div
-                  className={cx(
-                    styles.centerAreaContent,
-                    gameResult?.isWin && styles.isWin,
-                    gameResult?.isWin === false && styles.isLose,
-                  )}
-                >
-                  <p
-                    className={cx(
-                      styles.crashAreaValue,
-                      gameResult?.isWin && styles.isWin,
-                      gameResult?.isWin === false && styles.isLose,
-                    )}
-                  >
-                    {gameResult
-                      ? gameResult.multiplier.toFixed(2)
-                      : displayMultiplier}
-                    X
-                  </p>
-                  {gameResult && (
-                    <p
-                      className={cx(
-                        styles.crashAreaDescription,
-                        gameResult?.isWin && styles.isWin,
-                        gameResult?.isWin === false && styles.isLose,
-                      )}
-                    >
-                      Current Payout
-                    </p>
-                  )}
-                  {currentGameState === "waiting" && isFirstLoad && (
-                    <p className={styles.crashAreaDescription}>
-                      Waiting for bets...
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {currentGameState === "running" && !gameResult && (
-                <Scale
-                  type="multiplier"
-                  levels={multiplierLevels}
-                  currentValue={multiplier}
-                />
-              )}
-
-              {currentGameState === "running" && !gameResult && (
-                <Scale
-                  type="time"
-                  levels={timeLevels}
-                  currentValue={elapsedSeconds}
-                />
-              )}
-            </div>
+            <CrashGameDisplay
+              gameState={currentGameState}
+              multiplier={multiplier}
+              elapsed={elapsed}
+              gameResult={gameResult}
+              isFirstLoad={isFirstLoad}
+            />
 
             <SettingsPanel
               canBet={canBet}
