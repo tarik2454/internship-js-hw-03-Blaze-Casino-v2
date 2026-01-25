@@ -11,7 +11,10 @@
   border-radius: var(--radius-16);
   background: #423e6980;
 
-  &.isRunning,
+  &.isRunning {
+    background: url("/images/crash/crash-bg.svg") no-repeat center center;
+  }
+
   &.isWin,
   &.isLose {
     background: url("/images/crash/crash-bg.svg") no-repeat center center;
@@ -34,7 +37,7 @@
 
 .centerArea {
   @include flexCenter;
-  z-index: 1;
+  z-index: 10;
   position: relative;
   flex-direction: column;
   width: 100%;
@@ -45,14 +48,19 @@
 .centerAreaContent {
   padding: 8px;
   border-radius: var(--radius-16);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(4px);
+  background: transparent;
 
   &.isWin {
+    backdrop-filter: none;
+    background: transparent;
     box-shadow: 0px 0px 48px 0px #82c91e;
     color: #82c91e;
   }
 
   &.isLose {
+    backdrop-filter: none;
+    background: transparent;
     box-shadow: 0px 0px 48px 0px #c62121;
     color: #c62121;
   }
@@ -102,131 +110,232 @@
   }
 }
 
-.rocketImage {
-  display: block;
+.rocketWrapper {
+  z-index: 20;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  animation: rocketShake 0.3s ease-in-out 4s infinite;
-  user-select: none;
+  pointer-events: none;
 }
 
 .rocket {
   display: flex;
-  z-index: 10;
+  z-index: 20;
   position: absolute;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 80px;
-  min-height: 80px;
-  transform-origin: center center;
-  backface-visibility: hidden;
-  background: transparent;
-  animation: flyRocket 10s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  pointer-events: none;
-  will-change: transform, opacity;
-  -webkit-backface-visibility: hidden;
-  perspective: 1000px;
-  -webkit-perspective: 1000px;
-}
 
-.planet1 {
-  display: flex;
-  z-index: 5;
-  position: absolute;
+  bottom: 0px;
+  left: 40px;
   align-items: center;
   justify-content: center;
   width: 80px;
+  height: 106px;
+  transform: rotate(0deg) scale(1);
+
+  animation: rocketLaunchAndCruise 20s cubic-bezier(0.2, 0.6, 0.3, 1) forwards;
+  will-change: transform, bottom, left;
+}
+
+.rocketImage {
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  animation: rocketShake 0.1s ease-in-out infinite;
+}
+
+.flame {
+  z-index: 1;
+  position: absolute;
+  top: 52px;
+  left: 50%;
+  width: 30px;
+  height: 70px;
+  transform: translateX(-50%);
+  transform-origin: top center;
+  border-radius: 50% 50% 20% 20%;
+  background: linear-gradient(to bottom, #ffc400, #ff4c00, transparent);
+  animation: flameFlicker 0.1s ease-in-out infinite alternate;
+  filter: blur(4px);
+  opacity: 0.8;
+}
+
+.flameCore {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 14px;
+  height: 40px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: #fff;
+  animation: flameCorePulse 0.2s ease-in-out infinite alternate;
+  filter: blur(2px);
+}
+
+.starsContainer {
+  z-index: 1;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.starsLayer {
+  position: absolute;
+  width: 300%;
+  height: 300%;
+  inset: -100%;
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, #eee, rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 40px 70px, #fff, rgba(0, 0, 0, 0)),
+    radial-gradient(1px 1px at 90px 40px, #ddd, rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0, 0, 0, 0));
+  background-size: 200px 200px;
+  background-repeat: repeat;
+  opacity: 0;
+}
+
+.layer1 {
+  background-size: 200px 200px;
+  animation: starsScroll 3s linear infinite;
+  opacity: 0.8;
+}
+
+.layer2 {
+  transform: rotate(15deg);
+  background-size: 300px 300px;
+  animation: starsScroll 5s linear infinite;
+  opacity: 0.6;
+}
+
+.layer3 {
+  transform: rotate(-10deg);
+  background-size: 500px 500px;
+  animation: starsScroll 9s linear infinite;
+  opacity: 0.4;
+}
+
+.planet {
+  z-index: 5;
+  position: absolute;
+  will-change: transform;
+}
+
+.planet1 {
+  @extend .planet;
+  top: 120%;
+  left: 20%;
+  width: 80px;
   height: 80px;
-  transform-origin: center center;
-  backface-visibility: hidden;
-  animation: planetMove1 10s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  pointer-events: none;
-  will-change: transform, opacity;
-  -webkit-backface-visibility: hidden;
+  animation: planetPass 8s linear infinite;
+  animation-delay: 1s;
 }
 
 .planet2 {
-  display: flex;
-  z-index: 5;
-  position: absolute;
-  align-items: center;
-  justify-content: center;
+  @extend .planet;
+  top: 120%;
+  left: 80%;
   width: 100px;
   height: 100px;
-  transform-origin: center center;
-  backface-visibility: hidden;
-  animation: planetMove2 10s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  pointer-events: none;
-  will-change: transform, opacity;
-  -webkit-backface-visibility: hidden;
+  animation: planetPass 6s linear infinite;
+  animation-delay: 3s;
 }
 
-@keyframes flyRocket {
+@keyframes rocketLaunchAndCruise {
   0% {
-    bottom: 10%;
-    left: 10%;
-    transform: scale(3);
-    opacity: 0.1;
+    bottom: 50px;
+    left: 50px;
+    transform: rotate(10deg) scale(0.8);
   }
-
-  30% {
-    opacity: 1;
+  15% {
+    bottom: 40%;
+    left: 40%;
+    transform: rotate(10deg) scale(1.2);
   }
-
   100% {
-    bottom: 70%;
-    left: 70%;
-    transform: scale(1.5);
+    bottom: 60%;
+    left: 60%;
+    transform: rotate(10deg) scale(1.5) translate(10px, -10px);
+    /* The 100% keyframe here can be a "drift" */
   }
 }
 
 @keyframes rocketShake {
-  0%,
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-1px, 1px);
+  }
+  50% {
+    transform: translate(1px, -1px);
+  }
+  75% {
+    transform: translate(-1px, -1px);
+  }
   100% {
     transform: translate(0, 0);
   }
-
-  25% {
-    transform: translate(0.8px, -0.8px);
-  }
-
-  50% {
-    transform: translate(-0.8px, 0.8px);
-  }
-
-  75% {
-    transform: translate(0.5px, -0.5px);
-  }
 }
 
-@keyframes planetMove1 {
+@keyframes flameFlicker {
   0% {
-    bottom: 75%;
-    left: 75%;
-    transform: scale(0.5);
-    opacity: 0.7;
-  }
-  100% {
-    bottom: 20%;
-    left: 15%;
-    transform: scale(1.2);
-    opacity: 0.2;
-  }
-}
-
-@keyframes planetMove2 {
-  0% {
-    bottom: 70%;
-    left: 80%;
-    transform: scale(0.6);
+    height: 80px;
+    transform: translateX(-50%) rotate(43deg) scaleX(1);
     opacity: 0.8;
   }
   100% {
-    bottom: 15%;
-    left: 40%;
-    transform: scale(1);
-    opacity: 0.3;
+    height: 85px;
+    transform: translateX(-50%) rotate(43deg) scaleX(0.9);
+    opacity: 1;
+  }
+}
+
+@keyframes flameCorePulse {
+  0% {
+    height: 35px;
+    opacity: 0.8;
+  }
+  100% {
+    height: 45px;
+    opacity: 1;
+  }
+}
+
+@keyframes starsScroll {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  100% {
+    transform: translateY(100px) translateX(-100px);
+  }
+}
+
+@keyframes starsScroll {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -200px 200px;
+  }
+}
+
+@keyframes planetPass {
+  0% {
+    top: -20%;
+    left: 120%;
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    top: 120%;
+    left: -20%;
+    transform: scale(1.5);
+    opacity: 1;
   }
 }

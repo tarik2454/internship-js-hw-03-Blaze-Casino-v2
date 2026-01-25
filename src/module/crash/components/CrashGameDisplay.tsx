@@ -48,20 +48,31 @@ export const CrashGameDisplay = memo(function CrashGameDisplay({
         gameResult?.isWin === false && styles.isLose,
       )}
     >
-      {gameState === "running" && !gameResult && multiplier >= 1.0 && (
+      {gameState === "running" && !gameResult && (
         <>
-          <div className={styles.rocket}>
-            <Image
-              src="/images/crash/rocket.svg"
-              alt="Rocket"
-              className={styles.rocketImage}
-              fill={true}
-            />
+          <div className={styles.starsContainer}>
+            <div className={cx(styles.starsLayer, styles.layer1)} />
+            <div className={cx(styles.starsLayer, styles.layer2)} />
+            <div className={cx(styles.starsLayer, styles.layer3)} />
+          </div>
+
+          <div className={styles.rocketWrapper}>
+            <div className={styles.rocket}>
+              <div className={styles.flame}>
+                <div className={styles.flameCore} />
+              </div>
+              <Image
+                src="/images/crash/rocket.svg"
+                alt="Rocket"
+                className={styles.rocketImage}
+                fill={true}
+              />
+            </div>
           </div>
 
           <div className={styles.planet1}>
             <Image
-              src="/images/crash/planet-1.png "
+              src="/images/crash/planet-1.png"
               alt="Planet 1"
               fill={true}
             />
