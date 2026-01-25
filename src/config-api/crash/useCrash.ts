@@ -26,11 +26,9 @@ export function useCrashBet() {
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.crash.userHistory(),
       });
-      // Обновить текущую игру (это обновит betId и состояние)
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.crash.getCurrent(),
       });
-      // Обновить баланс пользователя
       queryClient.invalidateQueries({
         queryKey: queryKeys.user,
       });
@@ -57,7 +55,6 @@ export function useCrashCashout() {
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.crash.getCurrent(),
       });
-      // Обновить баланс пользователя
       queryClient.invalidateQueries({
         queryKey: queryKeys.user,
       });

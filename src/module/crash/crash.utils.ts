@@ -71,8 +71,6 @@ export const generateVisibleTimeLevels = (
   return levels;
 };
 
-// Функции-обертки с предустановленными параметрами для UI игры Crash
-
 export const getMultiplierLevels = (multiplier: number): number[] => {
   return generateVisibleMultiplierLevels(multiplier, 5.0, 0.2, 1.0, 10.0);
 };
