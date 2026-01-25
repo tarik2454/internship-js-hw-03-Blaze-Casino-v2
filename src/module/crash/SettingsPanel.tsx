@@ -33,10 +33,9 @@ export function SettingsPanel({
   const [isAuto, setIsAuto] = useState(false);
   const [isCashingOut, setIsCashingOut] = useState(false);
 
-  // Замораживаем множитель, если игра завершена или нет активной ставки
   const activeMultiplier = useMemo(() => {
     if (gameState === "crashed") return 0;
-    if (!betId && gameState === "running") return 1.0; // Пользователь уже мог забрать выигрыш
+    if (!betId && gameState === "running") return 1.0;
     return multiplier;
   }, [multiplier, gameState, betId]);
 

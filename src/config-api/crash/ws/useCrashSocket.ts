@@ -8,7 +8,6 @@ import { useCrashCurrent } from "@/config-api/crash/useCrash";
 export function useCrashSocket() {
   const { data: currentGame, refetch: refetchCurrentGame } = useCrashCurrent();
 
-  // Только данные из WebSocket в реальном времени
   const [multiplier, setMultiplier] = useState(1.0);
   const [elapsed, setElapsed] = useState(0);
   const [crashPoint, setCrashPoint] = useState<number | null>(null);
@@ -22,7 +21,6 @@ export function useCrashSocket() {
     socket.connect({
       onConnect: () => {
         console.log("Connected to crash socket");
-        // Подписаться на текущую игру если есть
         if (currentGame?.gameId) {
           socket.subscribeToGame(currentGame.gameId);
         }
@@ -34,7 +32,6 @@ export function useCrashSocket() {
       onCrash: (data: GameCrashEvent) => {
         console.log("WebSocket CRASH event:", data.crashPoint);
         setCrashPoint(data.crashPoint);
-        // Загрузить следующую игру через 3 секунды
         setTimeout(() => {
           console.log("Resetting after crash...");
           refetchCurrentGame();
@@ -50,7 +47,6 @@ export function useCrashSocket() {
     };
   }, []);
 
-  // Подписаться на новую игру когда currentGame меняется
   useEffect(() => {
     if (currentGame?.gameId && socketRef.current?.isConnected()) {
       socketRef.current.subscribeToGame(currentGame.gameId);
@@ -59,7 +55,6 @@ export function useCrashSocket() {
     }
   }, [currentGame?.gameId]);
 
-  // Состояние игры берём напрямую с сервера
   const canBet = currentGame?.state === "waiting" && !currentGame?.myBet;
 
   return {

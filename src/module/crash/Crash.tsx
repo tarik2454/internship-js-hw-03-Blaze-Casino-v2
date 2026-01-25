@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys, queryKeyFactories } from "@/config-api/keys";
 import { Container } from "@/shared/components/Container";
@@ -17,6 +17,7 @@ import Image from "next/image";
 
 export function Crash() {
   const queryClient = useQueryClient();
+
   const { multiplier, elapsed, canBet, crashPoint, betId, gameState } =
     useCrashSocket();
 
@@ -112,9 +113,7 @@ export function Crash() {
   }, [currentGameState]);
 
   useEffect(() => {
-    console.log("Crash effect:", { crashPoint, betId, isAutoCashedOut });
     if (crashPoint && betId && !isAutoCashedOut) {
-      console.log("Setting gameResult LOSS:", crashPoint);
       setGameResult({ multiplier: crashPoint, isWin: false });
     }
   }, [crashPoint, betId, isAutoCashedOut]);
@@ -130,9 +129,8 @@ export function Crash() {
                 currentGameState === "running" &&
                   !gameResult &&
                   styles.isRunning,
-                (currentGameState === "crashed" ||
-                  gameResult?.isWin === false) &&
-                  styles.crashed,
+                gameResult?.isWin && styles.isWin,
+                gameResult?.isWin === false && styles.isLose,
               )}
             >
               {currentGameState === "running" &&
@@ -160,7 +158,7 @@ export function Crash() {
                       }}
                     >
                       <Image
-                        src="/images/crash/1.png "
+                        src="/images/crash/planet-1.png "
                         alt="Planet 1"
                         fill={true}
                       />
@@ -173,7 +171,7 @@ export function Crash() {
                       }}
                     >
                       <Image
-                        src="/images/crash/2.png"
+                        src="/images/crash/planet-2.png"
                         alt="Planet 2"
                         fill={true}
                       />
@@ -182,28 +180,42 @@ export function Crash() {
                 )}
 
               <div className={styles.centerArea}>
-                <p
+                <div
                   className={cx(
-                    styles.crashAreaValue,
-                    gameResult?.isWin && styles.win,
-                    gameResult?.isWin === false && styles.lose,
+                    styles.centerAreaContent,
+                    gameResult?.isWin && styles.isWin,
+                    gameResult?.isWin === false && styles.isLose,
                   )}
                 >
-                  {gameResult
-                    ? gameResult.multiplier.toFixed(2)
-                    : displayMultiplier}
-                  X
-                </p>
-                {currentGameState === "waiting" && isFirstLoad && (
-                  <p className={styles.crashAreaDescription}>
-                    Waiting for bets...
+                  <p
+                    className={cx(
+                      styles.crashAreaValue,
+                      gameResult?.isWin && styles.isWin,
+                      gameResult?.isWin === false && styles.isLose,
+                    )}
+                  >
+                    {gameResult
+                      ? gameResult.multiplier.toFixed(2)
+                      : displayMultiplier}
+                    X
                   </p>
-                )}
-                {gameResult && (
-                  <p className={styles.crashAreaDescription}>
-                    {gameResult.isWin ? "Cashed out!" : "Crashed!"}
-                  </p>
-                )}
+                  {gameResult && (
+                    <p
+                      className={cx(
+                        styles.crashAreaDescription,
+                        gameResult?.isWin && styles.isWin,
+                        gameResult?.isWin === false && styles.isLose,
+                      )}
+                    >
+                      Current Payout
+                    </p>
+                  )}
+                  {currentGameState === "waiting" && isFirstLoad && (
+                    <p className={styles.crashAreaDescription}>
+                      Waiting for bets...
+                    </p>
+                  )}
+                </div>
               </div>
 
               {currentGameState === "running" && !gameResult && (

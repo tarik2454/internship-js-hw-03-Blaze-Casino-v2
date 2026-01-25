@@ -27,12 +27,10 @@ export const createCrashSocket = () => {
 
     socket = io(`${socketUrl}${CRASH_SOCKET.NAMESPACE}`, {
       transports: ["websocket"],
-      // Без аутентификации
     });
 
     socket.on("connect", () => {
       callbacks.onConnect?.();
-      // Переподписаться на игру после реконнекта
       if (currentGameId) {
         subscribeToGame(currentGameId);
       }
@@ -51,7 +49,7 @@ export const createCrashSocket = () => {
     socket.on(CRASH_SOCKET.EVENTS.GAME_CRASH, (data: GameCrashEvent) => {
       if (data.gameId === currentGameId) {
         callbacks.onCrash?.(data);
-        currentGameId = null; // Игра завершена
+        currentGameId = null;
       }
     });
   };
