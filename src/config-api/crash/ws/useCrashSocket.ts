@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createCrashSocket, CrashSocketService } from "./crash.ws.service";
 import { GameTickEvent, GameCrashEvent } from "./crash.ws.types";
+import { GAME_STATE } from "./crash.ws.constants";
 import { useCrashCurrent } from "@/config-api/crash/useCrash";
 
 export function useCrashSocket() {
@@ -55,7 +56,8 @@ export function useCrashSocket() {
     }
   }, [currentGame?.gameId]);
 
-  const canBet = currentGame?.state === "waiting" && !currentGame?.myBet;
+  const canBet =
+    currentGame?.state === GAME_STATE.WAITING && !currentGame?.myBet;
 
   return {
     multiplier,
