@@ -1,0 +1,12 @@
+@use "@/styles/index" as *;
+
+.crashWrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+
+  @include minWidth(xl) {
+    grid-template-columns: 1fr max(432px);
+  }
+}
+

@@ -3,7 +3,7 @@
 import { memo, useCallback, useRef, useLayoutEffect } from "react";
 import Image from "next/image";
 import { VirtualItem, Virtualizer } from "@tanstack/react-virtual";
-import { ChatMessage } from "../chat.types";
+import { ChatMessage } from "@/config-api/chat/chat.ws.types";
 import { CurrentUserResponse } from "@/config-api/user/user.types";
 import { cx } from "@/shared/utils/classNames";
 import styles from "./ChatItem.module.scss";
@@ -16,10 +16,6 @@ interface ChatItemProps {
   formatTime: (iso: string) => string;
 }
 
-/**
- * Внутренний компонент с тяжелой версткой.
- * Он НЕ перерендеривается при скролле.
- */
 const ChatItemContent = memo(
   ({
     msg,
@@ -59,11 +55,6 @@ const ChatItemContent = memo(
 
 ChatItemContent.displayName = "ChatItemContent";
 
-/**
- * Внешний контейнер.
- * Он отвечает за позицию и рендерится при скролле (быстро),
- * но не заставляет перерендериваться внутренний контент.
- */
 export function ChatItem({
   msg,
   currentUser,

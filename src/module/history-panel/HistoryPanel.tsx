@@ -1,0 +1,69 @@
+"use client";
+
+import { useMemo } from "react";
+import { Section } from "../../shared/components/Section";
+import { Container } from "../../shared/components/Container";
+import styles from "./HistoryPanel.module.scss";
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+} from "@tanstack/react-table";
+import { useGameHistory } from "./useGameHistory";
+import { createColumns } from "./historyPanel.utils";
+
+export function HistoryPanel() {
+  const { data: history } = useGameHistory();
+
+  const columns = useMemo(() => createColumns(styles), []);
+
+  const table = useReactTable({
+    data: history?.bets ?? [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getRowId: (row) => row.betId,
+  });
+
+  return (
+    <Section className={styles.historySection}>
+      <Container>
+        <h2 className={styles.historyPanelTitle}>Game history</h2>
+
+        <div className={styles.historyTableWrapper}>
+          <table className={styles.historyTable}>
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id} className={styles.historyHeader}>
+                  {headerGroup.headers.map((header) => (
+                    <th key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id} className={styles.historyItem}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Container>
+    </Section>
+  );
+}

@@ -9,6 +9,7 @@ export const queryKeys = {
     logout: ["auth", "logout"],
   },
   leaderboard: ["leaderboard"],
+  crash: ["crash"],
 };
 
 export const queryKeyFactories = {
@@ -21,5 +22,14 @@ export const queryKeyFactories = {
   },
   leaderboard: {
     all: ["leaderboard"],
+  },
+  crash: {
+    userHistory: (limit: number = 10, offset: number = 0) => [
+      ...queryKeys.crash,
+      "user-history",
+      limit,
+      offset,
+    ],
+    getCurrent: () => [...queryKeys.crash, "current"],
   },
 };

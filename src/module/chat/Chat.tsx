@@ -8,12 +8,13 @@ import { ArrowTop } from "@/shared/icons/arrow-top";
 import { useUsers } from "@/config-api/user/useUser";
 import { useChat } from "./useChat";
 import { cx } from "@/shared/utils/classNames";
-import { formatTime } from "./utils";
+import { formatTime } from "./chat.utils";
 import { ChatItem } from "./components/ChatItem";
 import { Section } from "@/shared/components/Section";
 
 import { MessageIcon } from "@/shared/icons/message";
 import { Button } from "@/shared/components/Button";
+import { useLockBodyScroll } from "@/shared/hooks/useLockBodyScroll";
 
 export function Chat() {
   "use no memo";
@@ -32,53 +33,45 @@ export function Chat() {
     setIsMounted(true);
   }, []);
 
-  function useChatVirtualizer() {
-    "use no memo";
-    return useVirtualizer({
-      count: messages.length,
-      getScrollElement: () => (isMounted ? parentRef.current : null),
-      estimateSize: () => 120,
-      getItemKey: (index) => messages[index]?._id || index,
-      overscan: 3,
-      gap: 16,
+  useLockBodyScroll(isVisible);
+
+  const virtualizer = useVirtualizer({
+    count: messages.length,
+    getScrollElement: () => (isMounted ? parentRef.current : null),
+    estimateSize: () => 120,
+    getItemKey: (index) => messages[index]?._id || index,
+    overscan: 3,
+    gap: 16,
+  });
+
+  const isFirstScrollRef = useRef(true);
+
+  const isAtBottom = (el: HTMLElement, threshold = 20) => {
+    return el.scrollHeight - el.scrollTop - el.clientHeight < threshold;
+  };
+
+  useEffect(() => {
+    if (!isMounted || !parentRef.current || messages.length === 0) return;
+
+    const scrollElement = parentRef.current;
+
+    if (isFirstScrollRef.current) {
+      const rafId = requestAnimationFrame(() => {
+        virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
+        isFirstScrollRef.current = false;
+      });
+
+      return () => cancelAnimationFrame(rafId);
+    }
+
+    if (!isAtBottom(scrollElement)) return;
+
+    const rafId = requestAnimationFrame(() => {
+      virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
     });
-  }
 
-  const virtualizer = useChatVirtualizer();
-
-  useEffect(() => {
-    if (messages.length > 0 && isMounted && parentRef.current) {
-      const scrollElement = parentRef.current;
-      const isContainerReady =
-        scrollElement.offsetHeight > 0 && scrollElement.offsetWidth > 0;
-
-      if (isContainerReady) {
-        const animationFrameId = requestAnimationFrame(() => {
-          try {
-            virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
-          } catch (error) {
-            console.error(error);
-          }
-        });
-
-        return () => {
-          cancelAnimationFrame(animationFrameId);
-        };
-      }
-    }
+    return () => cancelAnimationFrame(rafId);
   }, [messages.length, virtualizer, isMounted]);
-
-  useEffect(() => {
-    if (!isMounted) return;
-
-    if (isVisible) {
-      const originalOverflow = document.documentElement.style.overflow;
-      document.documentElement.style.overflow = "hidden";
-      return () => {
-        document.documentElement.style.overflow = originalOverflow;
-      };
-    }
-  }, [isVisible, isMounted]);
 
   const handleSendMessage = (e: FormEvent) => {
     e.preventDefault();
@@ -98,7 +91,7 @@ export function Chat() {
   return (
     <>
       <div
-        className={cx(styles.chatWrapper, { [styles.visible]: isVisible })}
+        className={cx(styles.chatWrapper, { [styles.isVisible]: isVisible })}
         onClick={(e) => e.stopPropagation()}
       >
         <Section className={styles.chat}>
@@ -168,7 +161,7 @@ export function Chat() {
       </div>
 
       <div
-        className={cx(styles.chatOverlay, { [styles.visible]: isVisible })}
+        className={cx(styles.chatOverlay, { [styles.isVisible]: isVisible })}
         onClick={handleOpenChat}
       ></div>
 

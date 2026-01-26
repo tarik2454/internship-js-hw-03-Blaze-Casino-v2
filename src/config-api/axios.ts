@@ -1,6 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { ApiException } from "./error.types";
-import { getCookie, setCookie, deleteCookie } from "@/shared/utils/cookies";
+import { getCookie, setCookie, deleteCookie } from "@/config-api/cookies";
 
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;

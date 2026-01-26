@@ -53,7 +53,7 @@
   opacity: 0;
   transition: var(--transition-300);
 
-  &.isOpen {
+  &.isVisible {
     transform: translateX(0);
     opacity: 1;
   }

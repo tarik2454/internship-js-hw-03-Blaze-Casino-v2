@@ -1,7 +1,7 @@
 @use "@/styles/index" as *;
 
 .chatOverlay {
-  z-index: 11;
+  z-index: 4;
   position: fixed;
   top: 0;
   left: 0;
@@ -12,16 +12,20 @@
   pointer-events: none;
   transition: var(--transition-300);
 
-  &.visible {
+  &.isVisible {
     background: #00000080;
     opacity: 1;
     pointer-events: auto;
+  }
+
+  @include minWidth(xl) {
+    z-index: 1;
   }
 }
 
 .chatWrapper {
   display: flex;
-  z-index: 12;
+  z-index: 5;
   position: fixed;
   top: 168px;
   bottom: 0;
@@ -33,11 +37,11 @@
   transform: translateY(100%);
   border-radius: 16px 16px 0 0;
   background: #423e6980;
-  opacity: 0;
+  opacity: 1;
   pointer-events: none;
   transition: var(--transition-300);
 
-  &.visible {
+  &.isVisible {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
@@ -45,6 +49,7 @@
 
   @include minWidth(xl) {
     display: flex;
+    z-index: 2;
     position: relative;
     top: 0;
     bottom: 0;
@@ -61,10 +66,38 @@
 }
 
 .chat {
+  bottom: 0;
   max-width: 345px;
+  height: 100%;
 
   @include minWidth(xl) {
     max-width: none;
+  }
+}
+
+.chatListContainer {
+  max-height: calc(100vh - 400px);
+  margin-bottom: 16px;
+  padding: 8px;
+  overflow-y: auto;
+  border-radius: var(--radius-16);
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-blue-3f);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: var(--color-bg-secondary);
+  }
+
+  @include minWidth(xl) {
+    height: 650px;
+    max-height: none;
   }
 }
 
@@ -110,30 +143,6 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
-  }
-}
-
-.chatListContainer {
-  height: 240px;
-  margin-bottom: 16px;
-  padding: 8px;
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: var(--color-blue-3f);
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background: var(--color-bg-secondary);
-  }
-
-  @include minWidth(xl) {
-    height: 650px;
   }
 }
 

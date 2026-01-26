@@ -2,16 +2,19 @@
 
 import { useEffect, useRef, useState, startTransition } from "react";
 import { usePathname } from "next/navigation";
-import { io, Socket } from "socket.io-client";
-import { getCookie } from "@/shared/utils/cookies";
+import { getCookie } from "@/config-api/cookies";
 import { useCurrentUser } from "@/config-api/user/useUser";
 import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
 import {
   ChatMessage,
   ChatHistoryResponse,
   ChatRoomUsersResponse,
-} from "./chat.types";
-import { ROUTE_TO_ROOM } from "./chat.constants";
+} from "@/config-api/chat/chat.ws.types";
+import { ROUTE_TO_ROOM } from "@/config-api/chat/chat.ws.constants";
+import {
+  ChatSocketService,
+  createChatSocket,
+} from "@/config-api/chat/chat.ws.service";
 
 export function useChat() {
   const pathname = usePathname();
@@ -24,9 +27,8 @@ export function useChat() {
     () => ROUTE_TO_ROOM[pathname] || "general",
   );
 
-  const socketRef = useRef<Socket | null>(null);
+  const socketServiceRef = useRef<ChatSocketService | null>(null);
   const roomRef = useRef(room);
-  const currentJoinedRoomRef = useRef<string | null>(null);
 
   useEffect(() => {
     roomRef.current = room;
@@ -48,122 +50,75 @@ export function useChat() {
     const token = getCookie("accessToken");
     if (!token) return;
 
-    const socketUrl = process.env.NEXT_PUBLIC_API_URL || "/";
+    const socketService = createChatSocket();
+    socketServiceRef.current = socketService;
 
-    const socket = io(socketUrl, {
-      auth: { token },
-      transports: ["websocket"],
-    });
-
-    socketRef.current = socket;
-
-    socket.on("connect", () => {
-      if (roomRef.current && currentJoinedRoomRef.current !== roomRef.current) {
-        socket.emit("chat:join", { roomId: roomRef.current });
-        currentJoinedRoomRef.current = roomRef.current;
-      }
-    });
-
-    socket.on("connect_error", () => {});
-
-    socket.on("disconnect", () => {});
-
-    socket.on("chat:history", (data: ChatHistoryResponse) => {
-      if (data.roomId === roomRef.current) {
-        setMessages(data.messages);
-      }
-    });
-
-    socket.on("message", (msg: ChatMessage) => {
-      if (msg.roomId === roomRef.current) {
-        setMessages((prev) => {
-          if (prev.some((m) => m._id === msg._id)) {
-            return prev;
-          }
-
-          return [...prev, msg];
+    socketService.connect(token, roomRef.current, {
+      onHistory: (data: ChatHistoryResponse) => {
+        if (data.roomId === roomRef.current) {
+          setMessages(data.messages);
+        }
+      },
+      onMessage: (msg: ChatMessage) => {
+        if (msg.roomId === roomRef.current) {
+          setMessages((prev) => {
+            if (prev.some((m) => m._id === msg._id)) {
+              return prev;
+            }
+            return [...prev, msg];
+          });
+        }
+      },
+      onRoomUsers: (data: ChatRoomUsersResponse) => {
+        setOnlineCounts((prev) => ({
+          ...prev,
+          [data.roomId]: data.activeUsers,
+        }));
+      },
+      onError: (err: { message: string }) => {
+        showPopup({
+          message: err.message,
+          type: POPUP_TYPE.ERROR,
+          autoCloseDelay: 5000,
         });
-      }
-    });
-
-    socket.on("chat:room:users", (data: ChatRoomUsersResponse) => {
-      setOnlineCounts((prev) => ({
-        ...prev,
-        [data.roomId]: data.activeUsers,
-      }));
-    });
-
-    socket.on("chat:error", (err: { message: string }) => {
-      showPopup({
-        message: err.message,
-        type: POPUP_TYPE.ERROR,
-        autoCloseDelay: 5000,
-      });
+      },
     });
 
     return () => {
-      if (socket.connected && currentJoinedRoomRef.current) {
-        socket.emit("chat:leave", { roomId: currentJoinedRoomRef.current });
-        currentJoinedRoomRef.current = null;
-      }
-      if (socket.connected) {
-        socket.disconnect();
-      } else {
-        socket.close();
-      }
-      socketRef.current = null;
+      socketService.disconnect();
+      socketServiceRef.current = null;
     };
-  }, [currentUser?._id]);
+  }, [currentUser?._id, showPopup]);
 
   useEffect(() => {
-    if (!currentUser && socketRef.current) {
-      const socket = socketRef.current;
-      if (socket.connected && currentJoinedRoomRef.current) {
-        socket.emit("chat:leave", { roomId: currentJoinedRoomRef.current });
-        currentJoinedRoomRef.current = null;
-      }
-      if (socket.connected) {
-        socket.disconnect();
-      } else {
-        socket.close();
-      }
-      socketRef.current = null;
+    if (!currentUser && socketServiceRef.current) {
+      socketServiceRef.current.disconnect();
+      socketServiceRef.current = null;
     }
   }, [currentUser]);
 
   useEffect(() => {
-    const socket = socketRef.current;
-    if (!socket || !socket.connected) return;
+    const socketService = socketServiceRef.current;
+    if (!socketService || !socketService.isConnected()) return;
 
-    const previousRoom = currentJoinedRoomRef.current;
-
-    if (currentJoinedRoomRef.current !== room) {
-      if (previousRoom) {
-        socket.emit("chat:leave", { roomId: previousRoom });
-      }
-      socket.emit("chat:join", { roomId: room });
-      currentJoinedRoomRef.current = room;
+    const currentRoom = socketService.getCurrentRoom();
+    if (currentRoom !== room) {
+      socketService.joinRoom(room);
     }
-
-    return () => {
-      if (socket.connected && currentJoinedRoomRef.current) {
-        socket.emit("chat:leave", { roomId: currentJoinedRoomRef.current });
-        currentJoinedRoomRef.current = null;
-      }
-    };
   }, [room]);
 
   const sendMessage = (text: string) => {
     if (!text.trim()) return;
 
-    if (!socketRef.current || !currentUser || !currentUser._id) return;
+    const socketService = socketServiceRef.current;
+    if (!socketService || !currentUser || !currentUser._id) return;
 
-    socketRef.current.emit("chat:message", {
-      roomId: room,
-      message: text,
-      username: currentUser.username,
-      userId: currentUser._id,
-    });
+    socketService.sendMessage(
+      room,
+      text,
+      currentUser.username,
+      currentUser._id,
+    );
   };
 
   const handleRoomChange = (newRoom: string) => {

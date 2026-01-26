@@ -16,11 +16,10 @@ import { ROUTES } from "@/shared/constants/routes";
 import { useLeaderboard } from "@/config-api/leaderboard/useLeaderboard";
 import { Logo } from "@/shared/components/Logo";
 import { useCurrentUser } from "@/config-api/user/useUser";
+import Link from "next/link";
 
 export function Header() {
-  const [menuVisibility, setMenuVisibility] = useState<"hidden" | "visible">(
-    "hidden",
-  );
+  const [isVisible, setIsVisible] = useState(false);
   const { showPopup } = usePopup();
   const router = useRouter();
   const { mutate: logoutMutation } = useLogout();
@@ -31,10 +30,10 @@ export function Header() {
     userData?.avatarURL || leaderboardData?.currentUser?.avatarURL;
 
   const handleToggleMenu = () => {
-    setMenuVisibility((prev) => (prev === "hidden" ? "visible" : "hidden"));
+    setIsVisible(!isVisible);
   };
 
-  const closeMenu = () => setMenuVisibility("hidden");
+  const closeMenu = () => setIsVisible(false);
 
   const handleLogout = () => {
     logoutMutation(undefined, {
@@ -56,7 +55,9 @@ export function Header() {
       <header className={styles.header}>
         <Container>
           <div className={styles.headerContent}>
-            <Logo className={styles.headerLogo} />
+            <Link href={ROUTES.HOME} className={styles.headerLogo}>
+              <Logo />
+            </Link>
 
             <Button
               className={styles.toggleMenuButton}
@@ -74,6 +75,7 @@ export function Header() {
                     width={24}
                     height={24}
                   />
+
                   <span>
                     {userData?.balance !== undefined
                       ? userData.balance
@@ -118,7 +120,7 @@ export function Header() {
       </header>
 
       <MobileMenu
-        menuVisibility={menuVisibility}
+        isVisible={isVisible}
         toggleMenu={handleToggleMenu}
         closeMenu={closeMenu}
         handleLogout={handleLogout}
