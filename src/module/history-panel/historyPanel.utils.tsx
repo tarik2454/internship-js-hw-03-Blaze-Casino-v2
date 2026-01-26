@@ -1,5 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { CrashBet } from "@/config-api/crash/crash.types";
+import { HistoryTableColumn } from "./historyPanel.types";
 
 const columnHelper = createColumnHelper<CrashBet>();
 
@@ -14,7 +15,9 @@ export const formatDate = (dateString: string) => {
   return `${day}.${month}.${year}, ${hours}:${minutes}:${seconds}`;
 };
 
-export const createColumns = (styles: Record<string, string>) => [
+export const createColumns = (
+  styles: Record<string, string>,
+): HistoryTableColumn[] => [
   columnHelper.accessor("createdAt", {
     header: "Time",
     cell: (info) => (

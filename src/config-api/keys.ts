@@ -10,6 +10,7 @@ export const queryKeys = {
   },
   leaderboard: ["leaderboard"],
   crash: ["crash"],
+  plinko: ["plinko"],
 };
 
 export const queryKeyFactories = {
@@ -31,5 +32,13 @@ export const queryKeyFactories = {
       offset,
     ],
     getCurrent: () => [...queryKeys.crash, "current"],
+  },
+  plinko: {
+    userHistory: (limit: number = 10, offset: number = 0) => [
+      ...queryKeys.plinko,
+      "user-history",
+      limit,
+      offset,
+    ],
   },
 };

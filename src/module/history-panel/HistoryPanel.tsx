@@ -17,8 +17,15 @@ export function HistoryPanel() {
 
   const columns = useMemo(() => createColumns(styles), []);
 
+  const tableData = useMemo(() => {
+    if (!history) return [];
+    if ("bets" in history) return history.bets;
+    if ("drops" in history) return [];
+    return [];
+  }, [history]);
+
   const table = useReactTable({
-    data: history?.bets ?? [],
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => row.betId,
