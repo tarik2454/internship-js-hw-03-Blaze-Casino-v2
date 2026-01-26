@@ -9,11 +9,13 @@ import styles from "./Crash.module.scss";
 import { useCrashSocket } from "@/config-api/crash/ws/useCrashSocket";
 import { useCrashBet } from "@/config-api/crash/useCrash";
 import { useCrashCashout } from "@/config-api/crash/useCrash";
+import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
 import { SettingsPanel } from "./SettingsPanel";
 import { CrashGameDisplay } from "./components/CrashGameDisplay";
 
 export function Crash() {
   const queryClient = useQueryClient();
+  const { showPopup } = usePopup();
 
   const { multiplier, elapsed, canBet, crashPoint, betId, gameState } =
     useCrashSocket();
@@ -51,9 +53,15 @@ export function Crash() {
           setActiveAutoCashout(data.autoCashout);
           setIsAutoCashedOut(false);
         },
+        onError: (error) => {
+          showPopup({
+            message: error.message || "Failed to place bet",
+            type: POPUP_TYPE.ERROR,
+          });
+        },
       });
     },
-    [placeBet],
+    [placeBet, showPopup],
   );
 
   useEffect(() => {

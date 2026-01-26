@@ -47,13 +47,6 @@ const BetForm = memo(function BetForm({
   gameState,
   betId,
 }: BetFormProps) {
-  // We need to clarify which parts depend on what.
-  // Ideally, BetForm shouldn't care about 'gameState' for standard rendering unless it affects disabled states.
-  // It does affect 'disabled={gameState !== "running" || !betId || isCashingOut}' for Cashout button.
-  // This means if 'gameState' changes (game starts/ends), this form re-renders. That is fine.
-  // But 'gameState' doesn't change 60 times a second. 'multiplier' does.
-  // So 'BetForm' props DO NOT include 'multiplier'. Good.
-
   return (
     <div className={styles.settingsPanel}>
       <div className={styles.inputWrapper}>
@@ -235,10 +228,6 @@ export function SettingsPanel({
   const handleAutoToggle = useCallback((checked: boolean) => {
     setIsAuto(checked);
     if (checked) {
-      // We need to check if autoCashout is empty inside the state setter or just here?
-      // The original logic checked `!autoCashout`. But `autoCashout` string state dependency.
-      // We can do functional update or just depend on it.
-      // Or simpler:
       setAutoCashout((prev) => (!prev ? "2.00" : prev));
     }
   }, []);
@@ -259,8 +248,6 @@ export function SettingsPanel({
     });
   }, [autoCashout, amount, isAuto, onPlaceBet]);
 
-  // Note: original handleCashout used setIsCashingOut logic.
-  // We need to keep that locally.
   const handleCashout = useCallback(async () => {
     setIsCashingOut(true);
     try {
