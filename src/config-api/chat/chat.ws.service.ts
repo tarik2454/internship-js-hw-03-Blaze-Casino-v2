@@ -100,12 +100,14 @@ export const createChatSocket = () => {
   ) => {
     if (!socket || !message.trim()) return;
 
-    socket.emit("chat:message", {
+    const messageData = {
       roomId,
       message,
       username,
       userId,
-    });
+    };
+
+    socket.emit("chat:message", messageData);
   };
 
   const disconnect = () => {
