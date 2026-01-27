@@ -8,7 +8,6 @@ import {
   PlinkoDropResponse,
   PlinkoMultipliersResponse,
   PlinkoUserHistoryResponse,
-  PlinkoRecentHistoryResponse,
   RiskLevel,
 } from "./plinko.types";
 
@@ -17,18 +16,6 @@ export function usePlinkoDrop() {
 
   return useMutation<PlinkoDropResponse, ApiError, PlinkoDropRequest>({
     mutationFn: (payload: PlinkoDropRequest) => plinkoApi.postBet(payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [...queryKeys.plinko, "user-history"],
-        refetchType: "active",
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.plinko,
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.user,
-      });
-    },
   });
 }
 
@@ -43,12 +30,5 @@ export function usePlinkoHistory(limit: number = 10, offset: number = 0) {
   return useQuery<PlinkoUserHistoryResponse, ApiError>({
     queryKey: queryKeyFactories.plinko.userHistory(limit, offset),
     queryFn: () => plinkoApi.getUserHistory(limit, offset),
-  });
-}
-
-export function usePlinkoRecent() {
-  return useQuery<PlinkoRecentHistoryResponse, ApiError>({
-    queryKey: queryKeyFactories.plinko.recent(),
-    queryFn: () => plinkoApi.getRecentGames(),
   });
 }

@@ -11,23 +11,24 @@ import { CrashUserHistoryResponse } from "@/config-api/crash/crash.types";
 
 type GameType = "crash" | "case" | "mines" | "plinko";
 
-const PATH_TO_GAME: Record<string, GameType> = {
-  "/crash": "crash",
-  "/case": "case",
-  "/mines": "mines",
-  "/plinko": "plinko",
-} as const;
-
 export function useGameHistory(limit = 10, offset = 0) {
   const pathname = usePathname();
-  const gameType = PATH_TO_GAME[pathname] || "crash";
+  let gameType: GameType = "crash";
+
+  if (pathname?.includes("plinko")) {
+    gameType = "plinko";
+  } else if (pathname?.includes("case")) {
+    gameType = "case";
+  } else if (pathname?.includes("mines")) {
+    gameType = "mines";
+  }
 
   const queryKey =
     gameType === "crash"
       ? queryKeyFactories.crash.userHistory(limit, offset)
       : queryKeyFactories.plinko.userHistory(limit, offset);
 
-  return useQuery<
+  const { data, refetch } = useQuery<
     CrashUserHistoryResponse | PlinkoUserHistoryResponse,
     ApiError
   >({
@@ -47,6 +48,7 @@ export function useGameHistory(limit = 10, offset = 0) {
       }
     },
     refetchOnWindowFocus: true,
-    refetchInterval: 2000, // Обновление каждые 2 секунды
   });
+
+  return { data, refetch };
 }

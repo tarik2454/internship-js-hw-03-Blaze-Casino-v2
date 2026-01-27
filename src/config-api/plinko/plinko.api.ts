@@ -4,7 +4,6 @@ import {
   PlinkoDropRequest,
   PlinkoDropResponse,
   PlinkoUserHistoryResponse,
-  PlinkoRecentHistoryResponse, // Added import
   PlinkoMultipliersResponse,
   RiskLevel,
   LinesCount,
@@ -43,13 +42,6 @@ export const plinkoApi = {
     const { data } = await api.get<PlinkoMultipliersResponse>(
       PLINKO_ROUTES.GET_MULTIPLIERS,
       { params: { risk, lines } },
-    );
-    return data;
-  },
-
-  getRecentGames: async (): Promise<PlinkoRecentHistoryResponse> => {
-    const { data } = await api.get<PlinkoRecentHistoryResponse>(
-      PLINKO_ROUTES.GET_RECENT,
     );
     return data;
   },
