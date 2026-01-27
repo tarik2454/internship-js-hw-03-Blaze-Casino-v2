@@ -1,3 +1,5 @@
+import { LinesCount, RiskLevel } from "@/module/settings-panel/types";
+
 export const queryKeys = {
   user: ["user"],
   balance: ["balance"],
@@ -39,6 +41,12 @@ export const queryKeyFactories = {
       "user-history",
       limit,
       offset,
+    ],
+    multipliers: (risk: RiskLevel, lines: LinesCount) => [
+      ...queryKeys.plinko,
+      "multipliers",
+      risk,
+      lines,
     ],
   },
 };

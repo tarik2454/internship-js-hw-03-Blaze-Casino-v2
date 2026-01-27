@@ -1,0 +1,128 @@
+"use client";
+
+import { cx } from "@/shared/utils/classNames";
+import { SettingsPanelProps, StatItem } from "./types";
+import { BetAmountInput } from "./components/BetAmountInput";
+import { AutoCashoutInput } from "./components/AutoCashoutInput";
+import { PlinkoOptions } from "./components/PlinkoOptions";
+import { BetStats } from "./components/BetStats";
+import { ActionButtons } from "./components/ActionButtons";
+import { useSettingsPanel } from "./hooks/useSettingsPanel";
+import styles from "./SettingsPanel.module.scss";
+export function SettingsPanel({
+  title,
+  canBet,
+  inputsDisabled = false,
+  showAutoCashout = true,
+  showCashoutButton = true,
+  showPlinkoOptions = false,
+  isCashoutDisabled = true,
+  stats,
+  computeStats,
+  children,
+  onPlaceBet,
+  onCashout,
+  riskLevel,
+  linesCount,
+  ballsCount,
+  onRiskChange,
+  onLinesChange,
+  onBallsChange,
+}: SettingsPanelProps) {
+  const {
+    amount,
+    autoCashout,
+    isAuto,
+    isCashingOut,
+    riskLevel: currentRisk,
+    linesCount: currentLines,
+    ballsCount: currentBalls,
+    handleAmountChange,
+    handleHalf,
+    handleDouble,
+    handleMax,
+    handleAutoToggle,
+    handleAutoCashoutChange,
+    handlePlaceBet,
+    handleCashout,
+    setRiskLevel,
+    setLinesCount,
+    setBallsCount,
+  } = useSettingsPanel({
+    showPlinkoOptions,
+    onPlaceBet,
+    onCashout,
+    riskLevel,
+    linesCount,
+    ballsCount,
+    onRiskChange,
+    onLinesChange,
+    onBallsChange,
+  });
+
+  return (
+    <aside className={styles.settingsPanelWrapper}>
+      <p className={styles.settingsPanelTitle}>{title}</p>
+
+      <div
+        className={cx(
+          styles.settingsPanel,
+          showPlinkoOptions && styles.settingsPanelWithPlinkoOptions,
+        )}
+      >
+        <BetAmountInput
+          amount={amount}
+          disabled={inputsDisabled}
+          onAmountChange={handleAmountChange}
+          onHalf={handleHalf}
+          onDouble={handleDouble}
+          onMax={handleMax}
+        />
+
+        {showAutoCashout && (
+          <AutoCashoutInput
+            autoCashout={autoCashout}
+            isAuto={isAuto}
+            disabled={inputsDisabled}
+            onAutoToggle={handleAutoToggle}
+            onAutoCashoutChange={handleAutoCashoutChange}
+          />
+        )}
+
+        {showPlinkoOptions && (
+          <PlinkoOptions
+            ballsCount={currentBalls}
+            riskLevel={currentRisk}
+            linesCount={currentLines}
+            onRiskChange={setRiskLevel}
+            onLinesChange={setLinesCount}
+            onBallsChange={setBallsCount}
+            disabled={inputsDisabled}
+          />
+        )}
+      </div>
+
+      <ActionButtons
+        canBet={canBet}
+        showCashoutButton={showCashoutButton}
+        isCashoutDisabled={isCashoutDisabled}
+        isCashingOut={isCashingOut}
+        hideBorder={showPlinkoOptions}
+        onPlaceBet={handlePlaceBet}
+        onCashout={handleCashout}
+      />
+
+      {(stats || computeStats) && (
+        <BetStats stats={computeStats ? computeStats(amount) : stats!} />
+      )}
+      {children}
+    </aside>
+  );
+}
+
+export type { SettingsPanelProps, StatItem };
+export type {
+  RiskLevel,
+  LinesCount,
+  BallsCount,
+} from "@/config-api/plinko/plinko.types";

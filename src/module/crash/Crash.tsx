@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys, queryKeyFactories } from "@/config-api/keys";
 import { Container } from "@/shared/components/Container";
 import { Section } from "@/shared/components/Section";
-import { SettingsPanel, StatItem } from "@/shared/components/SettingsPanel";
+import { SettingsPanel, StatItem } from "@/module/settings-panel/SettingsPanel";
 import styles from "./Crash.module.scss";
 import { useCrashSocket } from "@/config-api/crash/ws/useCrashSocket";
 import { useCrashBet } from "@/config-api/crash/useCrash";
@@ -146,9 +146,7 @@ export function Crash() {
               title="Crash Configuration"
               canBet={canBet}
               inputsDisabled={!!activeBetId}
-              isCashoutDisabled={
-                currentGameState !== "running" || !activeBetId
-              }
+              isCashoutDisabled={currentGameState !== "running" || !activeBetId}
               computeStats={computeStats}
               onPlaceBet={handlePlaceBet}
               onCashout={handleCashout}
