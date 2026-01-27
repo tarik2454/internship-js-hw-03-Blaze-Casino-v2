@@ -20,7 +20,7 @@ export function HistoryPanel() {
   const tableData = useMemo(() => {
     if (!history) return [];
     if ("bets" in history) return history.bets;
-    if ("drops" in history) return [];
+    if ("drops" in history) return history.drops;
     return [];
   }, [history]);
 
@@ -28,7 +28,10 @@ export function HistoryPanel() {
     data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getRowId: (row) => row.betId,
+    getRowId: (row) => {
+      // For crash: row.betId, for plinko: row._id
+      return "betId" in row ? row.betId : row._id;
+    },
   });
 
   return (

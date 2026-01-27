@@ -19,7 +19,14 @@ export function usePlinkoDrop() {
     mutationFn: (payload: PlinkoDropRequest) => plinkoApi.postBet(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({
+        queryKey: [...queryKeys.plinko, "user-history"],
+        refetchType: "active",
+      });
+      queryClient.invalidateQueries({
         queryKey: queryKeys.plinko,
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.user,
       });
     },
   });

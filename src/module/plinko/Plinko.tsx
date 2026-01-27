@@ -85,7 +85,6 @@ export function Plinko() {
             });
           },
           onError: (error) => {
-            // Rollback optimistic update
             if (previousUserData) {
               queryClient.setQueryData(queryKeys.user, previousUserData);
             }

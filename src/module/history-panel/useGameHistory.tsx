@@ -47,5 +47,6 @@ export function useGameHistory(limit = 10, offset = 0) {
       }
     },
     refetchOnWindowFocus: true,
+    refetchInterval: 2000, // Обновление каждые 2 секунды
   });
 }
