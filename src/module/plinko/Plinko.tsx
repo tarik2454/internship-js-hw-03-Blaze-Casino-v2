@@ -11,6 +11,8 @@ import type {
   RiskLevel,
   LinesCount,
   BallsCount,
+  PlinkoDrop,
+  PlinkoUserHistoryResponse,
 } from "@/config-api/plinko/plinko.types";
 import {
   usePlinkoDrop,
@@ -55,7 +57,7 @@ export function Plinko() {
             const { totalBet, totalWin, balls, risk, lines, dropId } =
               lastGameDataRef.current;
 
-            const newHistoryItem: any = {
+            const newHistoryItem: PlinkoDrop = {
               _id: dropId,
               betAmount: totalBet,
               ballsCount: balls,
@@ -66,9 +68,9 @@ export function Plinko() {
               createdAt: new Date().toISOString(),
             };
 
-            queryClient.setQueryData<any>(
+            queryClient.setQueryData<PlinkoUserHistoryResponse>(
               queryKeyFactories.plinko.userHistory(10, 0),
-              (old: any) => {
+              (old) => {
                 if (!old) return { drops: [newHistoryItem] };
                 return {
                   ...old,
