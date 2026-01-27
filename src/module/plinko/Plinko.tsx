@@ -105,7 +105,7 @@ export function Plinko() {
               queryKey: queryKeys.user,
               refetchType: "active",
             });
-          }, 2000);
+          }, 1000);
           setFinishedBallsCount(0);
           setExpectedBallsCount(0);
         }
