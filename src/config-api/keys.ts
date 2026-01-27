@@ -48,5 +48,6 @@ export const queryKeyFactories = {
       risk,
       lines,
     ],
+    recent: () => [...queryKeys.plinko, "recent"],
   },
 };

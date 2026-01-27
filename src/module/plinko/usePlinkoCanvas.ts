@@ -1,6 +1,28 @@
 import { useEffect, useRef, useCallback } from "react";
 import { getMultiplierColor } from "./plinko.services";
-import type { Ball, UsePlinkoCanvasProps } from "../types";
+
+export interface Ball {
+  path: number[];
+  currentStep: number;
+  progress: number;
+  row: number;
+  col: number;
+  multiplier: number;
+  payout: number;
+  slotIndex: number;
+  finished: boolean;
+  highlightSlot: boolean;
+  betAmount: number;
+  speed: number;
+  bounceStrength: number;
+  finishTime?: number;
+}
+
+export interface UsePlinkoCanvasProps {
+  lines: number;
+  multipliers: number[];
+  onBallFinish: (ball: Ball) => void;
+}
 
 export const usePlinkoCanvas = ({
   lines,
@@ -16,17 +38,6 @@ export const usePlinkoCanvas = ({
   useEffect(() => {
     onBallFinishRef.current = onBallFinish;
   }, [onBallFinish]);
-
-  const generatePath = useCallback((lines: number): number[] => {
-    const path: number[] = [];
-
-    for (let i = 0; i < lines; i++) {
-      const direction = Math.random() < 0.5 ? 0 : 1;
-      path.push(direction);
-    }
-
-    return path;
-  }, []);
 
   const renderBoard = useCallback(
     (ctx: CanvasRenderingContext2D, width: number, height: number) => {
@@ -271,9 +282,7 @@ export const usePlinkoCanvas = ({
   }, [renderBoard, renderSlots, updateAndDrawBalls]);
 
   const addBall = useCallback(
-    (betAmount: number) => {
-      const path = generatePath(lines);
-
+    (betAmount: number, path: number[], multiplier: number, payout: number) => {
       let finalCol = 0;
       path.forEach((dir) => {
         finalCol += dir;
@@ -285,8 +294,6 @@ export const usePlinkoCanvas = ({
         0,
         Math.min(multipliers.length - 1, slotIndex),
       );
-      const multiplier = multipliers[safeSlotIndex];
-      const payout = multiplier * betAmount;
 
       const ball: Ball = {
         path,
@@ -310,7 +317,7 @@ export const usePlinkoCanvas = ({
         startAnimation();
       }
     },
-    [lines, multipliers, generatePath, startAnimation],
+    [multipliers, startAnimation],
   );
 
   useEffect(() => {

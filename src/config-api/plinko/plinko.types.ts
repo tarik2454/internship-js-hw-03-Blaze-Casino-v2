@@ -35,6 +35,34 @@ export interface PlinkoDropResult {
   nonce: number;
 }
 
+export interface PlinkoRecentDrop {
+  _id: string;
+  userId: {
+    _id: string;
+    username: string;
+  };
+  betAmount: number;
+  ballsCount: BallsCount;
+  riskLevel: RiskLevel;
+  linesCount: LinesCount;
+  createdAt: string;
+}
+
+export interface PlinkoRecentHistoryResponse {
+  drops: PlinkoRecentDrop[];
+}
+
+export interface PlinkoDropResult {
+  dropId: string;
+  path: number[];
+  slotIndex: number;
+  multiplier: number;
+  winAmount: number;
+  serverSeed: string;
+  clientSeed: string;
+  nonce: number;
+}
+
 export interface PlinkoDropResponse {
   drops: PlinkoDropResult[];
   totalBet: number;

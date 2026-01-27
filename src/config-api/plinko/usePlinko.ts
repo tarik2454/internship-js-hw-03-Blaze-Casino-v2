@@ -7,6 +7,8 @@ import {
   PlinkoDropRequest,
   PlinkoDropResponse,
   PlinkoMultipliersResponse,
+  PlinkoUserHistoryResponse,
+  PlinkoRecentHistoryResponse,
   RiskLevel,
 } from "./plinko.types";
 
@@ -19,9 +21,6 @@ export function usePlinkoDrop() {
       queryClient.invalidateQueries({
         queryKey: queryKeys.plinko,
       });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.user,
-      });
     },
   });
 }
@@ -30,5 +29,19 @@ export function usePlinkoMultipliers(risk: RiskLevel, lines: LinesCount) {
   return useQuery<PlinkoMultipliersResponse, ApiError>({
     queryKey: queryKeyFactories.plinko.multipliers(risk, lines),
     queryFn: () => plinkoApi.getMultipliers(risk, lines),
+  });
+}
+
+export function usePlinkoHistory(limit: number = 10, offset: number = 0) {
+  return useQuery<PlinkoUserHistoryResponse, ApiError>({
+    queryKey: queryKeyFactories.plinko.userHistory(limit, offset),
+    queryFn: () => plinkoApi.getUserHistory(limit, offset),
+  });
+}
+
+export function usePlinkoRecent() {
+  return useQuery<PlinkoRecentHistoryResponse, ApiError>({
+    queryKey: queryKeyFactories.plinko.recent(),
+    queryFn: () => plinkoApi.getRecentGames(),
   });
 }
