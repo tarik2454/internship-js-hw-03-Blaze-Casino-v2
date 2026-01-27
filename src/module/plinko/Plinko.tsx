@@ -13,19 +13,20 @@ import {
   usePlinkoDrop,
   usePlinkoMultipliers,
 } from "@/config-api/plinko/usePlinko";
+import { formatMultiplier, getMultiplierColor } from "./plinko.services";
 import styles from "./Plinko.module.scss";
 
 export function Plinko() {
-  const { mutate: postBet, isPending } = usePlinkoDrop();
-
   const [riskLevel, setRiskLevel] = useState<RiskLevel>("medium");
   const [linesCount, setLinesCount] = useState<LinesCount>(12);
   const [ballsCount, setBallsCount] = useState<BallsCount>(1);
 
+  const { mutate: postBet, isPending } = usePlinkoDrop();
   const { data: multipliersData } = usePlinkoMultipliers(riskLevel, linesCount);
-  const multipliers = multipliersData?.multipliers || [];
 
-  console.log(multipliers);
+  const multipliers = multipliersData?.multipliers || [];
+  const maxMultiplier =
+    multipliers.length > 0 ? Math.max(...multipliers) : undefined;
 
   const handlePlaceBet = useCallback(
     async (data: {
@@ -55,8 +56,14 @@ export function Plinko() {
                 <li
                   key={`${multiplier}-${index}`}
                   className={styles.multiplierItem}
+                  style={{
+                    backgroundColor: getMultiplierColor(
+                      multiplier,
+                      maxMultiplier,
+                    ),
+                  }}
                 >
-                  {multiplier}
+                  {formatMultiplier(multiplier)}
                 </li>
               ))}
             </ul>

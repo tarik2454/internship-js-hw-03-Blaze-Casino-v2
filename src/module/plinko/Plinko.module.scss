@@ -11,7 +11,7 @@
 }
 
 .plinkoArea {
-  @include flexBetween();
+  @include flexBetween;
   flex-direction: column;
   width: 100%;
   height: 100%;
@@ -19,12 +19,26 @@
   border-radius: var(--radius-16);
   background: #423e6980;
 
-  // @include minWidth(xl) {
-  //   min-height: 638px;
-  // }
+  @include minWidth(xl) {
+    min-height: 638px;
+  }
 }
 
 .multipliersList {
   display: flex;
-  gap: 16px;
+  gap: 4px;
+}
+
+.multiplierItem {
+  @include flexCenter;
+  width: 17px;
+  padding: 8px 0;
+  border-radius: var(--radius-8);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.3;
+
+  @include minWidth(xl) {
+    width: 34px;
+  }
 }
