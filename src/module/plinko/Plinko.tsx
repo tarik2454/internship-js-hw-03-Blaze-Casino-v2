@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useRef } from "react";
+import { useCallback, useState, useRef, useMemo } from "react";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import { Section } from "@/shared/components/Section";
@@ -44,15 +44,21 @@ export function Plinko() {
 
   const multipliers = multipliersData?.multipliers || [];
 
+  const isGameActive = useMemo(
+    () =>
+      isPending ||
+      (expectedBallsCount > 0 && finishedBallsCount < expectedBallsCount),
+    [isPending, expectedBallsCount, finishedBallsCount],
+  );
+
   const { canvasRef, addBall } = usePlinkoCanvas({
     lines: linesCount,
     multipliers,
     onBallFinish: () => {
       setFinishedBallsCount((prev) => {
         const newCount = prev + 1;
-        // Обновляем историю только когда все шарики завершились
+
         if (newCount >= expectedBallsCount && expectedBallsCount > 0) {
-          // Оптимистичное обновление истории
           if (lastGameDataRef.current) {
             const { totalBet, totalWin, balls, risk, lines, dropId } =
               lastGameDataRef.current;
@@ -82,14 +88,11 @@ export function Plinko() {
             lastGameDataRef.current = null;
           }
 
-          // Задержка, чтобы сервер успел сохранить данные в БД
           setTimeout(() => {
-            // Инвалидируем все запросы истории Plinko (и баланс)
             queryClient.invalidateQueries({
               queryKey: queryKeys.plinko,
               refetchType: "active",
             });
-            // Также обновляем баланс после завершения всех шариков
             if (finalBalanceRef.current !== null) {
               const finalBal = finalBalanceRef.current;
               queryClient.setQueryData<CurrentUserResponse>(
@@ -129,7 +132,6 @@ export function Plinko() {
         queryKeys.user,
       );
 
-      // Оптимистичное обновление баланса (списание ставки)
       if (previousUserData) {
         queryClient.setQueryData<CurrentUserResponse>(queryKeys.user, (old) => {
           if (!old) return old;
@@ -149,15 +151,9 @@ export function Plinko() {
         },
         {
           onSuccess: (response) => {
-            // Сохраняем ожидаемый баланс (уже включает выигрыш) для обновления после анимации
-            // Но пока не обновляем глобальный стейт, чтобы пользователь видел анимацию
-
-            // Устанавливаем ожидаемое количество шариков
             setExpectedBallsCount(response.drops.length);
             setFinishedBallsCount(0);
 
-            // Сохраняем данные для оптимистичного обновления истории
-            // Берем первый dropId как ID игры для истории (или любой уникальный)
             const firstDropId =
               response.drops[0]?.dropId || `temp-${Date.now()}`;
             lastGameDataRef.current = {
@@ -169,7 +165,6 @@ export function Plinko() {
               dropId: firstDropId,
             };
 
-            // Запускаем шарики
             response.drops.forEach((drop, index) => {
               setTimeout(() => {
                 addBall(
@@ -177,17 +172,10 @@ export function Plinko() {
                   drop.path,
                   drop.multiplier,
                   drop.winAmount,
-                  // Передаем newBalance в callback финиша (через замыкание или аргумент,
-                  // но addBall принимает только параметры шарика.
-                  // Лучше сохранить newBalance в ref или state, если нужно,
-                  // но мы можем просто использовать response.newBalance в onBallFinish
-                  // Однако onBallFinish определен в usePlinkoCanvas.
-                  // Передадим newBalance через ref в компоненте.
                 );
               }, index * 200);
             });
 
-            // Сохраняем финальный баланс в ref, чтобы использовать его в onBallFinish
             finalBalanceRef.current = response.newBalance;
           },
           onError: (error) => {
@@ -217,8 +205,8 @@ export function Plinko() {
 
           <SettingsPanel
             title="Plinko Configuration"
-            canBet={!isPending}
-            inputsDisabled={isPending}
+            canBet={!isGameActive}
+            inputsDisabled={isGameActive}
             showAutoCashout={false}
             showCashoutButton={false}
             showPlinkoOptions={true}

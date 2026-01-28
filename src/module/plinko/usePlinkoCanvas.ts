@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from "react";
-import { getMultiplierColor } from "./plinko.services";
+import { getMultiplierColor } from "./plinko.utils";
 
 export interface Ball {
   path: number[];

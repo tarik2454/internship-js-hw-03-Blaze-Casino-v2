@@ -31,7 +31,7 @@
   min-width: 0;
   padding: 6px 16px;
   border-radius: var(--radius-4);
-  background: var(--color-blue-55);
+  background: var(--color-blue-3f);
   font-weight: 500;
   font-size: 14px;
   font-family: var(--font-manrope);
@@ -46,7 +46,6 @@
   }
 
   &:disabled {
-    cursor: not-allowed;
     opacity: 0.5;
   }
 }

@@ -21,7 +21,9 @@ export const createColumns = (
     id: "createdAt",
     header: "Time",
     cell: (info) => (
-      <span className={styles.historyDate}>{formatDate(info.row.original.createdAt)}</span>
+      <span className={styles.historyDate}>
+        {formatDate(info.row.original.createdAt)}
+      </span>
     ),
   }),
   columnHelper.display({
@@ -39,10 +41,8 @@ export const createColumns = (
     cell: (info) => {
       const row = info.row.original;
       if ("linesCount" in row) {
-        // Plinko
         return <span>{row.linesCount}</span>;
       }
-      // Crash - пустая ячейка
       return <span>-</span>;
     },
   }),
@@ -52,14 +52,10 @@ export const createColumns = (
     cell: (info) => {
       const row = info.row.original;
       if ("riskLevel" in row) {
-        // Plinko
         return (
-          <span style={{ textTransform: "capitalize" }}>
-            {row.riskLevel}
-          </span>
+          <span style={{ textTransform: "capitalize" }}>{row.riskLevel}</span>
         );
       }
-      // Crash - пустая ячейка
       return <span>-</span>;
     },
   }),
@@ -72,11 +68,9 @@ export const createColumns = (
       let isWon = false;
 
       if ("cashoutMultiplier" in row) {
-        // Crash
         multiplier = row.cashoutMultiplier;
         isWon = row.status === "won";
       } else if ("avgMultiplier" in row) {
-        // Plinko
         multiplier = parseFloat(row.avgMultiplier);
         isWon = row.totalWin > 0;
       }
@@ -97,11 +91,9 @@ export const createColumns = (
       let isWon = false;
 
       if ("winAmount" in row) {
-        // Crash
         winAmount = row.winAmount;
         isWon = row.status === "won";
       } else if ("totalWin" in row) {
-        // Plinko
         winAmount = row.totalWin;
         isWon = row.totalWin > 0;
       }
@@ -121,10 +113,8 @@ export const createColumns = (
       let isWon = false;
 
       if ("status" in row) {
-        // Crash
         isWon = row.status === "won";
       } else if ("totalWin" in row) {
-        // Plinko
         isWon = row.totalWin > 0;
       }
 

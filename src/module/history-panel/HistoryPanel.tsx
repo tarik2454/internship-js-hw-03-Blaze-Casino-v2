@@ -29,7 +29,6 @@ export function HistoryPanel() {
     columns,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => {
-      // For crash: row.betId, for plinko: row._id
       return "betId" in row ? row.betId : row._id;
     },
   });

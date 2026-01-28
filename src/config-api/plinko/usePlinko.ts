@@ -12,8 +12,6 @@ import {
 } from "./plinko.types";
 
 export function usePlinkoDrop() {
-  const queryClient = useQueryClient();
-
   return useMutation<PlinkoDropResponse, ApiError, PlinkoDropRequest>({
     mutationFn: (payload: PlinkoDropRequest) => plinkoApi.postBet(payload),
   });
