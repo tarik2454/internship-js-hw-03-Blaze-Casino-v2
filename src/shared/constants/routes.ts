@@ -5,7 +5,7 @@ export const ROUTES = {
   PROFILE: "/profile",
   LEADERBOARD: "/leaderboard",
   CRASH: "/crash",
-  CASE: "/case",
+  CASES: "/cases",
   MINES: "/mines",
   PLINKO: "/plinko",
 } as const;

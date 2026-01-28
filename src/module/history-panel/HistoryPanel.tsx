@@ -29,7 +29,9 @@ export function HistoryPanel() {
     columns,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => {
-      return "betId" in row ? row.betId : row._id;
+      if ("betId" in row) return row.betId;
+      if ("id" in row) return row.id;
+      return row._id;
     },
   });
 

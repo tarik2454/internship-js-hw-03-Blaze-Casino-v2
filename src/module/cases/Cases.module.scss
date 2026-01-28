@@ -1,0 +1,23 @@
+@use "@/styles/index" as *;
+
+.casesList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+
+  @include minWidth(xl) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+}
+
+.caseItem {
+  padding: 12px 8px 16px 8px;
+  border-radius: var(--radius-16);
+  background: #423e6980;
+  box-shadow: 0px 4px 10px 0px #1515153d;
+
+  @include minWidth(xl) {
+    padding: 24px 8px 74px 8px;
+  }
+}

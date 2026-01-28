@@ -31,7 +31,14 @@ export const createColumns = (
     header: "Bet",
     cell: (info) => {
       const row = info.row.original;
-      const amount = "amount" in row ? row.amount : row.betAmount;
+      const amount =
+        "amount" in row
+          ? row.amount
+          : "betAmount" in row
+            ? row.betAmount
+            : "casePrice" in row
+              ? row.casePrice
+              : 0;
       return <span className={styles.historyAmount}>${amount}</span>;
     },
   }),
@@ -96,6 +103,9 @@ export const createColumns = (
       } else if ("totalWin" in row) {
         winAmount = row.totalWin;
         isWon = row.totalWin > 0;
+      } else if ("itemValue" in row) {
+        winAmount = row.itemValue;
+        isWon = row.profit > 0;
       }
 
       return (
@@ -116,6 +126,8 @@ export const createColumns = (
         isWon = row.status === "won";
       } else if ("totalWin" in row) {
         isWon = row.totalWin > 0;
+      } else if ("profit" in row) {
+        isWon = row.profit > 0;
       }
 
       return (

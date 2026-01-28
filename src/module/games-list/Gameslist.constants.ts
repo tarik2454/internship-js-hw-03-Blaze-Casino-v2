@@ -7,7 +7,7 @@ export enum GameTags {
   NEW = "New",
 }
 
-export const LIST_GAMES = [
+export const GAMES_LIST = [
   {
     id: 1,
     name: "Crash",
@@ -18,11 +18,11 @@ export const LIST_GAMES = [
   },
   {
     id: 2,
-    name: "Case",
+    name: "Cases",
     description: "Open cases and win random rewards",
     backgroundImage: "/images/list-games/case.png",
     tag: GameTags.POPULAR,
-    href: ROUTES.CASE,
+    href: ROUTES.CASES,
   },
   {
     id: 3,

@@ -6,7 +6,7 @@ export interface CurrentUserResponse {
   totalWagered: number;
   gamesPlayed: number;
   totalWon: number;
-  avatarURL?: string; // Keep this just in case, though not in spec
+  avatarURL?: string;
 }
 
 export interface UserSummary {

@@ -1,16 +1,13 @@
 import { api } from "../axios";
+import { createAuthConfig } from "../api.utils";
 import { USER_ROUTES } from "./user.constants";
 import { CurrentUserResponse, UserListResponse } from "./user.types";
 
 export const userApi = {
   getCurrentUser: async (token?: string): Promise<CurrentUserResponse> => {
-    const config = token
-      ? { headers: { Authorization: `Bearer ${token}` } }
-      : {};
-
     const { data } = await api.get<CurrentUserResponse>(
       USER_ROUTES.CURRENT,
-      config,
+      createAuthConfig(token),
     );
     return data;
   },
