@@ -3,6 +3,7 @@ export type Case = {
   name: string;
   price: number;
   image: string;
+  description: string;
   items: never[];
 };
 
