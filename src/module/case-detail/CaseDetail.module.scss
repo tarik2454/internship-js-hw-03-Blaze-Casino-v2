@@ -1,0 +1,120 @@
+@use "@/styles/index" as *;
+
+.GameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  gap: 32px;
+
+  @include minWidth(xl) {
+    flex-direction: row;
+    margin-bottom: 56px;
+    gap: 257px;
+  }
+}
+
+.caseTitle {
+  margin-bottom: 24px;
+  font-weight: 900;
+  font-size: 32px;
+  line-height: 1.3;
+  font-family: var(--font-satoshi-900);
+
+  @include minWidth(md) {
+    text-align: center;
+  }
+
+  @include minWidth(xl) {
+    margin-bottom: 40;
+    font-size: 48px;
+    text-align: left;
+  }
+}
+
+.casePrice {
+  background: linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.caseImageWrapper {
+  width: 361px;
+  height: 198px;
+  margin-bottom: 16px;
+
+  @include minWidth(xl) {
+    width: 545px;
+    height: 402px;
+    margin-bottom: 0;
+  }
+}
+
+.caseImage {
+  position: relative !important;
+}
+
+.caseActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  @include minWidth(xl) {
+    flex-direction: row;
+    gap: 32px;
+  }
+}
+
+.openButton {
+  min-width: 204px;
+  padding: 12px 0;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.switchWrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.switch {
+  position: relative !important;
+}
+
+.switchLabel {
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.itemsTitle {
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 1.3;
+  font-family: var(--font-satoshi-900);
+
+  @include minWidth(xl) {
+    font-size: 32px;
+  }
+}
+
+.itemsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-auto-rows: minmax(0, 127px);
+  padding: 16px;
+  gap: 16px;
+
+  @include minWidth(md) {
+    grid-template-columns: repeat(4, minmax(100px, 1fr));
+  }
+
+  @include minWidth(xl) {
+    grid-template-columns: repeat(auto-fit, minmax(129px, 1fr));
+    grid-auto-rows: minmax(0, 141px);
+    gap: 24px;
+  }
+}

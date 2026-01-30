@@ -17,6 +17,7 @@ export type CaseItem = {
   rarity: string;
   value: number;
   chance: number;
+  imageUrl: string;
 };
 
 export type CaseResponse = {
