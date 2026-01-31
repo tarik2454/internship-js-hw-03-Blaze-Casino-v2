@@ -1,7 +1,12 @@
 import { api } from "../axios";
 import { createAuthConfig } from "../api.utils";
 import { USER_ROUTES } from "./user.constants";
-import { CurrentUserResponse, UserListResponse } from "./user.types";
+import {
+  CurrentUserResponse,
+  UpdateUserRequest,
+  UpdateUserResponse,
+  UserListResponse,
+} from "./user.types";
 
 export const userApi = {
   getCurrentUser: async (token?: string): Promise<CurrentUserResponse> => {
@@ -14,6 +19,18 @@ export const userApi = {
 
   getUsers: async (): Promise<UserListResponse> => {
     const { data } = await api.get<UserListResponse>(USER_ROUTES.ALL);
+    return data;
+  },
+
+  updateCurrentUser: async (
+    dto: UpdateUserRequest,
+    token?: string,
+  ): Promise<UpdateUserResponse> => {
+    const { data } = await api.patch<UpdateUserResponse>(
+      USER_ROUTES.UPDATE,
+      dto,
+      createAuthConfig(token),
+    );
     return data;
   },
 };

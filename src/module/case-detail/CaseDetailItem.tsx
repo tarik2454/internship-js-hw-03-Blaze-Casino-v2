@@ -38,6 +38,8 @@ export const CaseDetailItem = memo(function CaseDetailItem({
         {item.imageUrl}
       </div>
 
+      <div className={cx(styles.itemValue, classNameValue)}>${item.value}</div>
+
       <div
         className={cx(
           styles.itemCircle,

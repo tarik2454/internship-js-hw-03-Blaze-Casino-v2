@@ -15,4 +15,24 @@ export interface UserSummary {
   balance: number;
 }
 
+export interface UpdateUserRequest {
+  username?: string;
+  balance?: number;
+  totalWagered?: number;
+  gamesPlayed?: number;
+  totalWon?: number;
+  avatarURL?: string;
+}
+
+export interface UpdateUserResponse {
+  _id?: string;
+  username: string;
+  email: string;
+  balance: number;
+  totalWagered: number;
+  gamesPlayed: number;
+  totalWon: number;
+  avatarURL?: string;
+}
+
 export type UserListResponse = UserSummary[];

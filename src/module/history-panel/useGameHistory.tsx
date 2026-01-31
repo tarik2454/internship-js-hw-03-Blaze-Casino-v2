@@ -10,8 +10,9 @@ import { PlinkoUserHistoryResponse } from "@/config-api/plinko/plinko.types";
 import { CrashUserHistoryResponse } from "@/config-api/crash/crash.types";
 import { casesApi } from "@/config-api/cases/cases.api";
 import { CaseUserHistoryResponse } from "@/config-api/cases/cases.types";
+import type { GameType } from "./historyPanel.types";
 
-type GameType = "crash" | "cases" | "mines" | "plinko";
+export type { GameType } from "./historyPanel.types";
 
 export function useGameHistory(limit = 10, offset = 0) {
   const pathname = usePathname();
@@ -57,5 +58,5 @@ export function useGameHistory(limit = 10, offset = 0) {
     refetchOnWindowFocus: true,
   });
 
-  return { data, refetch };
+  return { data, refetch, gameType };
 }

@@ -1,5 +1,9 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { HistoryTableColumn, HistoryRow } from "./historyPanel.types";
+import {
+  HistoryTableColumn,
+  HistoryRow,
+  type GameType,
+} from "./historyPanel.types";
 
 const columnHelper = createColumnHelper<HistoryRow>();
 
@@ -16,131 +20,150 @@ export const formatDate = (dateString: string) => {
 
 export const createColumns = (
   styles: Record<string, string>,
-): HistoryTableColumn[] => [
-  columnHelper.display({
-    id: "createdAt",
-    header: "Time",
-    cell: (info) => (
-      <span className={styles.historyDate}>
-        {formatDate(info.row.original.createdAt)}
-      </span>
-    ),
-  }),
-  columnHelper.display({
-    id: "bet",
-    header: "Bet",
-    cell: (info) => {
-      const row = info.row.original;
-      const amount =
-        "amount" in row
-          ? row.amount
-          : "betAmount" in row
-            ? row.betAmount
-            : "casePrice" in row
-              ? row.casePrice
-              : 0;
-      return <span className={styles.historyAmount}>${amount}</span>;
-    },
-  }),
-  columnHelper.display({
-    id: "lines",
-    header: "Lines",
-    cell: (info) => {
-      const row = info.row.original;
-      if ("linesCount" in row) {
-        return <span>{row.linesCount}</span>;
-      }
-      return <span>-</span>;
-    },
-  }),
-  columnHelper.display({
-    id: "risk",
-    header: "Risk",
-    cell: (info) => {
-      const row = info.row.original;
-      if ("riskLevel" in row) {
+  gameType: GameType,
+): HistoryTableColumn[] => {
+  const columns: HistoryTableColumn[] = [
+    columnHelper.display({
+      id: "createdAt",
+      header: "Time",
+      cell: (info) => (
+        <span className={styles.historyDate}>
+          {formatDate(info.row.original.createdAt)}
+        </span>
+      ),
+    }),
+    columnHelper.display({
+      id: "bet",
+      header: "Bet",
+      cell: (info) => {
+        const row = info.row.original;
+        const amount =
+          "amount" in row
+            ? row.amount
+            : "betAmount" in row
+              ? row.betAmount
+              : "casePrice" in row
+                ? row.casePrice
+                : 0;
+        return <span className={styles.historyAmount}>${amount}</span>;
+      },
+    }),
+  ];
+
+  if (gameType === "plinko") {
+    columns.push(
+      columnHelper.display({
+        id: "lines",
+        header: "Lines",
+        cell: (info) => {
+          const row = info.row.original;
+          if ("linesCount" in row) {
+            return <span>{row.linesCount}</span>;
+          }
+          return <span>-</span>;
+        },
+      }),
+      columnHelper.display({
+        id: "risk",
+        header: "Risk",
+        cell: (info) => {
+          const row = info.row.original;
+          if ("riskLevel" in row) {
+            return (
+              <span style={{ textTransform: "capitalize" }}>
+                {row.riskLevel}
+              </span>
+            );
+          }
+          return <span>-</span>;
+        },
+      }),
+    );
+  }
+
+  columns.push(
+    columnHelper.display({
+      id: "multiplier",
+      header: "Multiplier",
+      cell: (info) => {
+        const row = info.row.original;
+        let multiplier: number | string | undefined;
+        let isWon = false;
+
+        if ("cashoutMultiplier" in row) {
+          multiplier = row.cashoutMultiplier;
+          isWon = row.status === "won";
+        } else if ("avgMultiplier" in row) {
+          multiplier = parseFloat(row.avgMultiplier);
+          isWon = row.totalWin > 0;
+        }
+
         return (
-          <span style={{ textTransform: "capitalize" }}>{row.riskLevel}</span>
+          <span
+            style={{ color: isWon ? "#82C91E" : "#C62121", fontWeight: 600 }}
+          >
+            {multiplier ? `${multiplier}x` : "0x"}
+          </span>
         );
-      }
-      return <span>-</span>;
-    },
-  }),
-  columnHelper.display({
-    id: "multiplier",
-    header: "Multiplier",
-    cell: (info) => {
-      const row = info.row.original;
-      let multiplier: number | string | undefined;
-      let isWon = false;
+      },
+    }),
+    columnHelper.display({
+      id: "winAmount",
+      header: "Win Amount",
+      cell: (info) => {
+        const row = info.row.original;
+        let winAmount: number | undefined;
+        let isWon = false;
 
-      if ("cashoutMultiplier" in row) {
-        multiplier = row.cashoutMultiplier;
-        isWon = row.status === "won";
-      } else if ("avgMultiplier" in row) {
-        multiplier = parseFloat(row.avgMultiplier);
-        isWon = row.totalWin > 0;
-      }
+        if ("winAmount" in row) {
+          winAmount = row.winAmount;
+          isWon = row.status === "won";
+        } else if ("totalWin" in row) {
+          winAmount = row.totalWin;
+          isWon = row.totalWin > 0;
+        } else if ("itemValue" in row) {
+          winAmount = row.itemValue;
+          isWon = row.profit > 0;
+        }
 
-      return (
-        <span style={{ color: isWon ? "#82C91E" : "#C62121", fontWeight: 600 }}>
-          {multiplier ? `${multiplier}x` : "0x"}
-        </span>
-      );
-    },
-  }),
-  columnHelper.display({
-    id: "winAmount",
-    header: "Win Amount",
-    cell: (info) => {
-      const row = info.row.original;
-      let winAmount: number | undefined;
-      let isWon = false;
+        return (
+          <span
+            style={{ color: isWon ? "#82C91E" : "#C62121", fontWeight: 600 }}
+          >
+            ${isWon ? (winAmount || 0).toFixed(2) : "0.00"}
+          </span>
+        );
+      },
+    }),
+    columnHelper.display({
+      id: "win",
+      header: "Win",
+      cell: (info) => {
+        const row = info.row.original;
+        let isWon = false;
 
-      if ("winAmount" in row) {
-        winAmount = row.winAmount;
-        isWon = row.status === "won";
-      } else if ("totalWin" in row) {
-        winAmount = row.totalWin;
-        isWon = row.totalWin > 0;
-      } else if ("itemValue" in row) {
-        winAmount = row.itemValue;
-        isWon = row.profit > 0;
-      }
+        if ("status" in row) {
+          isWon = row.status === "won";
+        } else if ("totalWin" in row) {
+          isWon = row.totalWin > 0;
+        } else if ("profit" in row) {
+          isWon = row.profit > 0;
+        }
 
-      return (
-        <span style={{ color: isWon ? "#82C91E" : "#C62121", fontWeight: 600 }}>
-          ${isWon ? (winAmount || 0).toFixed(2) : "0.00"}
-        </span>
-      );
-    },
-  }),
-  columnHelper.display({
-    id: "win",
-    header: "Win",
-    cell: (info) => {
-      const row = info.row.original;
-      let isWon = false;
+        return (
+          <span
+            style={{
+              color: isWon ? "#82C91E" : "#C62121",
+              fontWeight: 600,
+              textTransform: "capitalize",
+            }}
+          >
+            {isWon ? "won" : "lost"}
+          </span>
+        );
+      },
+    }),
+  );
 
-      if ("status" in row) {
-        isWon = row.status === "won";
-      } else if ("totalWin" in row) {
-        isWon = row.totalWin > 0;
-      } else if ("profit" in row) {
-        isWon = row.profit > 0;
-      }
-
-      return (
-        <span
-          style={{
-            color: isWon ? "#82C91E" : "#C62121",
-            fontWeight: 600,
-            textTransform: "capitalize",
-          }}
-        >
-          {isWon ? "won" : "lost"}
-        </span>
-      );
-    },
-  }),
-];
+  return columns;
+};

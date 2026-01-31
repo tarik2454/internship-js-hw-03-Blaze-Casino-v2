@@ -14,6 +14,8 @@ import { CaseOpeningResponse } from "@/config-api/cases/cases.types";
 import { useState } from "react";
 import { OpeningResult } from "./OpeningResult";
 import { CaseDetailItem } from "./CaseDetailItem";
+import { CaseRoulette } from "./CaseRoulette";
+import { POPUP_TYPE, usePopup } from "@/app/providers/PopupProvider";
 
 interface CaseDetailProps {
   caseId: string;
@@ -23,11 +25,19 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
   const [openingResult, setOpeningResult] =
     useState<CaseOpeningResponse | null>(null);
   const [isOpenResult, setIsOpenResult] = useState(false);
+  const [withoutAnimation, setWithoutAnimation] = useState(true);
+  const [rouletteDone, setRouletteDone] = useState(false);
 
   const { data: caseData, isLoading } = useCase(caseId);
   const { mutate: openCase, isPending } = useOpenCase();
 
   const queryClient = useQueryClient();
+  const { showPopup } = usePopup();
+
+  const handleCloseResult = (value: boolean) => {
+    setIsOpenResult(value);
+    if (!value) setRouletteDone(false);
+  };
 
   const handleOpenCase = () => {
     if (!caseData) return;
@@ -37,7 +47,8 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
       {
         onSuccess: (response) => {
           setOpeningResult(response);
-          // Обновляем баланс оптимистично
+          setIsOpenResult(true);
+
           queryClient.setQueryData<CurrentUserResponse>(
             queryKeys.user,
             (old) => {
@@ -48,11 +59,11 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
               };
             },
           );
-
-          // Инвалидируем историю и список кейсов
-          queryClient.invalidateQueries({
-            queryKey: queryKeys.cases,
-            refetchType: "active",
+        },
+        onError: (error) => {
+          showPopup({
+            message: error.message,
+            type: POPUP_TYPE.ERROR,
           });
         },
       },
@@ -79,12 +90,33 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
     );
   }
 
+  const showRoulette =
+    isOpenResult &&
+    openingResult &&
+    !withoutAnimation &&
+    caseData.items.length > 0;
+  const showResult =
+    isOpenResult && openingResult && (withoutAnimation || rouletteDone);
+
   return (
     <>
-      {openingResult ? (
+      {showRoulette && openingResult && caseData ? (
         <Section>
           <Container>
-            <OpeningResult openingResult={openingResult} />
+            <CaseRoulette
+              items={caseData.items}
+              winningItem={openingResult.item}
+              onAnimationEnd={() => setRouletteDone(true)}
+            />
+          </Container>
+        </Section>
+      ) : showResult && openingResult ? (
+        <Section>
+          <Container>
+            <OpeningResult
+              openingResult={openingResult}
+              setIsOpenResult={handleCloseResult}
+            />
           </Container>
         </Section>
       ) : (
@@ -120,9 +152,9 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
 
                   <div className={styles.switchWrapper}>
                     <Switch
-                      checked={true}
-                      onChange={() => {}}
-                      disabled={false}
+                      checked={withoutAnimation}
+                      onChange={() => setWithoutAnimation(!withoutAnimation)}
+                      disabled={isPending}
                       className={styles.switch}
                     />
                     <span className={styles.switchLabel}>
