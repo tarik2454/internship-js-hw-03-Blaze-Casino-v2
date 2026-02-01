@@ -12,9 +12,9 @@ import Image from "next/image";
 import { Switch } from "@/shared/components/Switch";
 import { CaseOpeningResponse } from "@/config-api/cases/cases.types";
 import { useState } from "react";
-import { OpeningResult } from "./case-opening/OpeningResult";
+import { OpeningResult } from "./components/OpeningResult";
 import { CaseDetailItem } from "./CaseDetailItem";
-import { CaseRoulette } from "./case-opening/CaseRoulette";
+import { CaseRoulette } from "./components/CaseRoulette";
 import { POPUP_TYPE, usePopup } from "@/app/providers/PopupProvider";
 
 interface CaseDetailProps {
@@ -96,7 +96,8 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
     isOpenResult &&
     openingResult &&
     !withoutAnimation &&
-    caseData.items.length > 0;
+    caseData.items.length > 0 &&
+    !rouletteDone;
   const showResult =
     isOpenResult && openingResult && (withoutAnimation || rouletteDone);
 
@@ -108,10 +109,11 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
             <CaseRoulette
               items={caseData.items}
               winningItem={openingResult.item}
-              onAnimationEnd={() => setRouletteDone(true)}
-              itemValue={openingResult.itemValue}
-              sellPrice={openingResult.item.value}
-              onTryAgain={() => handleCloseResult(false)}
+              onAnimationEnd={(skipped) =>
+                skipped
+                  ? setRouletteDone(true)
+                  : setTimeout(() => setRouletteDone(true), 1000)
+              }
             />
           </Container>
         </Section>

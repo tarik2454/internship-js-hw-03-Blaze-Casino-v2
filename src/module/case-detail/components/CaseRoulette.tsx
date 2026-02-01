@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { CaseItem, CaseOpeningItem } from "@/config-api/cases/cases.types";
 import { CaseDetailItem } from "../CaseDetailItem";
-import { CaseOpeningActions } from "./CaseOpeningActions";
 import styles from "./CaseRoulette.module.scss";
+import Image from "next/image";
+import { Button } from "@/shared/components/Button";
 
 const ROULETTE_DURATION_MS = 4000;
 const ITEM_WIDTH = 100;
@@ -13,21 +14,14 @@ const REPEAT_COUNT = 20;
 interface CaseRouletteProps {
   items: CaseItem[];
   winningItem: CaseOpeningItem;
-  onAnimationEnd?: () => void;
-  itemValue: number;
-  sellPrice: number;
-  onTryAgain: () => void;
+  onAnimationEnd?: (skipped?: boolean) => void;
 }
 
 export function CaseRoulette({
   items,
   winningItem,
   onAnimationEnd,
-  itemValue,
-  sellPrice,
-  onTryAgain,
 }: CaseRouletteProps) {
-  const [isStopped, setIsStopped] = useState(false);
   const stripRef = useRef<HTMLUListElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const onAnimationEndRef = useRef(onAnimationEnd);
@@ -72,14 +66,14 @@ export function CaseRoulette({
     requestAnimationFrame(() => {
       requestAnimationFrame(startAnimation);
     });
-
-    const timer = setTimeout(() => {
-      setIsStopped(true);
-      onAnimationEndRef.current?.();
-    }, ROULETTE_DURATION_MS);
-
-    return () => clearTimeout(timer);
   }, [targetItemIndex, extendedItems.length, items.length]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onAnimationEndRef.current?.(false);
+    }, ROULETTE_DURATION_MS);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className={styles.rouletteWrapper}>
@@ -98,13 +92,21 @@ export function CaseRoulette({
         <div className={styles.rouletteCenterLine} aria-hidden />
       </div>
 
-      <CaseOpeningActions
-        itemValue={itemValue}
-        sellPrice={sellPrice}
-        onTryAgain={onTryAgain}
-        revealPrice={isStopped}
-        className={styles.rouletteActions}
-      />
+      <Button
+        className={styles.rouletteSkipButton}
+        onClick={() => onAnimationEnd?.(true)}
+      >
+        skip animation
+      </Button>
+
+      <div className={styles.imageWrapper}>
+        <Image
+          src="/images/cases/chest.svg"
+          alt="roulette arrow"
+          fill
+          className={styles.image}
+        />
+      </div>
     </div>
   );
 }
