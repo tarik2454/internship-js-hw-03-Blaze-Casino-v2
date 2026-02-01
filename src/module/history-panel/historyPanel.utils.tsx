@@ -22,6 +22,90 @@ export const createColumns = (
   styles: Record<string, string>,
   gameType: GameType,
 ): HistoryTableColumn[] => {
+  if (gameType === "cases") {
+    return [
+      columnHelper.display({
+        id: "createdAt",
+        header: "Time",
+        cell: (info) => (
+          <span className={styles.historyDate}>
+            {formatDate(info.row.original.createdAt)}
+          </span>
+        ),
+      }),
+      columnHelper.display({
+        id: "caseName",
+        header: "Case",
+        cell: (info) => {
+          const row = info.row.original;
+          return "caseName" in row ? (
+            <span>{row.caseName}</span>
+          ) : (
+            <span>-</span>
+          );
+        },
+      }),
+      columnHelper.display({
+        id: "itemName",
+        header: "Item",
+        cell: (info) => {
+          const row = info.row.original;
+          return "itemName" in row ? (
+            <span>{row.itemName}</span>
+          ) : (
+            <span>-</span>
+          );
+        },
+      }),
+      columnHelper.display({
+        id: "itemRarity",
+        header: "Rarity",
+        cell: (info) => {
+          const row = info.row.original;
+          return "itemRarity" in row ? (
+            <span style={{ textTransform: "capitalize" }}>
+              {row.itemRarity}
+            </span>
+          ) : (
+            <span>-</span>
+          );
+        },
+      }),
+      columnHelper.display({
+        id: "itemValue",
+        header: "Value",
+        cell: (info) => {
+          const row = info.row.original;
+          return "itemValue" in row ? (
+            <span className={styles.historyAmount}>${row.itemValue}</span>
+          ) : (
+            <span>-</span>
+          );
+        },
+      }),
+      columnHelper.display({
+        id: "profit",
+        header: "Profit",
+        cell: (info) => {
+          const row = info.row.original;
+          const profit = "profit" in row ? row.profit : 0;
+          const isProfit = profit > 0;
+          const sign = profit >= 0 ? "+" : "";
+          return (
+            <span
+              style={{
+                color: isProfit ? "#82C91E" : "#C62121",
+                fontWeight: 600,
+              }}
+            >
+              {sign}{profit}
+            </span>
+          );
+        },
+      }),
+    ];
+  }
+
   const columns: HistoryTableColumn[] = [
     columnHelper.display({
       id: "createdAt",
