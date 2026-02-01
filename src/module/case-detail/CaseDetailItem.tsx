@@ -13,6 +13,7 @@ interface CaseDetailItemProps {
   classNameImage?: string;
   classNameValue?: string;
   classNameCircle?: string;
+  hideValue?: boolean;
 }
 
 export const CaseDetailItem = memo(function CaseDetailItem({
@@ -22,6 +23,7 @@ export const CaseDetailItem = memo(function CaseDetailItem({
   classNameImage,
   classNameValue,
   classNameCircle,
+  hideValue = false,
 }: CaseDetailItemProps) {
   const rarity = item.rarity.toLowerCase();
 
@@ -38,7 +40,11 @@ export const CaseDetailItem = memo(function CaseDetailItem({
         {item.imageUrl}
       </div>
 
-      <div className={cx(styles.itemValue, classNameValue)}>${item.value}</div>
+      {!hideValue && (
+        <div className={cx(styles.itemValue, classNameValue)}>
+          ${item.value}
+        </div>
+      )}
 
       <div
         className={cx(

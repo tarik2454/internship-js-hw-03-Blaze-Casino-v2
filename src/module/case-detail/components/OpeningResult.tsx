@@ -66,6 +66,7 @@ export function OpeningResult({
         classNameImage={styles.caseDetailItemImage}
         classNameValue={styles.caseDetailItemValue}
         classNameCircle={styles.caseDetailItemCircle}
+        hideValue
       />
 
       <div className={styles.actionsButtons}>
