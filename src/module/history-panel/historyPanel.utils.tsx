@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { CrashBet } from "@/config-api/crash/crash.types";
+import { HistoryTableColumn, HistoryRow } from "./historyPanel.types";
 
-const columnHelper = createColumnHelper<CrashBet>();
+const columnHelper = createColumnHelper<HistoryRow>();
 
 export const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -14,46 +14,110 @@ export const formatDate = (dateString: string) => {
   return `${day}.${month}.${year}, ${hours}:${minutes}:${seconds}`;
 };
 
-export const createColumns = (styles: Record<string, string>) => [
-  columnHelper.accessor("createdAt", {
+export const createColumns = (
+  styles: Record<string, string>,
+): HistoryTableColumn[] => [
+  columnHelper.display({
+    id: "createdAt",
     header: "Time",
     cell: (info) => (
-      <span className={styles.historyDate}>{formatDate(info.getValue())}</span>
+      <span className={styles.historyDate}>
+        {formatDate(info.row.original.createdAt)}
+      </span>
     ),
   }),
-  columnHelper.accessor("amount", {
+  columnHelper.display({
+    id: "bet",
     header: "Bet",
-    cell: (info) => (
-      <span className={styles.historyAmount}>${info.getValue()}</span>
-    ),
+    cell: (info) => {
+      const row = info.row.original;
+      const amount = "amount" in row ? row.amount : row.betAmount;
+      return <span className={styles.historyAmount}>${amount}</span>;
+    },
   }),
-  columnHelper.accessor("cashoutMultiplier", {
+  columnHelper.display({
+    id: "lines",
+    header: "Lines",
+    cell: (info) => {
+      const row = info.row.original;
+      if ("linesCount" in row) {
+        return <span>{row.linesCount}</span>;
+      }
+      return <span>-</span>;
+    },
+  }),
+  columnHelper.display({
+    id: "risk",
+    header: "Risk",
+    cell: (info) => {
+      const row = info.row.original;
+      if ("riskLevel" in row) {
+        return (
+          <span style={{ textTransform: "capitalize" }}>{row.riskLevel}</span>
+        );
+      }
+      return <span>-</span>;
+    },
+  }),
+  columnHelper.display({
+    id: "multiplier",
     header: "Multiplier",
     cell: (info) => {
-      const isWon = info.row.original.status === "won";
+      const row = info.row.original;
+      let multiplier: number | string | undefined;
+      let isWon = false;
+
+      if ("cashoutMultiplier" in row) {
+        multiplier = row.cashoutMultiplier;
+        isWon = row.status === "won";
+      } else if ("avgMultiplier" in row) {
+        multiplier = parseFloat(row.avgMultiplier);
+        isWon = row.totalWin > 0;
+      }
+
       return (
         <span style={{ color: isWon ? "#82C91E" : "#C62121", fontWeight: 600 }}>
-          {info.getValue()}
-          {isWon ? "x" : "0x"}
+          {multiplier ? `${multiplier}x` : "0x"}
         </span>
       );
     },
   }),
-  columnHelper.accessor("winAmount", {
+  columnHelper.display({
+    id: "winAmount",
     header: "Win Amount",
     cell: (info) => {
-      const isWon = info.row.original.status === "won";
+      const row = info.row.original;
+      let winAmount: number | undefined;
+      let isWon = false;
+
+      if ("winAmount" in row) {
+        winAmount = row.winAmount;
+        isWon = row.status === "won";
+      } else if ("totalWin" in row) {
+        winAmount = row.totalWin;
+        isWon = row.totalWin > 0;
+      }
+
       return (
         <span style={{ color: isWon ? "#82C91E" : "#C62121", fontWeight: 600 }}>
-          ${isWon ? info.getValue() : "0.00"}
+          ${isWon ? (winAmount || 0).toFixed(2) : "0.00"}
         </span>
       );
     },
   }),
-  columnHelper.accessor("status", {
-    header: "Status",
+  columnHelper.display({
+    id: "win",
+    header: "Win",
     cell: (info) => {
-      const isWon = info.getValue() === "won";
+      const row = info.row.original;
+      let isWon = false;
+
+      if ("status" in row) {
+        isWon = row.status === "won";
+      } else if ("totalWin" in row) {
+        isWon = row.totalWin > 0;
+      }
+
       return (
         <span
           style={{
@@ -62,7 +126,7 @@ export const createColumns = (styles: Record<string, string>) => [
             textTransform: "capitalize",
           }}
         >
-          {info.getValue()}
+          {isWon ? "won" : "lost"}
         </span>
       );
     },

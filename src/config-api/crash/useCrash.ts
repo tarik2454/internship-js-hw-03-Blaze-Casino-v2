@@ -7,15 +7,7 @@ import {
   CrashBetResponse,
   CrashCashoutResponse,
   CrashCurrentResponse,
-  CrashUserHistoryResponse,
 } from "./crash.types";
-
-export function useCrashUserHistory(limit: number = 10, offset: number = 0) {
-  return useQuery<CrashUserHistoryResponse, ApiError>({
-    queryKey: queryKeyFactories.crash.userHistory(limit, offset),
-    queryFn: () => crashApi.getUserHistory(limit, offset),
-  });
-}
 
 export function useCrashBet() {
   const queryClient = useQueryClient();

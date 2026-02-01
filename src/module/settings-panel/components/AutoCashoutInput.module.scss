@@ -1,0 +1,24 @@
+@use "@/styles/index" as *;
+
+.label {
+  margin-bottom: 8px;
+}
+
+.inputWrapperAutoCashout {
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.inputAutoCashout {
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+}
+
+.switchCashout {
+  position: absolute;
+  top: 42px;
+  right: 10px;
+}

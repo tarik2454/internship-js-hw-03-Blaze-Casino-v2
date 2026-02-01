@@ -1,0 +1,59 @@
+@use "@/styles/index" as *;
+
+.plinkoOptions {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 32px;
+  gap: 8px;
+}
+
+.optionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.optionLabel {
+  margin-bottom: 0;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.3;
+  font-family: var(--font-manrope);
+}
+
+.optionButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.optionButton {
+  min-width: 0;
+  padding: 6px 16px;
+  border-radius: var(--radius-4);
+  background: var(--color-blue-3f);
+  font-weight: 500;
+  font-size: 14px;
+  font-family: var(--font-manrope);
+  transition: var(--transition-250);
+
+  &:hover:not(:disabled) {
+    background: #7c7ce854;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.optionButtonActive {
+  background: #7c7ce854;
+
+  &:hover:not(:disabled) {
+    background: #7c7ce854;
+  }
+}

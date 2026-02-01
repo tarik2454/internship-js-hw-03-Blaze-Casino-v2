@@ -1,16 +1,16 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys, queryKeyFactories } from "@/config-api/keys";
 import { Container } from "@/shared/components/Container";
 import { Section } from "@/shared/components/Section";
+import { SettingsPanel, StatItem } from "@/module/settings-panel/SettingsPanel";
 import styles from "./Crash.module.scss";
 import { useCrashSocket } from "@/config-api/crash/ws/useCrashSocket";
 import { useCrashBet } from "@/config-api/crash/useCrash";
 import { useCrashCashout } from "@/config-api/crash/useCrash";
 import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
-import { SettingsPanel } from "./SettingsPanel";
 import { CrashGameDisplay } from "./components/CrashGameDisplay";
 
 export function Crash() {
@@ -31,9 +31,32 @@ export function Crash() {
   } | null>(null);
 
   const currentGameState = crashPoint ? "crashed" : gameState;
+  const activeBetId = isAutoCashedOut ? undefined : betId;
 
   const { mutate: placeBet } = useCrashBet();
   const { mutate: cashoutMutation } = useCrashCashout();
+
+  const activeMultiplier = useMemo(() => {
+    if (currentGameState === "crashed") return 0;
+    if (!betId && currentGameState === "running") return 1.0;
+    return multiplier;
+  }, [multiplier, currentGameState, betId]);
+
+  const computeStats = useCallback(
+    (amount: number): StatItem[] => [
+      {
+        label: "Current Multiplier",
+        value: activeMultiplier,
+        formatValue: (v) => `${Number(v).toFixed(2)}X`,
+      },
+      {
+        label: "Potential Win",
+        value: amount * activeMultiplier,
+        formatValue: (v) => `${Number(v).toFixed(2)}$`,
+      },
+    ],
+    [activeMultiplier],
+  );
 
   const handleCashout = useCallback(() => {
     if (!betId) return;
@@ -120,10 +143,11 @@ export function Crash() {
             />
 
             <SettingsPanel
+              title="Crash Configuration"
               canBet={canBet}
-              gameState={currentGameState}
-              betId={isAutoCashedOut ? undefined : betId}
-              multiplier={multiplier}
+              inputsDisabled={!!activeBetId}
+              isCashoutDisabled={currentGameState !== "running" || !activeBetId}
+              computeStats={computeStats}
               onPlaceBet={handlePlaceBet}
               onCashout={handleCashout}
             />

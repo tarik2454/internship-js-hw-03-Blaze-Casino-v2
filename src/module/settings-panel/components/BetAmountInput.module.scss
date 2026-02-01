@@ -1,0 +1,34 @@
+@use "@/styles/index" as *;
+
+.label {
+  margin-bottom: 8px;
+}
+
+.inputWrapperBetAmount {
+  position: relative;
+}
+
+.dollarIcon {
+  position: absolute;
+  top: 40px;
+  left: 10px;
+}
+
+.inputBetAmount {
+  padding-left: 44px !important;
+}
+
+.betButtonsWrapper {
+  display: flex;
+  position: absolute;
+  top: 39px;
+  right: 10px;
+  gap: 4px;
+}
+
+.betButton {
+  padding: 4px 6px;
+  border-radius: var(--radius-4);
+  background: var(--color-blue-55);
+  font-size: 12px;
+}

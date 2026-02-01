@@ -1,3 +1,5 @@
+import { LinesCount, RiskLevel } from "@/module/settings-panel/types";
+
 export const queryKeys = {
   user: ["user"],
   balance: ["balance"],
@@ -10,6 +12,7 @@ export const queryKeys = {
   },
   leaderboard: ["leaderboard"],
   crash: ["crash"],
+  plinko: ["plinko"],
 };
 
 export const queryKeyFactories = {
@@ -31,5 +34,20 @@ export const queryKeyFactories = {
       offset,
     ],
     getCurrent: () => [...queryKeys.crash, "current"],
+  },
+  plinko: {
+    userHistory: (limit: number = 10, offset: number = 0) => [
+      ...queryKeys.plinko,
+      "user-history",
+      limit,
+      offset,
+    ],
+    multipliers: (risk: RiskLevel, lines: LinesCount) => [
+      ...queryKeys.plinko,
+      "multipliers",
+      risk,
+      lines,
+    ],
+    recent: () => [...queryKeys.plinko, "recent"],
   },
 };
