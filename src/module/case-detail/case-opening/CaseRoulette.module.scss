@@ -1,0 +1,101 @@
+@use "@/styles/index" as *;
+
+.rouletteWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 788px;
+  margin: 0 auto;
+  padding-top: 85px;
+
+  @include minWidth(xl) {
+    padding-top: 99px;
+  }
+}
+
+.rouletteViewport {
+  position: relative;
+  width: 100%;
+  margin-bottom: 24px;
+  overflow: hidden;
+  border-radius: var(--radius-24);
+  background: var(--color-black);
+
+  @include minWidth(xl) {
+    margin-bottom: 32px;
+  }
+}
+
+.rouletteViewport::before {
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+
+  background: linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
+  content: "";
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  pointer-events: none;
+}
+
+.rouletteStrip {
+  display: flex;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 16px 0;
+  gap: 8px;
+  list-style: none;
+  will-change: transform;
+
+  @include minWidth(xl) {
+    gap: 24px;
+  }
+}
+
+.rouletteItem {
+  flex-shrink: 0;
+  width: 100px;
+}
+
+.rouletteItemImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.rouletteItemName {
+  max-width: 80px;
+  overflow: hidden;
+  font-weight: 600;
+  font-size: 12px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rouletteCenterLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
+  pointer-events: none;
+}
+
+.rouletteActions {
+  margin: 0 auto;
+}

@@ -1,15 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import type {
-  CaseItem,
-  CaseOpeningItem,
-} from "@/config-api/cases/cases.types";
+import { useEffect, useRef, useState } from "react";
+import type { CaseItem, CaseOpeningItem } from "@/config-api/cases/cases.types";
+import { CaseDetailItem } from "../CaseDetailItem";
+import { CaseOpeningActions } from "./CaseOpeningActions";
 import styles from "./CaseRoulette.module.scss";
-
-function isValidImageSrc(src: string | undefined): src is string {
-  return typeof src === "string" && src.trim().length > 0;
-}
 
 const ROULETTE_DURATION_MS = 4000;
 const ITEM_WIDTH = 100;
@@ -19,14 +14,21 @@ interface CaseRouletteProps {
   items: CaseItem[];
   winningItem: CaseOpeningItem;
   onAnimationEnd?: () => void;
+  itemValue: number;
+  sellPrice: number;
+  onTryAgain: () => void;
 }
 
 export function CaseRoulette({
   items,
   winningItem,
   onAnimationEnd,
+  itemValue,
+  sellPrice,
+  onTryAgain,
 }: CaseRouletteProps) {
-  const stripRef = useRef<HTMLDivElement>(null);
+  const [isStopped, setIsStopped] = useState(false);
+  const stripRef = useRef<HTMLUListElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const onAnimationEndRef = useRef(onAnimationEnd);
   onAnimationEndRef.current = onAnimationEnd;
@@ -50,10 +52,17 @@ export function CaseRoulette({
     strip.style.transition = `none`;
     strip.style.transform = `translateX(0)`;
 
+    const gapPx = getComputedStyle(strip).gap;
+    const gap = parseFloat(gapPx) || 0;
+    const slotWidth = ITEM_WIDTH + gap;
+    const stripWidth =
+      extendedItems.length * ITEM_WIDTH + (extendedItems.length - 1) * gap;
+    strip.style.width = `${stripWidth}px`;
+
     const startAnimation = () => {
       const viewportWidth = viewport.getBoundingClientRect().width;
       const centerOffset =
-        targetItemIndex * ITEM_WIDTH + ITEM_WIDTH / 2 - viewportWidth / 2;
+        targetItemIndex * slotWidth + ITEM_WIDTH / 2 - viewportWidth / 2;
       const targetTranslate = Math.max(0, centerOffset);
 
       strip.style.transition = `transform ${ROULETTE_DURATION_MS}ms cubic-bezier(0.2, 0.8, 0.2, 1)`;
@@ -65,6 +74,7 @@ export function CaseRoulette({
     });
 
     const timer = setTimeout(() => {
+      setIsStopped(true);
       onAnimationEndRef.current?.();
     }, ROULETTE_DURATION_MS);
 
@@ -74,42 +84,27 @@ export function CaseRoulette({
   return (
     <div className={styles.rouletteWrapper}>
       <div ref={viewportRef} className={styles.rouletteViewport}>
-        <div
-          ref={stripRef}
-          className={styles.rouletteStrip}
-          style={{ width: extendedItems.length * ITEM_WIDTH }}
-        >
+        <ul ref={stripRef} className={styles.rouletteStrip}>
           {extendedItems.map((item, index) => (
-            <div
+            <CaseDetailItem
               key={`${item.id}-${index}`}
-              className={styles.rouletteItem}
-              style={{ width: ITEM_WIDTH }}
-            >
-              {isValidImageSrc(item.imageUrl) ? (
-                <img
-                  src={item.imageUrl}
-                  alt={item.name}
-                  width={80}
-                  height={80}
-                  className={styles.rouletteItemImage}
-                />
-              ) : (
-                <div
-                  className={styles.rouletteItemImage}
-                  style={{
-                    width: 80,
-                    height: 80,
-                    background: "var(--color-bg-secondary, #333)",
-                  }}
-                  aria-hidden
-                />
-              )}
-              <span className={styles.rouletteItemName}>{item.name}</span>
-            </div>
+              item={item}
+              classNameWrapper={styles.rouletteItem}
+              classNameName={styles.rouletteItemName}
+              classNameImage={styles.rouletteItemImage}
+            />
           ))}
-        </div>
+        </ul>
+        <div className={styles.rouletteCenterLine} aria-hidden />
       </div>
-      <div className={styles.rouletteCenterLine} aria-hidden />
+
+      <CaseOpeningActions
+        itemValue={itemValue}
+        sellPrice={sellPrice}
+        onTryAgain={onTryAgain}
+        revealPrice={isStopped}
+        className={styles.rouletteActions}
+      />
     </div>
   );
 }

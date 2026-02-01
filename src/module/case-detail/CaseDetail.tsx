@@ -12,9 +12,9 @@ import Image from "next/image";
 import { Switch } from "@/shared/components/Switch";
 import { CaseOpeningResponse } from "@/config-api/cases/cases.types";
 import { useState } from "react";
-import { OpeningResult } from "./OpeningResult";
+import { OpeningResult } from "./case-opening/OpeningResult";
 import { CaseDetailItem } from "./CaseDetailItem";
-import { CaseRoulette } from "./CaseRoulette";
+import { CaseRoulette } from "./case-opening/CaseRoulette";
 import { POPUP_TYPE, usePopup } from "@/app/providers/PopupProvider";
 
 interface CaseDetailProps {
@@ -25,7 +25,7 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
   const [openingResult, setOpeningResult] =
     useState<CaseOpeningResponse | null>(null);
   const [isOpenResult, setIsOpenResult] = useState(false);
-  const [withoutAnimation, setWithoutAnimation] = useState(true);
+  const [withoutAnimation, setWithoutAnimation] = useState(false);
   const [rouletteDone, setRouletteDone] = useState(false);
 
   const { data: caseData, isLoading } = useCase(caseId);
@@ -41,6 +41,8 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
 
   const handleOpenCase = () => {
     if (!caseData) return;
+
+    console.log(caseData);
 
     openCase(
       { id: caseId },
@@ -107,6 +109,9 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
               items={caseData.items}
               winningItem={openingResult.item}
               onAnimationEnd={() => setRouletteDone(true)}
+              itemValue={openingResult.itemValue}
+              sellPrice={openingResult.item.value}
+              onTryAgain={() => handleCloseResult(false)}
             />
           </Container>
         </Section>

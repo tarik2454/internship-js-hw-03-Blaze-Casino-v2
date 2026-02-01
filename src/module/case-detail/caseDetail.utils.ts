@@ -6,6 +6,7 @@ const RARITIES = [
   "legendary",
   "gold",
 ] as const;
+
 export type RarityClassKey = (typeof RARITIES)[number];
 
 export function getRarityClasses(

@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import { cx } from "@/shared/utils/classNames";
-import { getRarityClasses } from "@/module/cases/cases.utils";
+import { getRarityClasses } from "./caseDetail.utils";
 import { CaseItem } from "@/config-api/cases/cases.types";
 import styles from "./CaseDetailItem.module.scss";
 
