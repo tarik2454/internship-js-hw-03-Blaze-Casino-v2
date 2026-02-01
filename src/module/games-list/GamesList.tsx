@@ -2,7 +2,7 @@ import { Button } from "@/shared/components/Button";
 import styles from "./GamesList.module.scss";
 import Link from "next/link";
 import { Section } from "@/shared/components/Section";
-import { GAMES_LIST } from "@/module/games-list/gamesList.constants";
+import { GAMES_LIST } from "./games-list.constants";
 
 export function GamesList() {
   return (
