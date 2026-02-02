@@ -54,28 +54,6 @@ export const minesApi = {
       MINES_ROUTES.GET_ACTIVE,
       createAuthConfig(token),
     );
-    if (data.game) {
-      const g = data.game as unknown as Record<string, unknown>;
-      const gameId = (g.gameId as string) ?? (g._id as string);
-      if (!gameId) {
-        data.game = null;
-      } else {
-        data.game = {
-          ...data.game,
-          gameId,
-          amount: (data.game.amount ?? (g.betAmount as number)) ?? 0,
-          revealedTiles:
-            data.game.revealedTiles ??
-            (data.game.revealedPositions as number[] | undefined) ??
-            [],
-          totalTiles:
-            data.game.totalTiles ??
-            (data.game.gridSize != null
-              ? data.game.gridSize * data.game.gridSize
-              : undefined),
-        };
-      }
-    }
     return data;
   },
 

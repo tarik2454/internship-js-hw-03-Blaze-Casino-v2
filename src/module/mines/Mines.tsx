@@ -6,7 +6,7 @@ import { Section } from "@/shared/components/Section";
 import styles from "./Mines.module.scss";
 import { Container } from "@/shared/components/Container";
 import { SettingsPanel, StatItem } from "../settings-panel/SettingsPanel";
-import { MinesGrid } from "./MinesGrid";
+import { MinesGrid } from "./components/MinesGrid";
 import { DEFAULT_MINES_GRID_SIZE, type MinesGridSize } from "./mines.constants";
 import {
   useMinesStart,
@@ -33,7 +33,7 @@ export function Mines() {
   }, [queryClient]);
 
   const rawGame = isSuccess && !isFetching ? activeData?.game : null;
-  const gameId = rawGame?.gameId ?? (rawGame as { _id?: string } | undefined)?._id;
+  const gameId = rawGame?._id;
   const hasValidActiveGame =
     typeof gameId === "string" && gameId.length > 0 && rawGame != null;
   const activeGame = hasValidActiveGame ? rawGame : null;
@@ -43,7 +43,7 @@ export function Mines() {
   const { mutateAsync: cashoutGame, isPending: isCashingOut } =
     useMinesCashout();
 
-  const revealedTiles = activeGame?.revealedTiles ?? [];
+  const revealedTiles = activeGame?.revealedPositions ?? [];
   const gameGridSize = (activeGame?.gridSize ?? gridSize) as MinesGridSize;
   const totalTiles = gameGridSize * gameGridSize;
   const isGameOver = hitMinePosition !== null;
@@ -92,8 +92,8 @@ export function Mines() {
 
   const handleReveal = useCallback(
     (position: number) => {
-      if (!activeGame?.gameId) return;
-      revealTile({ gameId: activeGame.gameId, position })
+      if (!activeGame?._id) return;
+      revealTile({ gameId: activeGame._id, position })
         .then((res) => {
           if (res.isMine) {
             setHitMinePosition(position);
@@ -113,12 +113,12 @@ export function Mines() {
           });
         });
     },
-    [activeGame?.gameId, revealTile, showPopup],
+    [activeGame?._id, revealTile, showPopup],
   );
 
   const handleCashout = useCallback(() => {
-    if (!activeGame?.gameId) return;
-    cashoutGame({ gameId: activeGame.gameId })
+    if (!activeGame?._id) return;
+    cashoutGame({ gameId: activeGame._id })
       .then((res) => {
         if (res.minePositions) {
           setAllMinePositions(res.minePositions);
@@ -135,7 +135,7 @@ export function Mines() {
           type: POPUP_TYPE.ERROR,
         });
       });
-  }, [activeGame?.gameId, cashoutGame, showPopup]);
+  }, [activeGame?._id, cashoutGame, showPopup]);
 
   const isCashoutDisabled = !activeGame || isGameOver;
 

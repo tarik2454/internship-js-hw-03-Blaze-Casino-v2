@@ -47,21 +47,19 @@ export interface MinesCashoutResponse {
   totalTiles?: number;
 }
 
+/** Формат ответа GET /mines/active (поля бэкенда + доп. из reveal) */
 export interface MinesActiveGame {
-  _id?: string;
-  gameId: string;
-  amount: number;
-  minesCount: number;
+  _id: string;
+  userId?: string;
+  betAmount: number;
   gridSize: number;
-  totalTiles?: number;
-  serverSeedHash: string;
-  multipliers: number[];
-  /** Open safe tile indices (backend may send as revealedPositions) */
-  revealedTiles?: number[];
+  minesCount: number;
   revealedPositions?: number[];
+  serverSeedHash?: string;
+  multipliers?: number[];
+  /** Обновляется из ответа reveal */
   currentMultiplier?: number;
   currentValue?: number;
-  betAmount?: number;
 }
 
 export interface MinesActiveResponse {

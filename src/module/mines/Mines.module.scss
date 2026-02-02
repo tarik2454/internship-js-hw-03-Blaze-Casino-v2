@@ -15,72 +15,12 @@
   align-items: center;
   justify-content: center;
   min-height: 381px;
-  padding: 16px;
+  padding: 40px 50px;
   border-radius: var(--radius-16);
   background: #423e6980;
 
   @include minWidth(xl) {
     min-height: 638px;
+    padding: 37px 162px;
   }
-}
-
-.minesGrid {
-  --grid-size: 5;
-  display: grid;
-  grid-template-columns: repeat(var(--grid-size), 1fr);
-  gap: 6px;
-  width: 100%;
-  max-width: min(340px, 100%);
-  aspect-ratio: 1;
-  max-height: min(340px, 100%);
-
-  @include minWidth(xl) {
-    max-width: min(400px, 100%);
-    max-height: min(400px, 100%);
-    gap: 8px;
-  }
-}
-
-.mineTile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  min-height: 0;
-  padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-4);
-  background: var(--color-blue-55);
-  cursor: pointer;
-  transition: background var(--transition-250);
-
-  &:hover:not(:disabled) {
-    background: #3d3858;
-  }
-
-  &:disabled {
-    cursor: default;
-  }
-}
-
-.mineTileRevealed {
-  cursor: default;
-}
-
-.mineTileSafe {
-  background: rgba(130, 201, 30, 0.15);
-  border-color: rgba(130, 201, 30, 0.3);
-}
-
-.mineTileMine {
-  background: rgba(198, 33, 33, 0.25);
-  border-color: var(--color-red-21);
-}
-
-.mineTileIcon {
-  width: 50%;
-  height: auto;
-  max-width: 28px;
-  max-height: 28px;
-  object-fit: contain;
 }

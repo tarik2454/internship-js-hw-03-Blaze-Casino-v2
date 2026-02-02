@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import Image from "next/image";
 import { cx } from "@/shared/utils/classNames";
-import styles from "./Mines.module.scss";
+import styles from "./MinesGrid.module.scss";
 
 type MinesGridSize = 5 | 6 | 7 | 8;
 
@@ -53,7 +53,7 @@ export function MinesGrid({
             className={cx(
               styles.mineTile,
               isRevealed && styles.mineTileRevealed,
-              showCoin && styles.mineTileSafe,
+              showCoin && styles.mineTileCoin,
               showBomb && styles.mineTileMine,
             )}
             onClick={() => !disabled && !isRevealed && onReveal(index)}
@@ -63,22 +63,19 @@ export function MinesGrid({
             }
           >
             {showCoin && (
-              <Image
-                src="/images/common/dollar.svg"
-                alt=""
-                width={24}
-                height={24}
-                className={styles.mineTileIcon}
-              />
+              <div
+                className={cx(
+                  styles.mineTileIconWrapper,
+                  styles.mineTileIconWrapperCoin,
+                )}
+              >
+                <Image src="/images/mines/coin.svg" alt="" fill />
+              </div>
             )}
             {showBomb && (
-              <Image
-                src="/images/mines/bomb.svg"
-                alt=""
-                width={24}
-                height={24}
-                className={styles.mineTileIcon}
-              />
+              <div className={styles.mineTileIconWrapper}>
+                <Image src="/images/mines/bomb.svg" alt="" fill />
+              </div>
             )}
           </button>
         );

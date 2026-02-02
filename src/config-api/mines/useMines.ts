@@ -45,20 +45,21 @@ export function useMinesReveal() {
           queryKey: queryKeyFactories.mines.userHistory(10, 0),
         });
       } else {
-        // Update active game state
+        // Update active game state (backend shape: revealedPositions)
         queryClient.setQueryData<MinesActiveResponse>(
           queryKeyFactories.mines.active(),
           (old) => {
             if (!old?.game) return old;
+            const nextRevealed =
+              data.revealedTiles ??
+              [...(old.game.revealedPositions ?? []), data.position].filter(
+                (p, i, arr) => arr.indexOf(p) === i,
+              );
             return {
               ...old,
               game: {
                 ...old.game,
-                revealedTiles:
-                  data.revealedTiles ??
-                  [...(old.game.revealedTiles ?? []), data.position].filter(
-                    (p, i, arr) => arr.indexOf(p) === i,
-                  ),
+                revealedPositions: nextRevealed,
                 currentMultiplier: data.currentMultiplier,
                 currentValue: data.currentValue,
               },
