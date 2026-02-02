@@ -1,4 +1,5 @@
 import { api } from "../axios";
+import { createAuthConfig } from "../api.utils";
 import { PLINKO_ROUTES } from "./plinko.constants";
 import {
   PlinkoDropRequest,
@@ -15,14 +16,9 @@ export const plinkoApi = {
     offset: number = 0,
     token?: string,
   ): Promise<PlinkoUserHistoryResponse> => {
-    const config = {
-      params: { limit, offset },
-      ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
-    };
-
     const { data } = await api.get<PlinkoUserHistoryResponse>(
       PLINKO_ROUTES.GET_USER_HISTORY,
-      config,
+      createAuthConfig(token, { params: { limit, offset } }),
     );
     return data;
   },

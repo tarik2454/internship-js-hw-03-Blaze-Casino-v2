@@ -1,14 +1,14 @@
 import { Button } from "@/shared/components/Button";
 import styles from "./GamesList.module.scss";
-import { LIST_GAMES } from "./Gameslist.constants";
 import Link from "next/link";
 import { Section } from "@/shared/components/Section";
+import { GAMES_LIST } from "./games-list.constants";
 
 export function GamesList() {
   return (
     <Section className={styles.gamesListSection}>
       <ul className={styles.gamesList}>
-        {LIST_GAMES.map(
+        {GAMES_LIST.map(
           ({ id, name, description, backgroundImage, tag, href }) => (
             <li
               key={id}

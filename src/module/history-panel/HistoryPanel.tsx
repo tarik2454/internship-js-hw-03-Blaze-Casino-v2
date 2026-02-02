@@ -13,14 +13,18 @@ import { useGameHistory } from "./useGameHistory";
 import { createColumns } from "./historyPanel.utils";
 
 export function HistoryPanel() {
-  const { data: history } = useGameHistory();
+  const { data: history, gameType } = useGameHistory();
 
-  const columns = useMemo(() => createColumns(styles), []);
+  const columns = useMemo(
+    () => createColumns(styles, gameType),
+    [gameType],
+  );
 
   const tableData = useMemo(() => {
     if (!history) return [];
     if ("bets" in history) return history.bets;
     if ("drops" in history) return history.drops;
+    if ("openings" in history) return history.openings;
     return [];
   }, [history]);
 
@@ -29,7 +33,9 @@ export function HistoryPanel() {
     columns,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => {
-      return "betId" in row ? row.betId : row._id;
+      if ("betId" in row) return row.betId;
+      if ("id" in row) return row.id;
+      return row._id;
     },
   });
 

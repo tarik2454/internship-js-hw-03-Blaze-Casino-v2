@@ -5,7 +5,8 @@ export const ROUTES = {
   PROFILE: "/profile",
   LEADERBOARD: "/leaderboard",
   CRASH: "/crash",
-  CASE: "/case",
+  CASES: "/cases",
+  CASE_DETAIL: (id: string) => `/cases/${id}`,
   MINES: "/mines",
   PLINKO: "/plinko",
 } as const;

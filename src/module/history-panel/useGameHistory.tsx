@@ -8,8 +8,11 @@ import { queryKeyFactories } from "@/config-api/keys";
 import { ApiError } from "@/config-api/error.types";
 import { PlinkoUserHistoryResponse } from "@/config-api/plinko/plinko.types";
 import { CrashUserHistoryResponse } from "@/config-api/crash/crash.types";
+import { casesApi } from "@/config-api/cases/cases.api";
+import { CaseUserHistoryResponse } from "@/config-api/cases/cases.types";
+import type { GameType } from "./historyPanel.types";
 
-type GameType = "crash" | "case" | "mines" | "plinko";
+export type { GameType } from "./historyPanel.types";
 
 export function useGameHistory(limit = 10, offset = 0) {
   const pathname = usePathname();
@@ -17,8 +20,8 @@ export function useGameHistory(limit = 10, offset = 0) {
 
   if (pathname?.includes("plinko")) {
     gameType = "plinko";
-  } else if (pathname?.includes("case")) {
-    gameType = "case";
+  } else if (pathname?.includes("cases")) {
+    gameType = "cases";
   } else if (pathname?.includes("mines")) {
     gameType = "mines";
   }
@@ -26,10 +29,14 @@ export function useGameHistory(limit = 10, offset = 0) {
   const queryKey =
     gameType === "crash"
       ? queryKeyFactories.crash.userHistory(limit, offset)
-      : queryKeyFactories.plinko.userHistory(limit, offset);
+      : gameType === "cases"
+        ? queryKeyFactories.cases.userHistory(limit, offset)
+        : queryKeyFactories.plinko.userHistory(limit, offset);
 
   const { data, refetch } = useQuery<
-    CrashUserHistoryResponse | PlinkoUserHistoryResponse,
+    | CrashUserHistoryResponse
+    | PlinkoUserHistoryResponse
+    | CaseUserHistoryResponse,
     ApiError
   >({
     queryKey,
@@ -39,7 +46,8 @@ export function useGameHistory(limit = 10, offset = 0) {
           return crashApi.getUserHistory(limit, offset);
         case "plinko":
           return plinkoApi.getUserHistory(limit, offset);
-        case "case":
+        case "cases":
+          return casesApi.getUserHistory(limit, offset);
         // TODO: Implement history for other games
         case "mines":
           return plinkoApi.getUserHistory(limit, offset);
@@ -50,5 +58,5 @@ export function useGameHistory(limit = 10, offset = 0) {
     refetchOnWindowFocus: true,
   });
 
-  return { data, refetch };
+  return { data, refetch, gameType };
 }

@@ -1,0 +1,56 @@
+@use "@/styles/index" as *;
+
+.openingResult {
+  @include flexCenter;
+  flex-direction: column;
+  width: 100%;
+  padding-top: 48px;
+
+  @include minWidth(xl) {
+    padding-top: 0;
+  }
+}
+
+.caseDetailItem {
+  width: 100%;
+  max-width: 336px;
+  margin-bottom: 24px;
+  padding: 24px;
+
+  @include minWidth(xl) {
+    margin-bottom: 32px;
+    padding: 32px;
+  }
+}
+
+.caseDetailItemName {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.caseDetailItemImage {
+  font-size: 120px;
+
+  @include minWidth(xl) {
+    font-size: 180px;
+  }
+}
+
+.caseDetailItemValue {
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.actionsButtons {
+  display: flex;
+  width: 100%;
+  max-width: 336px;
+  gap: 16px;
+}
+
+.actionButton {
+  width: 100%;
+  font-weight: 600;
+  line-height: 1.3;
+}

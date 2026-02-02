@@ -1,8 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { userApi } from "./user.api";
 import { queryKeys } from "../keys";
 import { ApiError } from "../error.types";
-import { CurrentUserResponse, UserListResponse } from "./user.types";
+import {
+  CurrentUserResponse,
+  UpdateUserRequest,
+  UpdateUserResponse,
+  UserListResponse,
+} from "./user.types";
 
 export function useCurrentUser() {
   return useQuery<CurrentUserResponse, ApiError>({
@@ -16,5 +21,11 @@ export function useUsers() {
   return useQuery<UserListResponse, ApiError>({
     queryKey: ["users", "list"],
     queryFn: () => userApi.getUsers(),
+  });
+}
+
+export function useUpdateCurrentUser() {
+  return useMutation<UpdateUserResponse, ApiError, UpdateUserRequest>({
+    mutationFn: (dto) => userApi.updateCurrentUser(dto),
   });
 }
