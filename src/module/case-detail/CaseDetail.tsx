@@ -4,7 +4,6 @@ import { useCase, useOpenCase } from "@/config-api/cases/useCases";
 import { Container } from "@/shared/components/Container";
 import { Section } from "@/shared/components/Section";
 import { Button } from "@/shared/components/Button";
-import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
 import styles from "./CaseDetail.module.scss";
 import Image from "next/image";
 import { Switch } from "@/shared/components/Switch";
@@ -27,7 +26,6 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
 
   const { data: caseData, isLoading } = useCase(caseId);
   const { mutate: openCase, isPending } = useOpenCase();
-  const { showPopup } = usePopup();
 
   const handleCloseResult = (value: boolean) => {
     setIsOpenResult(value);
@@ -45,12 +43,6 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
         onSuccess: (response) => {
           setOpeningResult(response);
           setIsOpenResult(true);
-          showPopup({
-            message: "You won!",
-            type: POPUP_TYPE.SUCCESS,
-            position: "topCenter",
-            resultAmount: response.itemValue,
-          });
         },
       },
     );

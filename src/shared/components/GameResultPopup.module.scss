@@ -34,11 +34,11 @@
     transform: translateX(-50%);
   }
 
-  &.isVisible {
+  &.visible {
     opacity: 1;
   }
 
-  &.isSuccess {
+  &.success {
     border-color: color-mix(in srgb, #00a63e 50%, transparent);
     background: color-mix(in srgb, #188241 30%, transparent);
   }

@@ -79,8 +79,7 @@ export const GameResultPopup = ({
     type === POPUP_TYPE.SUCCESS ||
     (type === undefined && (resultAmount ?? 0) >= 0);
 
-  const displayMessage = message ?? "";
-
+  const displayMessage = message ?? (isSuccess ? "You won!" : "You lost");
   const displayAmount =
     resultAmount !== undefined
       ? `${isSuccess ? "+" : "-"}${Math.abs(resultAmount).toFixed(2)}$`
@@ -94,8 +93,8 @@ export const GameResultPopup = ({
       className={cx(
         styles.popup,
         positionClass,
-        isVisible && styles.isVisible,
-        isSuccess && styles.isSuccess,
+        isVisible && styles.visible,
+        isSuccess && styles.success,
       )}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

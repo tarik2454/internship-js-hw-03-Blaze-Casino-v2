@@ -9,6 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/config-api/keys";
 import { CurrentUserResponse } from "@/config-api/user/user.types";
 import { useUpdateCurrentUser } from "@/config-api/user/useUser";
+import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
 
 export function OpeningResult({
   openingResult,
@@ -20,6 +21,7 @@ export function OpeningResult({
   const [sold, setSold] = useState(false);
   const { mutate: updateUser } = useUpdateCurrentUser();
   const queryClient = useQueryClient();
+  const { showPopup } = usePopup();
 
   const { id, name, value, rarity, image } = openingResult.item;
 
@@ -32,6 +34,12 @@ export function OpeningResult({
       {
         onSuccess: () => {
           setSold(true);
+          showPopup({
+            message: "Sold!",
+            type: POPUP_TYPE.SUCCESS,
+            position: "topCenter",
+            resultAmount: openingResult.itemValue,
+          });
         },
       },
     );
