@@ -36,7 +36,6 @@ export function useMinesReveal() {
     mutationFn: (body) => minesApi.postReveal(body),
     onSuccess: (data) => {
       if (data.isMine) {
-        // Game over - invalidate active game
         queryClient.invalidateQueries({
           queryKey: queryKeyFactories.mines.active(),
         });
@@ -45,7 +44,6 @@ export function useMinesReveal() {
           queryKey: queryKeyFactories.mines.userHistory(10, 0),
         });
       } else {
-        // Update active game state (backend shape: revealedPositions)
         queryClient.setQueryData<MinesActiveResponse>(
           queryKeyFactories.mines.active(),
           (old) => {

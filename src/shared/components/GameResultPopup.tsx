@@ -12,6 +12,7 @@ export const GameResultPopup = ({
   resultAmount,
   message,
   type = POPUP_TYPE.SUCCESS,
+  position = "bottomRight",
   onClose,
   autoCloseDelay = 3000,
 }: PopupData) => {
@@ -78,18 +79,23 @@ export const GameResultPopup = ({
     type === POPUP_TYPE.SUCCESS ||
     (type === undefined && (resultAmount ?? 0) >= 0);
 
-  const displayMessage = message ?? (isSuccess ? "You won!" : "You lost");
+  const displayMessage = message ?? "";
+
   const displayAmount =
     resultAmount !== undefined
       ? `${isSuccess ? "+" : "-"}${Math.abs(resultAmount).toFixed(2)}$`
       : null;
 
+  const positionClass =
+    position === "topCenter" ? styles.topCenter : styles.bottomRight;
+
   return createPortal(
     <div
       className={cx(
         styles.popup,
-        isVisible && styles.visible,
-        isSuccess && styles.success,
+        positionClass,
+        isVisible && styles.isVisible,
+        isSuccess && styles.isSuccess,
       )}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

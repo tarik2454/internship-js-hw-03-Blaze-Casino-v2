@@ -41,12 +41,6 @@ export function Header() {
         showPopup({ message: "Logout successful", type: "success" });
         router.push(ROUTES.LOGIN);
       },
-      onError: (error) => {
-        showPopup({
-          message: error.message || "Logout failed",
-          type: "error",
-        });
-      },
     });
   };
 

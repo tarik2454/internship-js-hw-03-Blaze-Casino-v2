@@ -4,8 +4,6 @@
   display: flex;
   z-index: 10000;
   position: fixed;
-  right: 20px;
-  bottom: 20px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -21,11 +19,26 @@
   opacity: 0;
   transition: opacity 0.3s ease-out;
 
-  &.visible {
+  &.bottomRight {
+    top: auto;
+    right: 20px;
+    bottom: 20px;
+    left: auto;
+  }
+
+  &.topCenter {
+    top: 20px;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &.isVisible {
     opacity: 1;
   }
 
-  &.success {
+  &.isSuccess {
     border-color: color-mix(in srgb, #00a63e 50%, transparent);
     background: color-mix(in srgb, #188241 30%, transparent);
   }

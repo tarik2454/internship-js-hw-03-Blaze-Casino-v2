@@ -27,12 +27,6 @@ export default function LoginPage() {
         });
         router.push(ROUTES.HOME);
       },
-      onError: (error) => {
-        showPopup({
-          message: error?.message || "Login failed",
-          type: "error",
-        });
-      },
     });
   };
 

@@ -23,12 +23,6 @@ export default function RegisterPage() {
         });
         router.push(ROUTES.LOGIN);
       },
-      onError: (error) => {
-        showPopup({
-          message: error.message || "Registration failed",
-          type: "error",
-        });
-      },
     });
   };
 

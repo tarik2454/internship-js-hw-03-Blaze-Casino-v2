@@ -38,16 +38,13 @@ export function Mines() {
     typeof gameId === "string" && gameId.length > 0 && rawGame != null;
   const activeGame = hasValidActiveGame ? rawGame : null;
 
-  const { mutateAsync: startGame, isPending: isStarting } = useMinesStart();
+  const { mutateAsync: startGame } = useMinesStart();
   const { mutateAsync: revealTile, isPending: isRevealing } = useMinesReveal();
-  const { mutateAsync: cashoutGame, isPending: isCashingOut } =
-    useMinesCashout();
+  const { mutateAsync: cashoutGame } = useMinesCashout();
 
   const revealedTiles = activeGame?.revealedPositions ?? [];
   const gameGridSize = (activeGame?.gridSize ?? gridSize) as MinesGridSize;
-  const totalTiles = gameGridSize * gameGridSize;
   const isGameOver = hitMinePosition !== null;
-  const hasActiveGame = !!activeGame && !isGameOver;
 
   const currentMultiplier = activeGame?.currentMultiplier ?? 0;
   const currentValue = activeGame?.currentValue ?? 0;
@@ -80,14 +77,9 @@ export function Mines() {
         amount: data.amount,
         minesCount: data.mineAmount ?? 3,
         gridSize: data.gridSize ?? DEFAULT_MINES_GRID_SIZE,
-      }).catch((err) => {
-        showPopup({
-          message: err?.message ?? "Failed to start game",
-          type: POPUP_TYPE.ERROR,
-        });
-      });
+      }).catch(() => {});
     },
-    [startGame, showPopup],
+    [startGame],
   );
 
   const handleReveal = useCallback(
@@ -103,15 +95,12 @@ export function Mines() {
             showPopup({
               message: "You hit a mine! Game over.",
               type: POPUP_TYPE.ERROR,
+              position: "topCenter",
+              resultAmount: -(activeGame?.betAmount ?? 0),
             });
           }
         })
-        .catch((err) => {
-          showPopup({
-            message: err?.message ?? "Failed to reveal tile",
-            type: POPUP_TYPE.ERROR,
-          });
-        });
+        .catch(() => {});
     },
     [activeGame?._id, revealTile, showPopup],
   );
@@ -126,15 +115,12 @@ export function Mines() {
         showPopup({
           message: `You won ${res.winAmount.toFixed(2)}$`,
           type: POPUP_TYPE.SUCCESS,
+          position: "topCenter",
+          resultAmount: res.winAmount,
         });
         setHitMinePosition(null);
       })
-      .catch((err) => {
-        showPopup({
-          message: err?.message ?? "Cashout failed",
-          type: POPUP_TYPE.ERROR,
-        });
-      });
+      .catch(() => {});
   }, [activeGame?._id, cashoutGame, showPopup]);
 
   const isCashoutDisabled = !activeGame || isGameOver;

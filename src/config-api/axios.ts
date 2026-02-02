@@ -1,4 +1,5 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
+import { getGlobalApiErrorHandler } from "./apiErrorHandler";
 import { createApiException } from "./error.types";
 import { getCookie, setCookie, deleteCookie } from "@/config-api/cookies";
 import { ROUTES } from "@/shared/constants/routes";
@@ -96,6 +97,11 @@ api.interceptors.response.use(
       error.response?.data?.error ||
       error.message ||
       "An unexpected error occurred";
+
+    if (typeof window !== "undefined") {
+      const handler = getGlobalApiErrorHandler();
+      if (handler) handler(message);
+    }
 
     throw createApiException(message, status, error.response?.data);
   },

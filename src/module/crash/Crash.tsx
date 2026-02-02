@@ -6,11 +6,11 @@ import { queryKeys, queryKeyFactories } from "@/config-api/keys";
 import { Container } from "@/shared/components/Container";
 import { Section } from "@/shared/components/Section";
 import { SettingsPanel, StatItem } from "@/module/settings-panel/SettingsPanel";
+import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
 import styles from "./Crash.module.scss";
 import { useCrashSocket } from "@/config-api/crash/ws/useCrashSocket";
 import { useCrashBet } from "@/config-api/crash/useCrash";
 import { useCrashCashout } from "@/config-api/crash/useCrash";
-import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
 import { CrashGameDisplay } from "./components/CrashGameDisplay";
 
 export function Crash() {
@@ -20,6 +20,7 @@ export function Crash() {
   const { multiplier, elapsed, canBet, crashPoint, betId, gameState } =
     useCrashSocket();
 
+  const [lastBetAmount, setLastBetAmount] = useState<number>(0);
   const [activeAutoCashout, setActiveAutoCashout] = useState<
     number | undefined
   >(undefined);
@@ -64,27 +65,28 @@ export function Crash() {
     cashoutMutation(betId, {
       onSuccess: (data) => {
         setGameResult({ multiplier: data.multiplier, isWin: true });
+        showPopup({
+          message: "You won!",
+          type: POPUP_TYPE.SUCCESS,
+          position: "topCenter",
+          resultAmount: data.winAmount,
+        });
       },
     });
-  }, [betId, cashoutMutation]);
+  }, [betId, cashoutMutation, showPopup]);
 
   const handlePlaceBet = useCallback(
     (data: { amount: number; autoCashout?: number }) => {
       setGameResult(null);
       placeBet(data, {
-        onSuccess: () => {
+        onSuccess: (response) => {
+          setLastBetAmount(response.amount);
           setActiveAutoCashout(data.autoCashout);
           setIsAutoCashedOut(false);
         },
-        onError: (error) => {
-          showPopup({
-            message: error.message || "Failed to place bet",
-            type: POPUP_TYPE.ERROR,
-          });
-        },
       });
     },
-    [placeBet, showPopup],
+    [placeBet],
   );
 
   useEffect(() => {
@@ -97,6 +99,13 @@ export function Crash() {
     ) {
       setIsAutoCashedOut(true);
       setGameResult({ multiplier: activeAutoCashout, isWin: true });
+      const winAmount = lastBetAmount * activeAutoCashout;
+      showPopup({
+        message: "You won!",
+        type: POPUP_TYPE.SUCCESS,
+        position: "topCenter",
+        resultAmount: winAmount,
+      });
       queryClient.invalidateQueries({ queryKey: queryKeys.user });
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.crash.getCurrent(),
@@ -108,6 +117,8 @@ export function Crash() {
     betId,
     isAutoCashedOut,
     currentGameState,
+    lastBetAmount,
+    showPopup,
     queryClient,
   ]);
 
@@ -126,8 +137,14 @@ export function Crash() {
   useEffect(() => {
     if (crashPoint && betId && !isAutoCashedOut) {
       setGameResult({ multiplier: crashPoint, isWin: false });
+      showPopup({
+        message: "Crashed!",
+        type: POPUP_TYPE.ERROR,
+        position: "topCenter",
+        resultAmount: -lastBetAmount,
+      });
     }
-  }, [crashPoint, betId, isAutoCashedOut]);
+  }, [crashPoint, betId, isAutoCashedOut, lastBetAmount, showPopup]);
 
   return (
     <>
