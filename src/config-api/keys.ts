@@ -14,6 +14,7 @@ export const queryKeys = {
   crash: ["crash"],
   plinko: ["plinko"],
   cases: ["cases"],
+  mines: ["mines"],
 };
 
 export const queryKeyFactories = {
@@ -52,14 +53,23 @@ export const queryKeyFactories = {
     recent: () => [...queryKeys.plinko, "recent"],
   },
   cases: {
-    all: () => [...queryKeys.cases],
-    detail: (id: string) => [...queryKeys.cases, "detail", id],
     userHistory: (limit: number = 10, offset: number = 0) => [
       ...queryKeys.cases,
       "user-history",
       limit,
       offset,
     ],
+    all: () => [...queryKeys.cases],
+    detail: (id: string) => [...queryKeys.cases, "detail", id],
+  },
+  mines: {
+    userHistory: (limit: number = 10, offset: number = 0) => [
+      ...queryKeys.mines,
+      "user-history",
+      limit,
+      offset,
+    ],
+    active: () => [...queryKeys.mines, "active"],
   },
 };
 

@@ -4,14 +4,20 @@ export interface ApiError {
   details?: unknown;
 }
 
-export class ApiException extends Error implements ApiError {
-  status?: number;
-  details?: unknown;
+export interface ApiException extends Error, ApiError {}
 
-  constructor(message: string, status?: number, details?: unknown) {
-    super(message);
-    this.name = "ApiException";
-    this.status = status;
-    this.details = details;
-  }
-}
+export const createApiException = (
+  message: string,
+  status?: number,
+  details?: unknown,
+): ApiException => {
+  const error = new Error(message) as ApiException;
+  error.name = "ApiException";
+  error.status = status;
+  error.details = details;
+  return error;
+};
+
+export const isApiException = (error: unknown): error is ApiException => {
+  return error instanceof Error && error.name === "ApiException";
+};

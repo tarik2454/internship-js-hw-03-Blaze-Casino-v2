@@ -11,6 +11,30 @@ import {
 } from "./plinko.types";
 
 export const plinkoApi = {
+  postBet: async (
+    body: PlinkoDropRequest,
+    token?: string,
+  ): Promise<PlinkoDropResponse> => {
+    const { data } = await api.post<PlinkoDropResponse>(
+      PLINKO_ROUTES.POST_DROP,
+      body,
+      createAuthConfig(token),
+    );
+    return data;
+  },
+
+  getMultipliers: async (
+    risk: RiskLevel,
+    lines: LinesCount,
+    token?: string,
+  ): Promise<PlinkoMultipliersResponse> => {
+    const { data } = await api.get<PlinkoMultipliersResponse>(
+      PLINKO_ROUTES.GET_MULTIPLIERS,
+      createAuthConfig(token, { params: { risk, lines } }),
+    );
+    return data;
+  },
+
   getUserHistory: async (
     limit: number = 10,
     offset: number = 0,
@@ -19,25 +43,6 @@ export const plinkoApi = {
     const { data } = await api.get<PlinkoUserHistoryResponse>(
       PLINKO_ROUTES.GET_USER_HISTORY,
       createAuthConfig(token, { params: { limit, offset } }),
-    );
-    return data;
-  },
-
-  postBet: async (payload: PlinkoDropRequest): Promise<PlinkoDropResponse> => {
-    const { data } = await api.post<PlinkoDropResponse>(
-      PLINKO_ROUTES.POST_DROP,
-      payload,
-    );
-    return data;
-  },
-
-  getMultipliers: async (
-    risk: RiskLevel,
-    lines: LinesCount,
-  ): Promise<PlinkoMultipliersResponse> => {
-    const { data } = await api.get<PlinkoMultipliersResponse>(
-      PLINKO_ROUTES.GET_MULTIPLIERS,
-      { params: { risk, lines } },
     );
     return data;
   },

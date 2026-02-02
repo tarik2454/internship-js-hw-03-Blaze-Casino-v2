@@ -106,6 +106,86 @@ export const createColumns = (
     ];
   }
 
+  if (gameType === "mines") {
+    return [
+      columnHelper.display({
+        id: "createdAt",
+        header: "Time",
+        cell: (info) => (
+          <span className={styles.historyDate}>
+            {formatDate(info.row.original.createdAt)}
+          </span>
+        ),
+      }),
+      columnHelper.display({
+        id: "bet",
+        header: "Bet",
+        cell: (info) => {
+          const row = info.row.original;
+          const amount = "amount" in row ? row.amount : 0;
+          return <span className={styles.historyAmount}>${amount}</span>;
+        },
+      }),
+      columnHelper.display({
+        id: "multiplier",
+        header: "Multiplier",
+        cell: (info) => {
+          const row = info.row.original;
+          const multiplier = "multiplier" in row ? row.multiplier : undefined;
+          const isWon = "status" in row && row.status === "won";
+          return (
+            <span
+              style={{
+                color: isWon ? "#82C91E" : "#C62121",
+                fontWeight: 600,
+              }}
+            >
+              {multiplier != null ? `${multiplier}x` : "0x"}
+            </span>
+          );
+        },
+      }),
+      columnHelper.display({
+        id: "winAmount",
+        header: "Win Amount",
+        cell: (info) => {
+          const row = info.row.original;
+          const winAmount = "winAmount" in row ? row.winAmount : 0;
+          const isWon = "status" in row && row.status === "won";
+          return (
+            <span
+              style={{
+                color: isWon ? "#82C91E" : "#C62121",
+                fontWeight: 600,
+              }}
+            >
+              ${isWon ? (winAmount ?? 0).toFixed(2) : "0.00"}
+            </span>
+          );
+        },
+      }),
+      columnHelper.display({
+        id: "status",
+        header: "Status",
+        cell: (info) => {
+          const row = info.row.original;
+          const isWon = "status" in row && row.status === "won";
+          return (
+            <span
+              style={{
+                color: isWon ? "#82C91E" : "#C62121",
+                fontWeight: 600,
+                textTransform: "capitalize",
+              }}
+            >
+              {row.status}
+            </span>
+          );
+        },
+      }),
+    ];
+  }
+
   const columns: HistoryTableColumn[] = [
     columnHelper.display({
       id: "createdAt",

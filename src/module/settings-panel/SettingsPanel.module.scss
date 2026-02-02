@@ -18,9 +18,9 @@
 .settingsPanel {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-}
+  gap: 8px;
 
-.settingsPanelWithPlinkoOptions {
-  gap: 16px;
+  @include minWidth(md) {
+    gap: 24px;
+  }
 }

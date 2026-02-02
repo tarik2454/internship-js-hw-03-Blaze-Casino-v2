@@ -4,7 +4,11 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 32px;
-  gap: 8px;
+  gap: 16px;
+
+  @include minWidth(md) {
+    gap: 8px;
+  }
 }
 
 .optionGroup {
@@ -25,6 +29,10 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+
+  &:disabled {
+    opacity: 0.5;
+  }
 }
 
 .optionButton {
@@ -38,7 +46,7 @@
   transition: var(--transition-250);
 
   &:hover:not(:disabled) {
-    background: #7c7ce854;
+    background: var(--color-blue-54);
   }
 
   &:active:not(:disabled) {
@@ -51,9 +59,9 @@
 }
 
 .optionButtonActive {
-  background: #7c7ce854;
+  background: var(--color-blue-54);
 
   &:hover:not(:disabled) {
-    background: #7c7ce854;
+    background: var(--color-blue-54);
   }
 }

@@ -1,19 +1,18 @@
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { ApiError } from "../error.types";
-import { queryKeyFactories, queryKeys } from "../keys";
+import { queryKeyFactories } from "../keys";
 import { plinkoApi } from "./plinko.api";
 import {
   LinesCount,
   PlinkoDropRequest,
   PlinkoDropResponse,
   PlinkoMultipliersResponse,
-  PlinkoUserHistoryResponse,
   RiskLevel,
 } from "./plinko.types";
 
 export function usePlinkoDrop() {
   return useMutation<PlinkoDropResponse, ApiError, PlinkoDropRequest>({
-    mutationFn: (payload: PlinkoDropRequest) => plinkoApi.postBet(payload),
+    mutationFn: (body: PlinkoDropRequest) => plinkoApi.postBet(body),
   });
 }
 
@@ -21,12 +20,5 @@ export function usePlinkoMultipliers(risk: RiskLevel, lines: LinesCount) {
   return useQuery<PlinkoMultipliersResponse, ApiError>({
     queryKey: queryKeyFactories.plinko.multipliers(risk, lines),
     queryFn: () => plinkoApi.getMultipliers(risk, lines),
-  });
-}
-
-export function usePlinkoHistory(limit: number = 10, offset: number = 0) {
-  return useQuery<PlinkoUserHistoryResponse, ApiError>({
-    queryKey: queryKeyFactories.plinko.userHistory(limit, offset),
-    queryFn: () => plinkoApi.getUserHistory(limit, offset),
   });
 }

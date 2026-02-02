@@ -41,7 +41,8 @@
 
 .mineAmountButton {
   min-width: 24px;
-  padding: 4px 4.5px;
+  padding: 4px 0;
+  border: 1px solid var(--color-blue-54);
   border-radius: var(--radius-4);
   background: var(--color-blue-55);
   font-size: 12px;
@@ -62,8 +63,8 @@
 }
 
 .optionButton {
-  min-width: 0;
-  padding: 6px 16px;
+  min-width: 46px;
+  padding: 6px 0;
   border-radius: var(--radius-4);
   background: var(--color-blue-55);
   font-weight: 500;

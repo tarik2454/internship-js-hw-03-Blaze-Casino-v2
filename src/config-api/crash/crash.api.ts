@@ -10,25 +10,13 @@ import {
 } from "./crash.types";
 
 export const crashApi = {
-  getUserHistory: async (
-    limit: number = 10,
-    offset: number = 0,
-    token?: string,
-  ): Promise<CrashUserHistoryResponse> => {
-    const { data } = await api.get<CrashUserHistoryResponse>(
-      CRASH_ROUTES.GET_USER_HISTORY,
-      createAuthConfig(token, { params: { limit, offset } }),
-    );
-    return data;
-  },
-
   postBet: async (
-    betData: CrashBetRequest,
+    body: CrashBetRequest,
     token?: string,
   ): Promise<CrashBetResponse> => {
     const { data } = await api.post<CrashBetResponse>(
       CRASH_ROUTES.POST_BET,
-      betData,
+      body,
       createAuthConfig(token),
     );
     return data;
@@ -50,6 +38,18 @@ export const crashApi = {
     const { data } = await api.get<CrashCurrentResponse>(
       CRASH_ROUTES.GET_CURRENT,
       createAuthConfig(token),
+    );
+    return data;
+  },
+
+  getUserHistory: async (
+    limit: number = 10,
+    offset: number = 0,
+    token?: string,
+  ): Promise<CrashUserHistoryResponse> => {
+    const { data } = await api.get<CrashUserHistoryResponse>(
+      CRASH_ROUTES.GET_USER_HISTORY,
+      createAuthConfig(token, { params: { limit, offset } }),
     );
     return data;
   },

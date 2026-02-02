@@ -26,7 +26,7 @@ export const casesApi = {
 
   postOpenCase: async (
     id: string,
-    dto: {
+    body: {
       clientSeed?: string;
     },
     token?: string,
@@ -35,7 +35,7 @@ export const casesApi = {
 
     const { data } = await api.post<CaseOpeningResponse>(
       url,
-      dto,
+      body,
       createAuthConfig(token),
     );
     return data;

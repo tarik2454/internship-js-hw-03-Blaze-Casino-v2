@@ -40,7 +40,15 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
   return (
     <PopupContext.Provider value={{ showPopup, hidePopup }}>
       {children}
-      {popupData && <GameResultPopup {...popupData} onClose={hidePopup} />}
+      {popupData && (
+        <GameResultPopup
+          {...popupData}
+          onClose={() => {
+            hidePopup();
+            popupData.onClose?.();
+          }}
+        />
+      )}
     </PopupContext.Provider>
   );
 };
