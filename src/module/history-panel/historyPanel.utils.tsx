@@ -4,6 +4,7 @@ import {
   HistoryRow,
   type GameType,
 } from "./historyPanel.types";
+import type { MinesHistoryItem } from "@/config-api/mines/mines.types";
 
 const columnHelper = createColumnHelper<HistoryRow>();
 
@@ -109,30 +110,39 @@ export const createColumns = (
   if (gameType === "mines") {
     return [
       columnHelper.display({
-        id: "createdAt",
+        id: "time",
         header: "Time",
-        cell: (info) => (
-          <span className={styles.historyDate}>
-            {formatDate(info.row.original.createdAt)}
-          </span>
-        ),
+        cell: (info) => {
+          const row = info.row.original as MinesHistoryItem;
+          const date =
+            "finishedAt" in row && row.finishedAt
+              ? row.finishedAt
+              : row.createdAt;
+          return (
+            <span className={styles.historyDate}>{formatDate(date)}</span>
+          );
+        },
       }),
       columnHelper.display({
         id: "bet",
         header: "Bet",
         cell: (info) => {
-          const row = info.row.original;
-          const amount = "amount" in row ? row.amount : 0;
-          return <span className={styles.historyAmount}>${amount}</span>;
+          const row = info.row.original as MinesHistoryItem;
+          return (
+            <span className={styles.historyAmount}>
+              ${Number(row.betAmount ?? 0).toFixed(2)}
+            </span>
+          );
         },
       }),
       columnHelper.display({
         id: "multiplier",
         header: "Multiplier",
         cell: (info) => {
-          const row = info.row.original;
-          const multiplier = "multiplier" in row ? row.multiplier : undefined;
-          const isWon = "status" in row && row.status === "won";
+          const row = info.row.original as MinesHistoryItem;
+          const multiplier = row.cashoutMultiplier ?? 0;
+          const isWon =
+            row.status === "won" || row.status === "cashed_out";
           return (
             <span
               style={{
@@ -140,7 +150,7 @@ export const createColumns = (
                 fontWeight: 600,
               }}
             >
-              {multiplier != null ? `${multiplier}x` : "0x"}
+              {multiplier > 0 ? `${Number(multiplier).toFixed(2)}x` : "0x"}
             </span>
           );
         },
@@ -149,9 +159,10 @@ export const createColumns = (
         id: "winAmount",
         header: "Win Amount",
         cell: (info) => {
-          const row = info.row.original;
-          const winAmount = "winAmount" in row ? row.winAmount : 0;
-          const isWon = "status" in row && row.status === "won";
+          const row = info.row.original as MinesHistoryItem;
+          const value = row.winAmount ?? 0;
+          const isWon =
+            row.status === "won" || row.status === "cashed_out";
           return (
             <span
               style={{
@@ -159,7 +170,7 @@ export const createColumns = (
                 fontWeight: 600,
               }}
             >
-              ${isWon ? (winAmount ?? 0).toFixed(2) : "0.00"}
+              ${Number(value).toFixed(2)}
             </span>
           );
         },
@@ -168,17 +179,18 @@ export const createColumns = (
         id: "status",
         header: "Status",
         cell: (info) => {
-          const row = info.row.original;
-          const isWon = "status" in row && row.status === "won";
+          const row = info.row.original as MinesHistoryItem;
+          const isWon =
+            row.status === "won" || row.status === "cashed_out";
+          const label = isWon ? "Win" : "Lost";
           return (
             <span
               style={{
                 color: isWon ? "#82C91E" : "#C62121",
                 fontWeight: 600,
-                textTransform: "capitalize",
               }}
             >
-              {row.status}
+              {label}
             </span>
           );
         },

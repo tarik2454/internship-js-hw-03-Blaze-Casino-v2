@@ -36,8 +36,9 @@ export function HistoryPanel() {
     getRowId: (row) => {
       if ("betId" in row) return row.betId;
       if ("gameId" in row) return row.gameId;
+      if ("_id" in row) return (row as { _id: string })._id;
       if ("id" in row) return row.id;
-      return row._id;
+      return "";
     },
   });
 
