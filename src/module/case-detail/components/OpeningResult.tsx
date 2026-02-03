@@ -34,11 +34,12 @@ export function OpeningResult({
       {
         onSuccess: () => {
           setSold(true);
+          const netProfit = openingResult.itemValue - openingResult.casePrice;
           showPopup({
             message: `Sold for ${openingResult.itemValue.toFixed(2)}$`,
-            type: POPUP_TYPE.SUCCESS,
+            type: netProfit >= 0 ? POPUP_TYPE.SUCCESS : POPUP_TYPE.ERROR,
             position: "topCenter",
-            resultAmount: openingResult.itemValue,
+            resultAmount: netProfit,
           });
         },
       },
