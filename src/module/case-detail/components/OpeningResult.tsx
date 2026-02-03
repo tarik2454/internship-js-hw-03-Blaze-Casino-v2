@@ -9,7 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/config-api/keys";
 import { CurrentUserResponse } from "@/config-api/user/user.types";
 import { useUpdateCurrentUser } from "@/config-api/user/useUser";
-import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
+import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
 
 export function OpeningResult({
   openingResult,
@@ -35,7 +35,7 @@ export function OpeningResult({
         onSuccess: () => {
           setSold(true);
           showPopup({
-            message: "Sold!",
+            message: `Sold for ${openingResult.itemValue.toFixed(2)}$`,
             type: POPUP_TYPE.SUCCESS,
             position: "topCenter",
             resultAmount: openingResult.itemValue,

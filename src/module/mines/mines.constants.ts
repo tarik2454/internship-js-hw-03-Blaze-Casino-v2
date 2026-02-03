@@ -1,3 +1,5 @@
+//
+
 export type MinesGridSize = 5 | 6 | 7 | 8;
 
 export const MINES_GRID_SIZES: MinesGridSize[] = [5, 6, 7, 8];

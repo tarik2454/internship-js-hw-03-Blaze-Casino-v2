@@ -6,7 +6,7 @@ import { queryKeys, queryKeyFactories } from "@/config-api/keys";
 import { Container } from "@/shared/components/Container";
 import { Section } from "@/shared/components/Section";
 import { SettingsPanel, StatItem } from "@/module/settings-panel/SettingsPanel";
-import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
+import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
 import styles from "./Crash.module.scss";
 import { useCrashSocket } from "@/config-api/crash/ws/useCrashSocket";
 import { useCrashBet } from "@/config-api/crash/useCrash";
@@ -66,10 +66,10 @@ export function Crash() {
       onSuccess: (data) => {
         setGameResult({ multiplier: data.multiplier, isWin: true });
         showPopup({
-          message: "You won!",
+          message: `You won ${data.winAmount.toFixed(2)}$`,
           type: POPUP_TYPE.SUCCESS,
           position: "topCenter",
-          resultAmount: data.winAmount,
+          resultAmount: data.winAmount - lastBetAmount,
         });
       },
     });
@@ -101,10 +101,10 @@ export function Crash() {
       setGameResult({ multiplier: activeAutoCashout, isWin: true });
       const winAmount = lastBetAmount * activeAutoCashout;
       showPopup({
-        message: "You won!",
+        message: `You won ${winAmount.toFixed(2)}$`,
         type: POPUP_TYPE.SUCCESS,
         position: "topCenter",
-        resultAmount: winAmount,
+        resultAmount: lastBetAmount * (activeAutoCashout - 1),
       });
       queryClient.invalidateQueries({ queryKey: queryKeys.user });
       queryClient.invalidateQueries({
@@ -138,7 +138,7 @@ export function Crash() {
     if (crashPoint && betId && !isAutoCashedOut) {
       setGameResult({ multiplier: crashPoint, isWin: false });
       showPopup({
-        message: "Crashed!",
+        message: `You lost ${lastBetAmount.toFixed(2)}$`,
         type: POPUP_TYPE.ERROR,
         position: "topCenter",
         resultAmount: -lastBetAmount,

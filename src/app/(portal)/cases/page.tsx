@@ -2,7 +2,7 @@ import { HistoryPanel } from "@/module/history-panel/HistoryPanel";
 import { PageWrapper } from "@/shared/components/PageWrapper";
 import { Cases } from "@/module/cases/Cases";
 import { dehydrate, HydrationBoundary, useQuery } from "@tanstack/react-query";
-import { getQueryClient } from "@/app/providers/getQueryClient";
+import { getQueryClient } from "@/providers/getQueryClient";
 import { queryKeyFactories } from "@/config-api/keys";
 import { casesApi } from "@/config-api/cases/cases.api";
 import { cookies } from "next/headers";

@@ -5,7 +5,7 @@ import { Leaderboard } from "@/module/leaderboard/Leaderboard";
 import styles from "./page.module.scss";
 import { PageWrapper } from "@/shared/components/PageWrapper";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { getQueryClient } from "../providers/getQueryClient";
+import { getQueryClient } from "../../providers/getQueryClient";
 import { leaderboardApi } from "@/config-api/leaderboard/leaderboard.api";
 import { queryKeyFactories } from "@/config-api/keys";
 import { cookies } from "next/headers";

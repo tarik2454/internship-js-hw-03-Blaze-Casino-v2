@@ -1,6 +1,6 @@
 import { PageWrapper } from "@/shared/components/PageWrapper";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { getQueryClient } from "@/app/providers/getQueryClient";
+import { getQueryClient } from "@/providers/getQueryClient";
 import { queryKeyFactories } from "@/config-api/keys";
 import { casesApi } from "@/config-api/cases/cases.api";
 import { cookies } from "next/headers";

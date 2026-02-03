@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { cx } from "@/shared/utils/classNames";
 import styles from "./GameResultPopup.module.scss";
-import { PopupData, POPUP_TYPE } from "@/app/providers/PopupProvider";
+import { PopupData, POPUP_TYPE } from "@/providers/PopupProvider";
 
 const portalRoot = typeof document !== "undefined" ? document.body : null;
 
@@ -79,7 +79,8 @@ export const GameResultPopup = ({
     type === POPUP_TYPE.SUCCESS ||
     (type === undefined && (resultAmount ?? 0) >= 0);
 
-  const displayMessage = message ?? (isSuccess ? "You won!" : "You lost");
+  const displayMessage = message ?? "";
+
   const displayAmount =
     resultAmount !== undefined
       ? `${isSuccess ? "+" : "-"}${Math.abs(resultAmount).toFixed(2)}$`

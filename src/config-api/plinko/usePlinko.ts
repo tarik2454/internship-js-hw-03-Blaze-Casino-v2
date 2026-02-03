@@ -31,6 +31,7 @@ export function usePlinkoDrop() {
         linesCount: variables.lines,
         totalWin: response.totalWin,
         avgMultiplier: (response.totalWin / response.totalBet).toFixed(2),
+        status: response.totalWin > response.totalBet ? "won" : "lost",
         createdAt: new Date().toISOString(),
       };
 

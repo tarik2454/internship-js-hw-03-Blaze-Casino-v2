@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import Satoshi from "next/font/local";
 import "../styles/globals.scss";
-import { ReactQueryProvider } from "./providers/ReactQueryProvider";
-import { PopupProvider } from "./providers/PopupProvider";
+import { ReactQueryProvider } from "../providers/ReactQueryProvider";
+import { PopupProvider } from "../providers/PopupProvider";
 
 const satoshi900 = Satoshi({
   src: [

@@ -10,7 +10,7 @@ import { Button } from "@/shared/components/Button";
 import { SettingProfileIcon } from "@/shared/icons/setting-profile";
 import { LogoutIcon } from "@/shared/icons/logout";
 import { useLogout } from "@/config-api/session/useSession";
-import { usePopup } from "@/app/providers/PopupProvider";
+import { usePopup } from "@/providers/PopupProvider";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/shared/constants/routes";
 import { useLeaderboard } from "@/config-api/leaderboard/useLeaderboard";

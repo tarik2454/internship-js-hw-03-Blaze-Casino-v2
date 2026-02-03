@@ -6,7 +6,7 @@ import { useLogin } from "@/config-api/session/useSession";
 import { LoginSchemaDto } from "@/module/auth/auth.schema";
 import { useRouter } from "next/navigation";
 import { SESSION_MODE } from "@/config-api/session/session.constants";
-import { usePopup } from "@/app/providers/PopupProvider";
+import { usePopup } from "@/providers/PopupProvider";
 import { ROUTES } from "@/shared/constants/routes";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/config-api/keys";

@@ -1,3 +1,5 @@
+//
+
 import { queryKeyFactories, queryKeys } from "../keys";
 import { minesApi } from "./mines.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

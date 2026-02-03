@@ -5,7 +5,7 @@ import { Auth } from "@/module/auth/Auth";
 import { useRegister } from "@/config-api/session/useSession";
 import { RegisterSchemaDto } from "@/module/auth/auth.schema";
 import { useRouter } from "next/navigation";
-import { usePopup } from "@/app/providers/PopupProvider";
+import { usePopup } from "@/providers/PopupProvider";
 import { SESSION_MODE } from "@/config-api/session/session.constants";
 import { ROUTES } from "@/shared/constants/routes";
 

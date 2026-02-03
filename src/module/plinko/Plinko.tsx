@@ -6,9 +6,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Section } from "@/shared/components/Section";
 import { Container } from "@/shared/components/Container";
 import { SettingsPanel } from "@/module/settings-panel/SettingsPanel";
-import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
+import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
 import { queryKeys } from "@/config-api/keys";
-import type { RiskLevel, LinesCount, BallsCount } from "@/config-api/plinko/plinko.types";
+import type {
+  RiskLevel,
+  LinesCount,
+  BallsCount,
+} from "@/config-api/plinko/plinko.types";
 import {
   usePlinkoDrop,
   usePlinkoMultipliers,
@@ -58,7 +62,10 @@ export function Plinko() {
           if (data) {
             const profit = data.totalWin - data.totalBet;
             showPopup({
-              message: profit >= 0 ? "You won!" : "You lost",
+              message:
+                profit >= 0
+                  ? `You won ${data.totalWin.toFixed(2)}$`
+                  : "You lost",
               type: profit >= 0 ? POPUP_TYPE.SUCCESS : POPUP_TYPE.ERROR,
               position: "topCenter",
               resultAmount: profit,

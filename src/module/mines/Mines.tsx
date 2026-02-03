@@ -1,7 +1,8 @@
+//
+
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { Section } from "@/shared/components/Section";
 import styles from "./Mines.module.scss";
 import { Container } from "@/shared/components/Container";
@@ -14,23 +15,18 @@ import {
   useMinesCashout,
   useMinesActive,
 } from "@/config-api/mines/useMines";
-import { queryKeyFactories } from "@/config-api/keys";
-import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
+import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
 
 export function Mines() {
-  const { showPopup } = usePopup();
-  const queryClient = useQueryClient();
+  const [hitMinePosition, setHitMinePosition] = useState<number | null>(null);
+  const [allMinePositions, setAllMinePositions] = useState<number[]>([]);
   const [gridSize, setGridSize] = useState<MinesGridSize>(
     DEFAULT_MINES_GRID_SIZE,
   );
-  const [hitMinePosition, setHitMinePosition] = useState<number | null>(null);
-  const [allMinePositions, setAllMinePositions] = useState<number[]>([]);
+
+  const { showPopup } = usePopup();
 
   const { data: activeData, isSuccess, isFetching } = useMinesActive();
-
-  useEffect(() => {
-    queryClient.removeQueries({ queryKey: queryKeyFactories.mines.active() });
-  }, [queryClient]);
 
   const rawGame = isSuccess && !isFetching ? activeData?.game : null;
   const gameId = rawGame?._id;
@@ -77,7 +73,7 @@ export function Mines() {
         amount: data.amount,
         minesCount: data.mineAmount ?? 3,
         gridSize: data.gridSize ?? DEFAULT_MINES_GRID_SIZE,
-      }).catch(() => {});
+      });
     },
     [startGame],
   );
@@ -85,42 +81,38 @@ export function Mines() {
   const handleReveal = useCallback(
     (position: number) => {
       if (!activeGame?._id) return;
-      revealTile({ gameId: activeGame._id, position })
-        .then((res) => {
-          if (res.isMine) {
-            setHitMinePosition(position);
-            if (res.minePositions) {
-              setAllMinePositions(res.minePositions);
-            }
-            showPopup({
-              message: "You hit a mine! Game over.",
-              type: POPUP_TYPE.ERROR,
-              position: "topCenter",
-              resultAmount: -(activeGame?.betAmount ?? 0),
-            });
+      revealTile({ gameId: activeGame._id, position }).then((res) => {
+        if (res.isMine) {
+          setHitMinePosition(position);
+          if (res.minePositions) {
+            setAllMinePositions(res.minePositions);
           }
-        })
-        .catch(() => {});
+          showPopup({
+            message: "You hit a mine! Game over.",
+            type: POPUP_TYPE.ERROR,
+            position: "topCenter",
+            resultAmount: -(activeGame?.betAmount ?? 0),
+          });
+        }
+      });
     },
     [activeGame?._id, revealTile, showPopup],
   );
 
   const handleCashout = useCallback(() => {
     if (!activeGame?._id) return;
-    cashoutGame({ gameId: activeGame._id })
-      .then((res) => {
-        if (res.minePositions) {
-          setAllMinePositions(res.minePositions);
-        }
-        showPopup({
-          message: `You won ${res.winAmount.toFixed(2)}$`,
-          type: POPUP_TYPE.SUCCESS,
-          position: "topCenter",
-          resultAmount: res.winAmount,
-        });
-        setHitMinePosition(null);
-      })
-      .catch(() => {});
+    cashoutGame({ gameId: activeGame._id }).then((res) => {
+      if (res.minePositions) {
+        setAllMinePositions(res.minePositions);
+      }
+      showPopup({
+        message: `You won ${res.winAmount.toFixed(2)}$`,
+        type: POPUP_TYPE.SUCCESS,
+        position: "topCenter",
+        resultAmount: res.winAmount - (activeGame?.betAmount ?? 0),
+      });
+      setHitMinePosition(null);
+    });
   }, [activeGame?._id, cashoutGame, showPopup]);
 
   const isCashoutDisabled = !activeGame || isGameOver;

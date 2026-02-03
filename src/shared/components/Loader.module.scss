@@ -2,7 +2,7 @@
 
 .container {
   display: flex;
-  z-index: 9999;
+  z-index: var(--z-index-9999);
   position: fixed;
   top: 0;
   left: 0;

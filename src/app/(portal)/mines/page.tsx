@@ -2,7 +2,7 @@ import { Chat } from "@/module/chat/Chat";
 import { HistoryPanel } from "@/module/history-panel/HistoryPanel";
 import { Mines } from "@/module/mines/Mines";
 import { PageWrapper } from "@/shared/components/PageWrapper";
-import { getQueryClient } from "@/app/providers/getQueryClient";
+import { getQueryClient } from "@/providers/getQueryClient";
 import { cookies } from "next/headers";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { queryKeyFactories } from "@/config-api/keys";
