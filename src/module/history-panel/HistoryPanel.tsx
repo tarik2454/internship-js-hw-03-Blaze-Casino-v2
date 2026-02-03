@@ -34,10 +34,10 @@ export function HistoryPanel() {
     columns,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row): string => {
-      if ("betId" in row) return row.betId;
-      if ("gameId" in row) return row.gameId;
-      if ("_id" in row) return (row as { _id: string })._id;
-      if ("id" in row) return row.id;
+      if ("betId" in row) return String(row.betId);
+      if ("gameId" in row) return String(row.gameId);
+      if ("_id" in row) return String((row as { _id: string })._id);
+      if ("id" in row) return String(row.id);
       return "";
     },
   });

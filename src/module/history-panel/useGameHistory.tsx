@@ -2,6 +2,7 @@
 
 import { crashApi } from "@/config-api/crash/crash.api";
 import { plinkoApi } from "@/config-api/plinko/plinko.api";
+import { casesApi } from "@/config-api/cases/cases.api";
 import { minesApi } from "@/config-api/mines/mines.api";
 import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
