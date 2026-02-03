@@ -33,7 +33,7 @@ export function HistoryPanel() {
     data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getRowId: (row) => {
+    getRowId: (row): string => {
       if ("betId" in row) return row.betId;
       if ("gameId" in row) return row.gameId;
       if ("_id" in row) return (row as { _id: string })._id;
