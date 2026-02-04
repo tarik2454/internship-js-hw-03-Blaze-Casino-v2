@@ -1,5 +1,13 @@
 @use "@/styles/index" as *;
 
+.profileSection {
+  margin-bottom: 16px;
+
+  @include minWidth(xl) {
+    margin-bottom: 40px;
+  }
+}
+
 .profileWrapper {
   @include flexCenter;
   flex-direction: column;

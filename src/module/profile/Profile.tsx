@@ -9,8 +9,6 @@ import styles from "./Profile.module.scss";
 export default function Profile() {
   const { data: currentUser } = useCurrentUser();
 
-  console.log("currentUser", currentUser);
-
   const totalWon = currentUser?.totalWon ?? 0;
   const totalLoss = currentUser?.totalWagered
     ? currentUser?.totalWagered - (currentUser?.totalWon ?? 0)
@@ -20,7 +18,7 @@ export default function Profile() {
   const lossPercent = total > 0 ? (totalLoss / total) * 100 : 0;
 
   return (
-    <Section>
+    <Section className={styles.profileSection}>
       <Container>
         <div className={styles.profileWrapper}>
           <div className={styles.profileHeader}>
