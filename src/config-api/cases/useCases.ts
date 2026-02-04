@@ -1,5 +1,3 @@
-//
-
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError } from "../error.types";
 import { queryKeys, queryKeyFactories } from "../keys";

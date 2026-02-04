@@ -1,5 +1,3 @@
-//
-
 "use client";
 
 import { useCases } from "@/config-api/cases/useCases";

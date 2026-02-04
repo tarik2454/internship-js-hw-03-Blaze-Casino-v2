@@ -1,5 +1,3 @@
-//
-
 export const MINES_ROUTES = {
   POST_START: "/api/mines/start",
   POST_REVEAL: "/api/mines/reveal",
