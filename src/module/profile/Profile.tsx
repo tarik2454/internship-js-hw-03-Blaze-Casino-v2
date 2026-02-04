@@ -11,41 +11,60 @@ export default function Profile() {
 
   console.log("currentUser", currentUser);
 
+  const totalWon = currentUser?.totalWon ?? 0;
+  const totalLoss = currentUser?.totalWagered
+    ? currentUser?.totalWagered - (currentUser?.totalWon ?? 0)
+    : 0;
+  const total = totalWon + totalLoss;
+  const winPercent = total > 0 ? (totalWon / total) * 100 : 0;
+  const lossPercent = total > 0 ? (totalLoss / total) * 100 : 0;
+
   return (
     <Section>
       <Container>
-        <div>
-          <Image
-            src={currentUser?.avatarURL ?? ""}
-            alt="User Avatar"
-            width={96}
-            height={96}
-            className={styles.profileAvatar}
-          />
-          <h2>{currentUser?.username}</h2>
-        </div>
+        <div className={styles.profileWrapper}>
+          <div className={styles.profileHeader}>
+            <Image
+              src={currentUser?.avatarURL ?? ""}
+              alt="User Avatar"
+              width={96}
+              height={96}
+              className={styles.profileAvatar}
+            />
+            <h2 className={styles.profileUsername}>{currentUser?.username}</h2>
+          </div>
 
-        <div>
-          <p>
-            Total game <span>{currentUser?.gamesPlayed}</span>
-          </p>
-          <p>
-            Win <span>{currentUser?.totalWon}</span>
-          </p>
-          <p>
-            Loss
-            <span>
-              {currentUser?.totalWagered
-                ? currentUser?.totalWagered - (currentUser?.totalWon ?? 0)
-                : 0}
-            </span>
-          </p>
-          <Image
-            src="/images/common/dollar.svg"
-            alt="Dollar"
-            width={16}
-            height={16}
-          />
+          <div className={styles.profileInfo}>
+            <p className={styles.profileInfoItem}>
+              Total game
+              <span className={styles.profileInfoItemValue}>
+                {currentUser?.gamesPlayed}
+              </span>
+            </p>
+            <p className={styles.profileInfoItem}>
+              Win
+              <span className={styles.profileInfoItemValue}>
+                {total > 0 && `${winPercent.toFixed()}%`}
+              </span>
+            </p>
+            <p className={styles.profileInfoItem}>
+              Loss
+              <span className={styles.profileInfoItemValue}>
+                {total > 0 && `${lossPercent.toFixed()}%`}
+              </span>
+            </p>
+            <div className={styles.profileInfoItem}>
+              Location
+              <span>
+                <Image
+                  src="/images/profile/location.svg"
+                  alt="Location"
+                  width={32}
+                  height={23}
+                />
+              </span>
+            </div>
+          </div>
         </div>
       </Container>
     </Section>
