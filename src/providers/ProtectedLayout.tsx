@@ -31,14 +31,11 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
     return <Loader />;
   }
 
-  // Handle errors
   if (isError) {
-    // If it's an auth error, the effect will handle redirect; show loader in meantime
     if (isAuthError) {
       return <Loader />;
     }
 
-    // For non-auth errors (network, 500, etc.), show error UI
     const isNetworkOrConfig =
       status == null ||
       status === 0 ||
@@ -73,8 +70,6 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
     );
   }
 
-  // If not loading and no error, but no data... theoretically shouldn't happen if API succeeds,
-  // but if it does, show loader (or could handle as auth error)
   if (!data) {
     return <Loader />;
   }

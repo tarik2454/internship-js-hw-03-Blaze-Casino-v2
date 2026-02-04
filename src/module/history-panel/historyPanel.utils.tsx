@@ -267,7 +267,10 @@ export const createColumns = (
           isWon = row.status === "won";
         } else if ("avgMultiplier" in row) {
           multiplier = parseFloat(row.avgMultiplier);
-          isWon = row.totalWin > 0;
+          isWon =
+            "status" in row && row.status != null
+              ? row.status === "won"
+              : row.totalWin > 0;
         }
 
         return (
@@ -292,7 +295,10 @@ export const createColumns = (
           isWon = row.status === "won";
         } else if ("totalWin" in row) {
           winAmount = row.totalWin;
-          isWon = row.totalWin > 0;
+          isWon =
+            "status" in row && row.status != null
+              ? row.status === "won"
+              : row.totalWin > 0;
         } else if ("itemValue" in row) {
           winAmount = row.itemValue;
           isWon = row.profit > 0;
@@ -314,12 +320,12 @@ export const createColumns = (
         const row = info.row.original;
         let isWon = false;
 
-        if ("status" in row) {
+        if ("status" in row && row.status != null) {
           isWon = row.status === "won";
         } else if ("totalWin" in row) {
-          isWon = row.totalWin > 0;
+          isWon = (row.totalWin as number) > 0;
         } else if ("profit" in row) {
-          isWon = row.profit > 0;
+          isWon = (row.profit as number) > 0;
         }
 
         return (
