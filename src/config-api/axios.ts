@@ -1,6 +1,8 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
-import { ApiException } from "./error.types";
+import { getGlobalApiErrorHandler } from "./apiErrorHandler";
+import { createApiException } from "./error.types";
 import { getCookie, setCookie, deleteCookie } from "@/config-api/cookies";
+import { ROUTES } from "@/shared/constants/routes";
 
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
@@ -27,7 +29,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (!axios.isAxiosError(error)) {
-      throw new ApiException("An unexpected error occurred");
+      throw createApiException("An unexpected error occurred");
     }
 
     const originalRequest = error.config as RetryableRequestConfig | undefined;
@@ -39,14 +41,16 @@ api.interceptors.response.use(
     ) {
       originalRequest._retry = true;
 
+      if (typeof window === "undefined") {
+        throw createApiException("Session expired. Please login again.", 401);
+      }
+
       const refreshToken = getCookie("refreshToken");
       if (!refreshToken) {
         deleteCookie("accessToken");
         deleteCookie("refreshToken");
-        if (typeof window !== "undefined") {
-          window.location.href = "/login";
-        }
-        throw new ApiException("Session expired. Please login again.", 401);
+        window.location.href = ROUTES.LOGIN;
+        throw createApiException("Session expired. Please login again.", 401);
       }
 
       try {
@@ -56,18 +60,34 @@ api.interceptors.response.use(
         );
 
         setCookie("accessToken", data.accessToken);
+        if (data.refreshToken) {
+          setCookie("refreshToken", data.refreshToken);
+        }
         originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
 
         return api(originalRequest);
-      } catch {
-        deleteCookie("accessToken");
-        deleteCookie("refreshToken");
+      } catch (refreshError) {
+        if (axios.isAxiosError(refreshError)) {
+          const status = refreshError.response?.status;
+          if (status === 401 || status === 403) {
+            deleteCookie("accessToken");
+            deleteCookie("refreshToken");
 
-        if (typeof window !== "undefined") {
-          window.location.href = "/login";
+            if (typeof window !== "undefined") {
+              window.location.href = ROUTES.LOGIN;
+            }
+
+            throw createApiException(
+              "Session expired. Please login again.",
+              401,
+            );
+          }
         }
 
-        throw new ApiException("Session expired. Please login again.", 401);
+        throw createApiException(
+          "Failed to refresh session. Please try again later.",
+          refreshError instanceof Error ? 500 : undefined,
+        );
       }
     }
 
@@ -78,6 +98,11 @@ api.interceptors.response.use(
       error.message ||
       "An unexpected error occurred";
 
-    throw new ApiException(message, status, error.response?.data);
+    if (typeof window !== "undefined") {
+      const handler = getGlobalApiErrorHandler();
+      if (handler) handler(message);
+    }
+
+    throw createApiException(message, status, error.response?.data);
   },
 );

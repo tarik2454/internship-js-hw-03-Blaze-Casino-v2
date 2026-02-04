@@ -1,9 +1,16 @@
+//
+
 @use "@/styles/index" as *;
 
 .casesList {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(172px, 1fr));
   gap: 16px;
+
+  @include minWidth(md) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
 
   @include minWidth(xl) {
     grid-template-columns: repeat(4, 1fr);
@@ -88,17 +95,16 @@
 }
 
 .caseImageWrapper {
-  @include flexCenter;
-  margin-bottom: 16px;
-}
-
-.caseImage {
+  position: relative;
   width: 157px;
   height: 84px;
+  margin: 0 auto;
+  margin-bottom: 16px;
 
   @include minWidth(xl) {
     width: 302px;
     height: 197px;
+    margin-bottom: 0;
   }
 }
 

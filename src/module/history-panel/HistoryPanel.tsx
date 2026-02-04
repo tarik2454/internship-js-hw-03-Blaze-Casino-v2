@@ -25,6 +25,7 @@ export function HistoryPanel() {
     if ("bets" in history) return history.bets;
     if ("drops" in history) return history.drops;
     if ("openings" in history) return history.openings;
+    if ("games" in history) return history.games;
     return [];
   }, [history]);
 
@@ -32,10 +33,12 @@ export function HistoryPanel() {
     data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getRowId: (row) => {
-      if ("betId" in row) return row.betId;
-      if ("id" in row) return row.id;
-      return row._id;
+    getRowId: (row): string => {
+      if ("betId" in row) return String(row.betId);
+      if ("gameId" in row) return String(row.gameId);
+      if ("_id" in row) return String((row as { _id: string })._id);
+      if ("id" in row) return String(row.id);
+      return "";
     },
   });
 

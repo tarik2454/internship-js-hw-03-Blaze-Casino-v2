@@ -1,0 +1,28 @@
+//
+
+@use "@/styles/index" as *;
+
+.minesWrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+
+  @include minWidth(xl) {
+    grid-template-columns: 1fr max(432px);
+  }
+}
+
+.minesArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 381px;
+  padding: 40px 50px;
+  border-radius: var(--radius-16);
+  background: #423e6980;
+
+  @include minWidth(xl) {
+    min-height: 638px;
+    padding: 37px 162px;
+  }
+}

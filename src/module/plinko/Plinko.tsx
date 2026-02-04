@@ -6,13 +6,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Section } from "@/shared/components/Section";
 import { Container } from "@/shared/components/Container";
 import { SettingsPanel } from "@/module/settings-panel/SettingsPanel";
-import { queryKeys, queryKeyFactories } from "@/config-api/keys";
+import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
+import { queryKeys } from "@/config-api/keys";
 import type {
   RiskLevel,
   LinesCount,
   BallsCount,
-  PlinkoDrop,
-  PlinkoUserHistoryResponse,
 } from "@/config-api/plinko/plinko.types";
 import {
   usePlinkoDrop,
@@ -24,12 +23,12 @@ import styles from "./Plinko.module.scss";
 
 export function Plinko() {
   const queryClient = useQueryClient();
+  const { showPopup } = usePopup();
   const [riskLevel, setRiskLevel] = useState<RiskLevel>("medium");
   const [linesCount, setLinesCount] = useState<LinesCount>(16);
   const [ballsCount, setBallsCount] = useState<BallsCount>(1);
   const [expectedBallsCount, setExpectedBallsCount] = useState(0);
   const [finishedBallsCount, setFinishedBallsCount] = useState(0);
-  const finalBalanceRef = useRef<number | null>(null);
   const lastGameDataRef = useRef<{
     totalBet: number;
     totalWin: number;
@@ -59,56 +58,20 @@ export function Plinko() {
         const newCount = prev + 1;
 
         if (newCount >= expectedBallsCount && expectedBallsCount > 0) {
-          if (lastGameDataRef.current) {
-            const { totalBet, totalWin, balls, risk, lines, dropId } =
-              lastGameDataRef.current;
-
-            const newHistoryItem: PlinkoDrop = {
-              _id: dropId,
-              betAmount: totalBet,
-              ballsCount: balls,
-              riskLevel: risk,
-              linesCount: lines,
-              totalWin: totalWin,
-              avgMultiplier: (totalWin / totalBet).toFixed(2),
-              createdAt: new Date().toISOString(),
-            };
-
-            queryClient.setQueryData<PlinkoUserHistoryResponse>(
-              queryKeyFactories.plinko.userHistory(10, 0),
-              (old) => {
-                if (!old) return { drops: [newHistoryItem] };
-                return {
-                  ...old,
-                  drops: [newHistoryItem, ...old.drops],
-                };
-              },
-            );
-
-            lastGameDataRef.current = null;
+          const data = lastGameDataRef.current;
+          if (data) {
+            const profit = data.totalWin - data.totalBet;
+            showPopup({
+              message:
+                profit >= 0
+                  ? `You won ${data.totalWin.toFixed(2)}$`
+                  : "You lost",
+              type: profit >= 0 ? POPUP_TYPE.SUCCESS : POPUP_TYPE.ERROR,
+              position: "topCenter",
+              resultAmount: profit,
+            });
           }
-
-          setTimeout(() => {
-            queryClient.invalidateQueries({
-              queryKey: queryKeys.plinko,
-              refetchType: "active",
-            });
-            if (finalBalanceRef.current !== null) {
-              const finalBal = finalBalanceRef.current;
-              queryClient.setQueryData<CurrentUserResponse>(
-                queryKeys.user,
-                (old) => {
-                  if (!old) return old;
-                  return { ...old, balance: finalBal };
-                },
-              );
-              finalBalanceRef.current = null;
-            }
-            queryClient.invalidateQueries({
-              queryKey: queryKeys.user,
-              refetchType: "active",
-            });
-          }, 1000);
+          lastGameDataRef.current = null;
           setFinishedBallsCount(0);
           setExpectedBallsCount(0);
         }
@@ -175,8 +138,6 @@ export function Plinko() {
                 );
               }, index * 200);
             });
-
-            finalBalanceRef.current = response.newBalance;
           },
           onError: (error) => {
             if (previousUserData) {

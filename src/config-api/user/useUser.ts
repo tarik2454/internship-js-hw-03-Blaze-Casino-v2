@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userApi } from "./user.api";
 import { queryKeys } from "../keys";
 import { ApiError } from "../error.types";
@@ -25,7 +25,12 @@ export function useUsers() {
 }
 
 export function useUpdateCurrentUser() {
+  const queryClient = useQueryClient();
+
   return useMutation<UpdateUserResponse, ApiError, UpdateUserRequest>({
     mutationFn: (dto) => userApi.updateCurrentUser(dto),
+    onSuccess: (data) => {
+      queryClient.setQueryData(queryKeys.user, data);
+    },
   });
 }

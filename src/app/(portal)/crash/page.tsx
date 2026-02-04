@@ -2,7 +2,7 @@ import { PageWrapper } from "@/shared/components/PageWrapper";
 import { Crash } from "@/module/crash/Crash";
 import { HistoryPanel } from "@/module/history-panel/HistoryPanel";
 import { queryKeyFactories } from "@/config-api/keys";
-import { getQueryClient } from "@/app/providers/getQueryClient";
+import { getQueryClient } from "@/providers/getQueryClient";
 import { cookies } from "next/headers";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { crashApi } from "@/config-api/crash/crash.api";

@@ -1,7 +1,7 @@
 import { Header } from "@/module/header/Header";
-import ProtectedLayout from "../providers/ProtectedLayout";
+import ProtectedLayout from "../../providers/ProtectedLayout";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { getQueryClient } from "../providers/getQueryClient";
+import { getQueryClient } from "../../providers/getQueryClient";
 import { userApi } from "@/config-api/user/user.api";
 import { queryKeys } from "@/config-api/keys";
 import { cookies } from "next/headers";

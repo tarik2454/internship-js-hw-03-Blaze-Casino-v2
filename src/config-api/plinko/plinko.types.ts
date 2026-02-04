@@ -10,6 +10,7 @@ export interface PlinkoDrop {
   linesCount: LinesCount;
   totalWin: number;
   avgMultiplier: string;
+  status?: "won" | "lost";
   createdAt: string;
 }
 

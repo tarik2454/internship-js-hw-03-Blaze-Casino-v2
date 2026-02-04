@@ -2,7 +2,7 @@ import { Plinko } from "@/module/plinko/Plinko";
 import { HistoryPanel } from "@/module/history-panel/HistoryPanel";
 import { PageWrapper } from "@/shared/components/PageWrapper";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { getQueryClient } from "@/app/providers/getQueryClient";
+import { getQueryClient } from "@/providers/getQueryClient";
 import { cookies } from "next/headers";
 import { queryKeyFactories } from "@/config-api/keys";
 import { plinkoApi } from "@/config-api/plinko/plinko.api";

@@ -1,12 +1,11 @@
+//
+
 "use client";
 
 import { useCase, useOpenCase } from "@/config-api/cases/useCases";
 import { Container } from "@/shared/components/Container";
 import { Section } from "@/shared/components/Section";
 import { Button } from "@/shared/components/Button";
-import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@/config-api/keys";
-import { CurrentUserResponse } from "@/config-api/user/user.types";
 import styles from "./CaseDetail.module.scss";
 import Image from "next/image";
 import { Switch } from "@/shared/components/Switch";
@@ -15,7 +14,6 @@ import { useState } from "react";
 import { OpeningResult } from "./components/OpeningResult";
 import { CaseDetailItem } from "./CaseDetailItem";
 import { CaseRoulette } from "./components/CaseRoulette";
-import { POPUP_TYPE, usePopup } from "@/app/providers/PopupProvider";
 
 interface CaseDetailProps {
   caseId: string;
@@ -30,9 +28,6 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
 
   const { data: caseData, isLoading } = useCase(caseId);
   const { mutate: openCase, isPending } = useOpenCase();
-
-  const queryClient = useQueryClient();
-  const { showPopup } = usePopup();
 
   const handleCloseResult = (value: boolean) => {
     setIsOpenResult(value);
@@ -50,23 +45,6 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
         onSuccess: (response) => {
           setOpeningResult(response);
           setIsOpenResult(true);
-
-          queryClient.setQueryData<CurrentUserResponse>(
-            queryKeys.user,
-            (old) => {
-              if (!old) return old;
-              return {
-                ...old,
-                balance: response.newBalance,
-              };
-            },
-          );
-        },
-        onError: (error) => {
-          showPopup({
-            message: error.message,
-            type: POPUP_TYPE.ERROR,
-          });
         },
       },
     );

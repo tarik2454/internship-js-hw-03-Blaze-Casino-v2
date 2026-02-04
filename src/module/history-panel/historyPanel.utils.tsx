@@ -4,6 +4,7 @@ import {
   HistoryRow,
   type GameType,
 } from "./historyPanel.types";
+import type { MinesHistoryItem } from "@/config-api/mines/mines.types";
 
 const columnHelper = createColumnHelper<HistoryRow>();
 
@@ -98,7 +99,94 @@ export const createColumns = (
                 fontWeight: 600,
               }}
             >
-              {sign}{profit}
+              {sign}
+              {profit}
+            </span>
+          );
+        },
+      }),
+    ];
+  }
+
+  if (gameType === "mines") {
+    return [
+      columnHelper.display({
+        id: "time",
+        header: "Time",
+        cell: (info) => {
+          const row = info.row.original as MinesHistoryItem;
+          const date =
+            "finishedAt" in row && row.finishedAt
+              ? row.finishedAt
+              : row.createdAt;
+          return <span className={styles.historyDate}>{formatDate(date)}</span>;
+        },
+      }),
+      columnHelper.display({
+        id: "bet",
+        header: "Bet",
+        cell: (info) => {
+          const row = info.row.original as MinesHistoryItem;
+          return (
+            <span className={styles.historyAmount}>
+              ${Number(row.betAmount ?? 0).toFixed(2)}
+            </span>
+          );
+        },
+      }),
+      columnHelper.display({
+        id: "multiplier",
+        header: "Multiplier",
+        cell: (info) => {
+          const row = info.row.original as MinesHistoryItem;
+          const multiplier = row.cashoutMultiplier ?? 0;
+          const isWon = row.status === "won" || row.status === "cashed_out";
+          return (
+            <span
+              style={{
+                color: isWon ? "#82C91E" : "#C62121",
+                fontWeight: 600,
+              }}
+            >
+              {multiplier > 0 ? `${Number(multiplier).toFixed(2)}x` : "0x"}
+            </span>
+          );
+        },
+      }),
+      columnHelper.display({
+        id: "winAmount",
+        header: "Win Amount",
+        cell: (info) => {
+          const row = info.row.original as MinesHistoryItem;
+          const value = row.winAmount ?? 0;
+          const isWon = row.status === "won" || row.status === "cashed_out";
+          return (
+            <span
+              style={{
+                color: isWon ? "#82C91E" : "#C62121",
+                fontWeight: 600,
+              }}
+            >
+              ${Number(value).toFixed(2)}
+            </span>
+          );
+        },
+      }),
+      columnHelper.display({
+        id: "status",
+        header: "Status",
+        cell: (info) => {
+          const row = info.row.original as MinesHistoryItem;
+          const isWon = row.status === "won" || row.status === "cashed_out";
+          const label = isWon ? "Win" : "Lost";
+          return (
+            <span
+              style={{
+                color: isWon ? "#82C91E" : "#C62121",
+                fontWeight: 600,
+              }}
+            >
+              {label}
             </span>
           );
         },

@@ -1,0 +1,94 @@
+@use "@/styles/index" as *;
+
+.minesOptions {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 32px;
+  gap: 16px;
+
+  @include minWidth(md) {
+    gap: 8px;
+  }
+}
+
+.mineAmountWrapper {
+  position: relative;
+}
+
+.optionLabel {
+  margin-bottom: 8px;
+}
+
+.optionGridLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  font-family: var(--font-manrope);
+}
+
+.mineAmountInput {
+  padding-right: 140px !important;
+}
+
+.mineAmountButtons {
+  display: flex;
+  position: absolute;
+  top: 39px;
+  right: 10px;
+  gap: 4px;
+}
+
+.mineAmountButton {
+  min-width: 24px;
+  padding: 4px 0;
+  border: 1px solid var(--color-blue-54);
+  border-radius: var(--radius-4);
+  background: var(--color-blue-55);
+  font-size: 12px;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.mineAmountButtonActive {
+  background: var(--color-blue-54);
+}
+
+.optionButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.optionButton {
+  min-width: 46px;
+  padding: 6px 0;
+  border-radius: var(--radius-4);
+  background: var(--color-blue-3f);
+  font-weight: 500;
+  font-size: 14px;
+  font-family: var(--font-manrope);
+  transition: var(--transition-250);
+
+  &:hover:not(:disabled) {
+    background: var(--color-blue-54);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.optionButtonActive {
+  background: var(--color-blue-54);
+
+  &:hover:not(:disabled) {
+    background: var(--color-blue-54);
+  }
+}

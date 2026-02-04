@@ -1,3 +1,5 @@
+//
+
 "use client";
 
 import { useCases } from "@/config-api/cases/useCases";
@@ -45,13 +47,7 @@ export function Cases() {
                   </div>
 
                   <div className={styles.caseImageWrapper}>
-                    <Image
-                      src={"/images/cases/chest.svg"}
-                      alt={name}
-                      width={157}
-                      height={84}
-                      className={styles.caseImage}
-                    />
+                    <Image src={"/images/cases/chest.png"} alt={name} fill />
                   </div>
                 </Link>
               </li>

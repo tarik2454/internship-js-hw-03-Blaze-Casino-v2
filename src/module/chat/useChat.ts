@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, startTransition } from "react";
 import { usePathname } from "next/navigation";
 import { getCookie } from "@/config-api/cookies";
 import { useCurrentUser } from "@/config-api/user/useUser";
-import { usePopup, POPUP_TYPE } from "@/app/providers/PopupProvider";
+import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
 import {
   ChatMessage,
   ChatHistoryResponse,

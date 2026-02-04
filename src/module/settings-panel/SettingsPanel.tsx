@@ -5,6 +5,7 @@ import { SettingsPanelProps, StatItem } from "./types";
 import { BetAmountInput } from "./components/BetAmountInput";
 import { AutoCashoutInput } from "./components/AutoCashoutInput";
 import { PlinkoOptions } from "./components/PlinkoOptions";
+import { MinesOptions } from "./components/MinesOptions";
 import { BetStats } from "./components/BetStats";
 import { ActionButtons } from "./components/ActionButtons";
 import { useSettingsPanel } from "./hooks/useSettingsPanel";
@@ -16,6 +17,7 @@ export function SettingsPanel({
   showAutoCashout = true,
   showCashoutButton = true,
   showPlinkoOptions = false,
+  showMinesOptions = false,
   isCashoutDisabled = true,
   stats,
   computeStats,
@@ -25,9 +27,13 @@ export function SettingsPanel({
   riskLevel,
   linesCount,
   ballsCount,
+  gridSize,
+  mineAmount,
   onRiskChange,
   onLinesChange,
   onBallsChange,
+  onGridSizeChange,
+  onMineAmountChange,
 }: SettingsPanelProps) {
   const {
     amount,
@@ -37,6 +43,8 @@ export function SettingsPanel({
     riskLevel: currentRisk,
     linesCount: currentLines,
     ballsCount: currentBalls,
+    gridSize: currentGridSize,
+    mineAmount: currentMineAmount,
     handleAmountChange,
     handleHalf,
     handleDouble,
@@ -48,28 +56,30 @@ export function SettingsPanel({
     setRiskLevel,
     setLinesCount,
     setBallsCount,
+    setGridSize,
+    setMineAmount,
   } = useSettingsPanel({
     showPlinkoOptions,
+    showMinesOptions,
     onPlaceBet,
     onCashout,
     riskLevel,
     linesCount,
     ballsCount,
+    gridSize,
+    mineAmount,
     onRiskChange,
     onLinesChange,
     onBallsChange,
+    onGridSizeChange,
+    onMineAmountChange,
   });
 
   return (
     <aside className={styles.settingsPanelWrapper}>
       <p className={styles.settingsPanelTitle}>{title}</p>
 
-      <div
-        className={cx(
-          styles.settingsPanel,
-          showPlinkoOptions && styles.settingsPanelWithPlinkoOptions,
-        )}
-      >
+      <div className={styles.settingsPanel}>
         <BetAmountInput
           amount={amount}
           disabled={inputsDisabled}
@@ -97,6 +107,16 @@ export function SettingsPanel({
             onRiskChange={setRiskLevel}
             onLinesChange={setLinesCount}
             onBallsChange={setBallsCount}
+            disabled={inputsDisabled}
+          />
+        )}
+
+        {showMinesOptions && (
+          <MinesOptions
+            mineAmount={currentMineAmount}
+            onMineAmountChange={setMineAmount}
+            gridSize={currentGridSize}
+            onGridSizeChange={setGridSize}
             disabled={inputsDisabled}
           />
         )}

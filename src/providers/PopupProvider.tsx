@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { setGlobalApiErrorHandler } from "@/config-api/apiErrorHandler";
 import { GameResultPopup } from "@/shared/components/GameResultPopup";
 
 export const POPUP_TYPE = {
@@ -14,6 +21,7 @@ export interface PopupData {
   resultAmount?: number;
   message?: string;
   type?: PopupType;
+  position?: "topCenter" | "bottomRight";
   autoCloseDelay?: number;
   onClose?: () => void;
 }
@@ -37,10 +45,25 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
   const showPopup = (data: PopupData) => setPopupData(data);
   const hidePopup = () => setPopupData(null);
 
+  useEffect(() => {
+    setGlobalApiErrorHandler((message) =>
+      showPopup({ message, type: POPUP_TYPE.ERROR }),
+    );
+    return () => setGlobalApiErrorHandler(null);
+  }, []);
+
   return (
     <PopupContext.Provider value={{ showPopup, hidePopup }}>
       {children}
-      {popupData && <GameResultPopup {...popupData} onClose={hidePopup} />}
+      {popupData && (
+        <GameResultPopup
+          {...popupData}
+          onClose={() => {
+            hidePopup();
+            popupData.onClose?.();
+          }}
+        />
+      )}
     </PopupContext.Provider>
   );
 };

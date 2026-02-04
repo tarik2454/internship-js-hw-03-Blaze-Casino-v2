@@ -1,3 +1,5 @@
+//
+
 const RARITIES = [
   "common",
   "uncommon",

@@ -2,7 +2,13 @@
 
 import { useState, useCallback } from "react";
 import { useCurrentUser } from "@/config-api/user/useUser";
-import { SettingsPanelProps } from "../types";
+import {
+  SettingsPanelProps,
+  MinesGridSize,
+  MinesMineAmount,
+  DEFAULT_MINES_GRID_SIZE,
+  DEFAULT_MINES_MINE_AMOUNT,
+} from "../types";
 import type {
   RiskLevel,
   LinesCount,
@@ -11,25 +17,35 @@ import type {
 
 export function useSettingsPanel({
   showPlinkoOptions,
+  showMinesOptions,
   onPlaceBet,
   onCashout,
   riskLevel: propsRisk,
   linesCount: propsLines,
   ballsCount: propsBalls,
+  gridSize: propsGridSize,
+  mineAmount: propsMineAmount,
   onRiskChange,
   onLinesChange,
   onBallsChange,
+  onGridSizeChange,
+  onMineAmountChange,
 }: Pick<
   SettingsPanelProps,
   | "showPlinkoOptions"
+  | "showMinesOptions"
   | "onPlaceBet"
   | "onCashout"
   | "riskLevel"
   | "linesCount"
   | "ballsCount"
+  | "gridSize"
+  | "mineAmount"
   | "onRiskChange"
   | "onLinesChange"
   | "onBallsChange"
+  | "onGridSizeChange"
+  | "onMineAmountChange"
 >) {
   const { data: user } = useCurrentUser();
   const [amount, setAmount] = useState<number>(10);
@@ -40,14 +56,22 @@ export function useSettingsPanel({
   const [localRisk, setLocalRisk] = useState<RiskLevel>("medium");
   const [localLines, setLocalLines] = useState<LinesCount>(12);
   const [localBalls, setLocalBalls] = useState<BallsCount>(1);
+  const [localGridSize, setLocalGridSize] =
+    useState<MinesGridSize>(DEFAULT_MINES_GRID_SIZE);
+  const [localMineAmount, setLocalMineAmount] =
+    useState<MinesMineAmount>(DEFAULT_MINES_MINE_AMOUNT);
 
   const riskLevel = propsRisk ?? localRisk;
   const linesCount = propsLines ?? localLines;
   const ballsCount = propsBalls ?? localBalls;
+  const gridSize = propsGridSize ?? localGridSize;
+  const mineAmount = propsMineAmount ?? localMineAmount;
 
   const setRiskLevel = onRiskChange ?? setLocalRisk;
   const setLinesCount = onLinesChange ?? setLocalLines;
   const setBallsCount = onBallsChange ?? setLocalBalls;
+  const setGridSize = onGridSizeChange ?? setLocalGridSize;
+  const setMineAmount = onMineAmountChange ?? setLocalMineAmount;
 
   const handleAmountChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +119,7 @@ export function useSettingsPanel({
         linesCount,
         ballsCount,
       }),
+      ...(showMinesOptions && { gridSize, mineAmount }),
     });
   }, [
     autoCashout,
@@ -102,9 +127,12 @@ export function useSettingsPanel({
     isAuto,
     onPlaceBet,
     showPlinkoOptions,
+    showMinesOptions,
     riskLevel,
     linesCount,
     ballsCount,
+    gridSize,
+    mineAmount,
   ]);
 
   const handleCashout = useCallback(async () => {
@@ -125,6 +153,8 @@ export function useSettingsPanel({
     riskLevel,
     linesCount,
     ballsCount,
+    gridSize,
+    mineAmount,
     handleAmountChange,
     handleHalf,
     handleDouble,
@@ -136,5 +166,7 @@ export function useSettingsPanel({
     setRiskLevel,
     setLinesCount,
     setBallsCount,
+    setGridSize,
+    setMineAmount,
   };
 }

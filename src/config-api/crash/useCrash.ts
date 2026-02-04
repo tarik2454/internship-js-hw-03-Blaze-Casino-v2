@@ -13,7 +13,7 @@ export function useCrashBet() {
   const queryClient = useQueryClient();
 
   return useMutation<CrashBetResponse, ApiError, CrashBetRequest>({
-    mutationFn: (betData: CrashBetRequest) => crashApi.postBet(betData),
+    mutationFn: (body: CrashBetRequest) => crashApi.postBet(body),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.crash.userHistory(),

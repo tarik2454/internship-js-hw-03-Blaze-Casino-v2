@@ -1,6 +1,9 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+//
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError } from "../error.types";
-import { queryKeyFactories } from "../keys";
+import { queryKeys, queryKeyFactories } from "../keys";
+import type { CurrentUserResponse } from "../user/user.types";
 import { casesApi } from "./cases.api";
 import {
   CaseOpeningResponse,
@@ -25,6 +28,8 @@ export function useCase(id: string) {
 }
 
 export function useOpenCase() {
+  const queryClient = useQueryClient();
+
   return useMutation<
     CaseOpeningResponse,
     ApiError,
@@ -35,5 +40,10 @@ export function useOpenCase() {
   >({
     mutationFn: ({ id, clientSeed }) =>
       casesApi.postOpenCase(id, { clientSeed }),
+    onSuccess: (response) => {
+      queryClient.setQueryData<CurrentUserResponse>(queryKeys.user, (old) =>
+        old ? { ...old, balance: response.newBalance } : old,
+      );
+    },
   });
 }
