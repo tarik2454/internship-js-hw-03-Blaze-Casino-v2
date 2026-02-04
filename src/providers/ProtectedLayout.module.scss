@@ -1,0 +1,60 @@
+@use "@/styles/tokens" as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--color-bg-primary); // consistent with body theme
+  color: var(--color-red-21);
+}
+
+.content {
+  max-width: 28rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  text-align: center;
+}
+
+.title {
+  color: var(
+    --color-text-primary
+  ); // generic title color, error message below can be red
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.message {
+  margin-top: 0.5rem;
+  color: var(--color-red-21); // make the error message red
+}
+
+.hint {
+  margin-top: 0.75rem;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+.code {
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.25rem;
+  background-color: rgba(255, 255, 255, 0.1); // slightly lighter for dark mode
+  font-family: monospace;
+}
+
+.retryButton {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  background-color: var(--color-violet-ff);
+  color: var(--color-white);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
