@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userApi } from "./user.api";
-import { queryKeys } from "../keys";
+import { queryKeyFactories } from "../keys";
 import { ApiError } from "../error.types";
 import {
   CurrentUserResponse,
@@ -11,7 +11,7 @@ import {
 
 export function useCurrentUser() {
   return useQuery<CurrentUserResponse, ApiError>({
-    queryKey: queryKeys.user,
+    queryKey: queryKeyFactories.user.current(),
     queryFn: () => userApi.getCurrentUser(),
     retry: false,
   });
@@ -30,7 +30,7 @@ export function useUpdateCurrentUser() {
   return useMutation<UpdateUserResponse, ApiError, UpdateUserRequest>({
     mutationFn: (dto) => userApi.updateCurrentUser(dto),
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.user, data);
+      queryClient.setQueryData(queryKeyFactories.user.current(), data);
     },
   });
 }

@@ -22,7 +22,7 @@ export function useCrashBet() {
         queryKey: queryKeyFactories.crash.getCurrent(),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.user,
+        queryKey: queryKeyFactories.user.current(),
       });
     },
   });
@@ -48,7 +48,7 @@ export function useCrashCashout() {
         queryKey: queryKeyFactories.crash.getCurrent(),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.user,
+        queryKey: queryKeyFactories.user.current(),
       });
     },
   });

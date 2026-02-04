@@ -3,7 +3,7 @@ import ProtectedLayout from "../../providers/ProtectedLayout";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "../../providers/getQueryClient";
 import { userApi } from "@/config-api/user/user.api";
-import { queryKeys } from "@/config-api/keys";
+import { queryKeyFactories } from "@/config-api/keys";
 import { cookies } from "next/headers";
 
 export default async function PortalLayout({
@@ -16,7 +16,7 @@ export default async function PortalLayout({
   const token = cookieStore.get("accessToken")?.value;
 
   await queryClient.prefetchQuery({
-    queryKey: queryKeys.user,
+    queryKey: queryKeyFactories.user.current(),
     queryFn: () => userApi.getCurrentUser(token),
   });
 

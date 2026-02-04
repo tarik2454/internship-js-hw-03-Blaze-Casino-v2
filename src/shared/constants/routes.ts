@@ -9,4 +9,5 @@ export const ROUTES = {
   CASE_DETAIL: (id: string) => `/cases/${id}`,
   MINES: "/mines",
   PLINKO: "/plinko",
+  BONUS: "/bonus",
 } as const;

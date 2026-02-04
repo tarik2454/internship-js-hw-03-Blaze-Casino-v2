@@ -39,8 +39,9 @@ export function useOpenCase() {
     mutationFn: ({ id, clientSeed }) =>
       casesApi.postOpenCase(id, { clientSeed }),
     onSuccess: (response) => {
-      queryClient.setQueryData<CurrentUserResponse>(queryKeys.user, (old) =>
-        old ? { ...old, balance: response.newBalance } : old,
+      queryClient.setQueryData<CurrentUserResponse>(
+        queryKeyFactories.user.current(),
+        (old) => (old ? { ...old, balance: response.newBalance } : old),
       );
     },
   });

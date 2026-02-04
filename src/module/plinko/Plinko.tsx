@@ -7,7 +7,7 @@ import { Section } from "@/shared/components/Section";
 import { Container } from "@/shared/components/Container";
 import { SettingsPanel } from "@/module/settings-panel/SettingsPanel";
 import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
-import { queryKeys } from "@/config-api/keys";
+import { queryKeyFactories } from "@/config-api/keys";
 import type {
   RiskLevel,
   LinesCount,
@@ -92,17 +92,20 @@ export function Plinko() {
       const currentBalls = data.ballsCount || ballsCount;
 
       const previousUserData = queryClient.getQueryData<CurrentUserResponse>(
-        queryKeys.user,
+        queryKeyFactories.user.current(),
       );
 
       if (previousUserData) {
-        queryClient.setQueryData<CurrentUserResponse>(queryKeys.user, (old) => {
-          if (!old) return old;
-          return {
-            ...old,
-            balance: old.balance - data.amount * currentBalls,
-          };
-        });
+        queryClient.setQueryData<CurrentUserResponse>(
+          queryKeyFactories.user.current(),
+          (old) => {
+            if (!old) return old;
+            return {
+              ...old,
+              balance: old.balance - data.amount * currentBalls,
+            };
+          },
+        );
       }
 
       postBet(
@@ -141,7 +144,10 @@ export function Plinko() {
           },
           onError: (error) => {
             if (previousUserData) {
-              queryClient.setQueryData(queryKeys.user, previousUserData);
+              queryClient.setQueryData(
+                queryKeyFactories.user.current(),
+                previousUserData,
+              );
             }
             toast.error(error.message || "Failed to place bet");
           },

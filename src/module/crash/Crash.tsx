@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys, queryKeyFactories } from "@/config-api/keys";
+import { queryKeyFactories } from "@/config-api/keys";
 import { Container } from "@/shared/components/Container";
 import { Section } from "@/shared/components/Section";
 import { SettingsPanel, StatItem } from "@/module/settings-panel/SettingsPanel";
@@ -106,7 +106,9 @@ export function Crash() {
         position: "topCenter",
         resultAmount: lastBetAmount * (activeAutoCashout - 1),
       });
-      queryClient.invalidateQueries({ queryKey: queryKeys.user });
+      queryClient.invalidateQueries({
+        queryKey: queryKeyFactories.user.current(),
+      });
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.crash.getCurrent(),
       });

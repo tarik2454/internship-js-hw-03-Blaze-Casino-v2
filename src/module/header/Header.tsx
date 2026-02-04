@@ -78,26 +78,28 @@ export function Header() {
                       : "0"}
                   </span>
                 </div>
-                {currentUserAvatar ? (
-                  <Image
-                    src={currentUserAvatar}
-                    alt="User Avatar"
-                    width={40}
-                    height={40}
-                    className={styles.userAvatar}
-                  />
-                ) : (
-                  <Image
-                    src="/images/header/user.svg"
-                    alt="User Avatar"
-                    width={32}
-                    height={32}
-                  />
-                )}
+                <Link href={ROUTES.PROFILE} className={styles.profileLink}>
+                  {currentUserAvatar ? (
+                    <Image
+                      src={currentUserAvatar}
+                      alt="User Avatar"
+                      width={40}
+                      height={40}
+                      className={styles.userAvatar}
+                    />
+                  ) : (
+                    <Image
+                      src="/images/header/user.svg"
+                      alt="User Avatar"
+                      width={32}
+                      height={32}
+                    />
+                  )}
+                </Link>
               </div>
 
               <div className={styles.groupButtons}>
-                <Button className={styles.profileButton}>
+                <Button className={styles.settingsButton}>
                   <SettingProfileIcon />
                 </Button>
                 <Button

@@ -6,7 +6,7 @@ import styles from "./OpeningResult.module.scss";
 import { CaseOpeningResponse } from "@/config-api/cases/cases.types";
 import { Button } from "@/shared/components/Button";
 import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@/config-api/keys";
+import { queryKeyFactories } from "@/config-api/keys";
 import { CurrentUserResponse } from "@/config-api/user/user.types";
 import { useUpdateCurrentUser } from "@/config-api/user/useUser";
 import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
@@ -26,7 +26,9 @@ export function OpeningResult({
   const { id, name, value, rarity, image } = openingResult.item;
 
   const handleSell = () => {
-    const old = queryClient.getQueryData<CurrentUserResponse>(queryKeys.user);
+    const old = queryClient.getQueryData<CurrentUserResponse>(
+      queryKeyFactories.user.current(),
+    );
     if (!old || sold) return;
 
     updateUser(

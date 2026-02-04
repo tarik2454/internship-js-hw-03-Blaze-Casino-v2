@@ -21,7 +21,9 @@ export function useMinesStart() {
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.mines.active(),
       });
-      queryClient.invalidateQueries({ queryKey: queryKeys.user });
+      queryClient.invalidateQueries({
+        queryKey: queryKeyFactories.user.current(),
+      });
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.mines.userHistory(10, 0),
       });
@@ -39,7 +41,9 @@ export function useMinesReveal() {
         queryClient.invalidateQueries({
           queryKey: queryKeyFactories.mines.active(),
         });
-        queryClient.invalidateQueries({ queryKey: queryKeys.user });
+        queryClient.invalidateQueries({
+          queryKey: queryKeyFactories.user.current(),
+        });
         queryClient.invalidateQueries({
           queryKey: queryKeyFactories.mines.userHistory(10, 0),
         });
@@ -64,7 +68,9 @@ export function useMinesReveal() {
             };
           },
         );
-        queryClient.invalidateQueries({ queryKey: queryKeys.user });
+        queryClient.invalidateQueries({
+          queryKey: queryKeyFactories.user.current(),
+        });
       }
     },
   });
@@ -79,7 +85,9 @@ export function useMinesCashout() {
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.mines.active(),
       });
-      queryClient.invalidateQueries({ queryKey: queryKeys.user });
+      queryClient.invalidateQueries({
+        queryKey: queryKeyFactories.user.current(),
+      });
       queryClient.invalidateQueries({
         queryKey: queryKeyFactories.mines.userHistory(10, 0),
       });

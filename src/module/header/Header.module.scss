@@ -84,7 +84,8 @@
   }
 }
 
-.profileButton {
+.settingsButton {
+  @include flexCenter;
   padding: 8px;
 }
 

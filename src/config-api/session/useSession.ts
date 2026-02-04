@@ -1,7 +1,7 @@
 import { Query, useMutation, useQueryClient } from "@tanstack/react-query";
 import { sessionApi } from "./session.api";
 import { LoginSchemaDto, RegisterSchemaDto } from "@/module/auth/auth.schema";
-import { queryKeys } from "@/config-api/keys";
+import { queryKeys, queryKeyFactories } from "@/config-api/keys";
 import { ApiError } from "@/config-api/error.types";
 import { LoginResponse, RegisterResponse } from "./session.types";
 
@@ -28,7 +28,7 @@ export function useLogout() {
 
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.user,
+        queryKey: queryKeyFactories.user.current(),
       });
 
       queryClient.removeQueries({
