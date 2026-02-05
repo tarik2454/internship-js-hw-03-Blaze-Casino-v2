@@ -1,5 +1,5 @@
 import { cx } from "@/shared/utils/classNames";
-import { MouseEventHandler, ReactNode } from "react";
+import { forwardRef, MouseEventHandler, ReactNode } from "react";
 import styles from "./Button.module.scss";
 
 interface ButtonProps {
@@ -17,30 +17,36 @@ const variantClassesMap = {
   yellowGradient: styles.yellowGradient,
 };
 
-export function Button({
-  ariaLabel = "",
-  children,
-  className = "",
-  disabled = false,
-  type = "button",
-  stylesVariant,
-  onClick,
-  ...props
-}: ButtonProps) {
-  return (
-    <button
-      aria-label={ariaLabel}
-      type={type}
-      className={cx(
-        styles.button,
-        variantClassesMap[stylesVariant as keyof typeof variantClassesMap],
-        className,
-      )}
-      onClick={onClick}
-      disabled={disabled}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-}
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  function Button(
+    {
+      ariaLabel = "",
+      children,
+      className = "",
+      disabled = false,
+      type = "button",
+      stylesVariant,
+      onClick,
+      ...props
+    },
+    ref,
+  ) {
+    return (
+      <button
+        ref={ref}
+        aria-label={ariaLabel}
+        type={type}
+        className={cx(
+          styles.button,
+          variantClassesMap[stylesVariant as keyof typeof variantClassesMap],
+          className,
+        )}
+        onClick={onClick}
+        disabled={disabled}
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  },
+);

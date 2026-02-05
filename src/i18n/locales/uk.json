@@ -1,0 +1,153 @@
+{
+  "common": {
+    "loading": "Завантаження...",
+    "error": "Помилка",
+    "unknown": "Невідомо"
+  },
+  "auth": {
+    "title": "Blaze Casino",
+    "welcomeBack": "З поверненням!",
+    "username": "Ім'я користувача",
+    "usernamePlaceholder": "Введіть ім'я користувача",
+    "email": "Електронна пошта",
+    "emailPlaceholder": "Введіть електронну пошту",
+    "password": "Пароль",
+    "passwordPlaceholder": "Введіть пароль",
+    "login": "Увійти",
+    "register": "Зареєструватися",
+    "noAccount": "Немає акаунту? Зареєструватися",
+    "hasAccount": "Вже є акаунт? Увійти",
+    "loginSuccess": "Вхід успішний",
+    "registerSuccess": "Реєстрація успішна. Будь ласка, увійдіть.",
+    "usernameMinLength": "Ім'я користувача повинно містити щонайменше 2 символи",
+    "invalidEmail": "Невірна адреса електронної пошти"
+  },
+  "header": {
+    "logout": "Вийти",
+    "logoutSuccess": "Вихід успішний",
+    "inventory": "Інвентар",
+    "settings": "Налаштування"
+  },
+  "language": {
+    "english": "English",
+    "ukrainian": "Українська"
+  },
+  "bonus": {
+    "title": "Хвилинний бонус",
+    "bonusAmount": "Сума бонусу",
+    "nextBonusIn": "Наступний бонус через:",
+    "availableNow": "Доступно зараз!",
+    "baseAmount": "Базова сума",
+    "wagerBonus": "Бонус за ставки",
+    "gamesBonus": "Бонус за ігри",
+    "nextClaimAt": "Наступне отримання",
+    "claimBonus": "Отримати бонус"
+  },
+  "profile": {
+    "title": "Профіль",
+    "totalGame": "Всього ігор",
+    "win": "Виграші",
+    "loss": "Програші",
+    "location": "Місцезнаходження",
+    "errorLoading": "Помилка завантаження профілю"
+  },
+  "chat": {
+    "online": "онлайн",
+    "friends": "друзі",
+    "messagePlaceholder": "Напишіть повідомлення..."
+  },
+  "leaderboard": {
+    "title": "Таблиця лідерів",
+    "topPlayers": "Топ гравці",
+    "games": "ігор",
+    "winRate": "перемог"
+  },
+  "games": {
+    "freePlay": "Безкоштовна гра",
+    "tags": {
+      "top": "Топ",
+      "popular": "Популярне",
+      "hot": "Гаряче",
+      "new": "Нове"
+    },
+    "crash": {
+      "name": "Краш",
+      "description": "Спостерігай за зростанням множника і забирай виграш"
+    },
+    "cases": {
+      "name": "Кейси",
+      "description": "Відкривай кейси та вигравай випадкові нагороди"
+    },
+    "mines": {
+      "name": "Міни",
+      "description": "Уникай мін та збирай більші нагороди"
+    },
+    "plinko": {
+      "name": "Плінко",
+      "description": "Кинь кульку, дивись як вона стрибає, та вигравай призи"
+    }
+  },
+  "crash": {
+    "configuration": "Налаштування Краш",
+    "currentMultiplier": "Поточний множник",
+    "potentialWin": "Потенційний виграш",
+    "currentPayout": "Поточна виплата",
+    "waitingForBets": "Очікування ставок...",
+    "youWon": "Ви виграли",
+    "youLost": "Ви програли"
+  },
+  "mines": {
+    "configuration": "Налаштування Мін",
+    "currentMultiplier": "Поточний множник",
+    "winAmount": "Сума виграшу",
+    "mineAmount": "Кількість мін",
+    "gridSize": "Розмір поля",
+    "hitMine": "Ви потрапили на міну! Гра закінчена.",
+    "youWon": "Ви виграли"
+  },
+  "plinko": {
+    "configuration": "Налаштування Плінко",
+    "risk": "Ризик",
+    "balls": "Кульки",
+    "row": "Ряд",
+    "youWon": "Ви виграли",
+    "youLost": "Ви програли",
+    "failedToBet": "Не вдалося зробити ставку"
+  },
+  "cases": {
+    "caseContent": "Вміст кейсу",
+    "openCase": "Відкрити кейс",
+    "withoutAnimation": "без анімації",
+    "skipAnimation": "пропустити анімацію",
+    "sellFor": "Продати за",
+    "soldFor": "Продано за",
+    "tryAgain": "Спробувати знову",
+    "notFound": "Кейс не знайдено"
+  },
+  "settings": {
+    "betAmount": "Сума ставки",
+    "autoCashout": "Авто-вивід (опціонально)",
+    "autoCashoutPlaceholder": "напр. 2.00",
+    "placeBet": "Зробити ставку",
+    "cashout": "Забрати",
+    "cashingOut": "Виводжу..."
+  },
+  "history": {
+    "title": "Історія ігор",
+    "time": "Час",
+    "case": "Кейс",
+    "item": "Предмет",
+    "rarity": "Рідкість",
+    "value": "Вартість",
+    "profit": "Прибуток",
+    "bet": "Ставка",
+    "multiplier": "Множник",
+    "winAmount": "Сума виграшу",
+    "status": "Статус",
+    "lines": "Лінії",
+    "risk": "Ризик",
+    "win": "Виграш",
+    "won": "виграв",
+    "lost": "програв"
+  }
+}

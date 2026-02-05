@@ -4,6 +4,7 @@ import Satoshi from "next/font/local";
 import "../styles/globals.scss";
 import { ReactQueryProvider } from "../providers/ReactQueryProvider";
 import { PopupProvider } from "../providers/PopupProvider";
+import { LocaleProvider } from "../providers/LocaleProvider";
 
 const satoshi900 = Satoshi({
   src: [
@@ -48,7 +49,9 @@ export default function RootLayout({
         className={`${inter.variable} ${manrope.variable} ${satoshi900.variable}`}
       >
         <ReactQueryProvider>
-          <PopupProvider>{children}</PopupProvider>
+          <LocaleProvider>
+            <PopupProvider>{children}</PopupProvider>
+          </LocaleProvider>
         </ReactQueryProvider>
       </body>
     </html>

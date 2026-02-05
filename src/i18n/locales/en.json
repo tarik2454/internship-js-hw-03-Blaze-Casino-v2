@@ -1,0 +1,153 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "unknown": "Unknown"
+  },
+  "auth": {
+    "title": "Blaze Casino",
+    "welcomeBack": "Welcome back!",
+    "username": "Username",
+    "usernamePlaceholder": "Enter username",
+    "email": "Email",
+    "emailPlaceholder": "Enter email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password",
+    "login": "Login",
+    "register": "Register",
+    "noAccount": "Don't have an account? Register",
+    "hasAccount": "Already have an account? Login",
+    "loginSuccess": "Login successful",
+    "registerSuccess": "Registration successful. Please login.",
+    "usernameMinLength": "Username must be at least 2 characters",
+    "invalidEmail": "Invalid email address"
+  },
+  "header": {
+    "logout": "Logout",
+    "logoutSuccess": "Logout successful",
+    "inventory": "Inventory",
+    "settings": "Settings"
+  },
+  "language": {
+    "english": "English",
+    "ukrainian": "Українська"
+  },
+  "bonus": {
+    "title": "Minute Bonus",
+    "bonusAmount": "Bonus Amount",
+    "nextBonusIn": "Next bonus in:",
+    "availableNow": "Available now!",
+    "baseAmount": "Base Amount",
+    "wagerBonus": "Wager Bonus",
+    "gamesBonus": "Games Bonus",
+    "nextClaimAt": "Next Claim At",
+    "claimBonus": "Claim Bonus"
+  },
+  "profile": {
+    "title": "Profile",
+    "totalGame": "Total game",
+    "win": "Win",
+    "loss": "Loss",
+    "location": "Location",
+    "errorLoading": "Error loading profile"
+  },
+  "chat": {
+    "online": "online",
+    "friends": "friends",
+    "messagePlaceholder": "Write a message..."
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "topPlayers": "Top players",
+    "games": "games",
+    "winRate": "win"
+  },
+  "games": {
+    "freePlay": "Free play",
+    "tags": {
+      "top": "Top",
+      "popular": "Popular",
+      "hot": "Hot",
+      "new": "New"
+    },
+    "crash": {
+      "name": "Crash",
+      "description": "Watch the multiplier rise and cash out before it's gone"
+    },
+    "cases": {
+      "name": "Cases",
+      "description": "Open cases and win random rewards"
+    },
+    "mines": {
+      "name": "Mines",
+      "description": "Avoid the mines and collect bigger rewards"
+    },
+    "plinko": {
+      "name": "Plinko",
+      "description": "Drop the ball, watch it bounce, and win prizes"
+    }
+  },
+  "crash": {
+    "configuration": "Crash Configuration",
+    "currentMultiplier": "Current Multiplier",
+    "potentialWin": "Potential Win",
+    "currentPayout": "Current Payout",
+    "waitingForBets": "Waiting for bets...",
+    "youWon": "You won",
+    "youLost": "You lost"
+  },
+  "mines": {
+    "configuration": "Mines Configuration",
+    "currentMultiplier": "Current Multiplier",
+    "winAmount": "Win Amount",
+    "mineAmount": "Mine Amount",
+    "gridSize": "Grid Size",
+    "hitMine": "You hit a mine! Game over.",
+    "youWon": "You won"
+  },
+  "plinko": {
+    "configuration": "Plinko Configuration",
+    "risk": "Risk",
+    "balls": "Balls",
+    "row": "Row",
+    "youWon": "You won",
+    "youLost": "You lost",
+    "failedToBet": "Failed to place bet"
+  },
+  "cases": {
+    "caseContent": "Case content",
+    "openCase": "Open Case",
+    "withoutAnimation": "without animation",
+    "skipAnimation": "skip animation",
+    "sellFor": "Sell for",
+    "soldFor": "Sold for",
+    "tryAgain": "Try again",
+    "notFound": "Case not found"
+  },
+  "settings": {
+    "betAmount": "Bet Amount",
+    "autoCashout": "Auto Cashout (optional)",
+    "autoCashoutPlaceholder": "e.g 2.00",
+    "placeBet": "Place Bet",
+    "cashout": "Cashout",
+    "cashingOut": "Cashing out..."
+  },
+  "history": {
+    "title": "Game history",
+    "time": "Time",
+    "case": "Case",
+    "item": "Item",
+    "rarity": "Rarity",
+    "value": "Value",
+    "profit": "Profit",
+    "bet": "Bet",
+    "multiplier": "Multiplier",
+    "winAmount": "Win Amount",
+    "status": "Status",
+    "lines": "Lines",
+    "risk": "Risk",
+    "win": "Win",
+    "won": "won",
+    "lost": "lost"
+  }
+}

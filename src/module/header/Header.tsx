@@ -4,10 +4,9 @@ import { Container } from "@/shared/components/Container";
 import Image from "next/image";
 import styles from "./Header.module.scss";
 import { NavToggleIcon } from "@/shared/icons/nav-toggle";
-import { useState } from "react";
-import { MobileMenu } from "./mobile-menu/MobileMenu";
+import { useRef, useState } from "react";
+import { MobileMenu } from "./components/MobileMenu";
 import { Button } from "@/shared/components/Button";
-import { SettingProfileIcon } from "@/shared/icons/setting-profile";
 import { LogoutIcon } from "@/shared/icons/logout";
 import { useLogout } from "@/config-api/session/useSession";
 import { usePopup } from "@/providers/PopupProvider";
@@ -17,14 +16,22 @@ import { useLeaderboard } from "@/config-api/leaderboard/useLeaderboard";
 import { Logo } from "@/shared/components/Logo";
 import { useCurrentUser } from "@/config-api/user/useUser";
 import Link from "next/link";
+import { useLocale, type Locale } from "@/providers/LocaleProvider";
+import { SettingsIcon } from "@/shared/icons/settings";
+import { LanguageMenu } from "./components/LanguageMenu";
 
 export function Header() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+
   const { showPopup } = usePopup();
   const router = useRouter();
   const { mutate: logoutMutation } = useLogout();
   const { data: leaderboardData } = useLeaderboard();
   const { data: userData } = useCurrentUser();
+  const { locale, setLocale } = useLocale();
+
+  const settingsButtonRef = useRef<HTMLButtonElement>(null);
 
   const currentUserAvatar =
     userData?.avatarURL || leaderboardData?.currentUser?.avatarURL;
@@ -42,6 +49,15 @@ export function Header() {
         router.push(ROUTES.LOGIN);
       },
     });
+  };
+
+  const handleToggleLanguageMenu = () => {
+    setIsLanguageMenuOpen((prev) => !prev);
+  };
+
+  const handleSelectLanguage = (lang: Locale) => {
+    setLocale(lang);
+    setIsLanguageMenuOpen(false);
   };
 
   return (
@@ -99,9 +115,24 @@ export function Header() {
               </div>
 
               <div className={styles.groupButtons}>
-                <Button className={styles.settingsButton}>
-                  <SettingProfileIcon />
-                </Button>
+                <div className={styles.settingsWrapper}>
+                  <Button
+                    ref={settingsButtonRef}
+                    className={styles.settingsButton}
+                    onClick={handleToggleLanguageMenu}
+                  >
+                    <SettingsIcon />
+                  </Button>
+                  {isLanguageMenuOpen && (
+                    <LanguageMenu
+                      currentLocale={locale}
+                      onSelect={handleSelectLanguage}
+                      onClose={() => setIsLanguageMenuOpen(false)}
+                      triggerRef={settingsButtonRef}
+                    />
+                  )}
+                </div>
+
                 <Button
                   className={styles.logoutButton}
                   stylesVariant="yellowGradient"

@@ -1,43 +1,41 @@
 import { ROUTES } from "@/shared/constants/routes";
 
-export enum GameTags {
-  TOP = "Top",
-  POPULAR = "Popular",
-  HOT = "Hot",
-  NEW = "New",
-}
+export type GameKey = "crash" | "cases" | "mines" | "plinko";
+export type TagKey = "top" | "popular" | "hot" | "new";
 
-export const GAMES_LIST = [
+export const GAMES_LIST: {
+  id: number;
+  key: GameKey;
+  backgroundImage: string;
+  tag: TagKey;
+  href: string;
+}[] = [
   {
     id: 1,
-    name: "Crash",
-    description: "Watch the multiplier rise and cash out before it’s gone",
+    key: "crash",
     backgroundImage: "/images/list-games/crash.png",
-    tag: GameTags.TOP,
+    tag: "top",
     href: ROUTES.CRASH,
   },
   {
     id: 2,
-    name: "Cases",
-    description: "Open cases and win random rewards",
+    key: "cases",
     backgroundImage: "/images/list-games/case.png",
-    tag: GameTags.POPULAR,
+    tag: "popular",
     href: ROUTES.CASES,
   },
   {
     id: 3,
-    name: "Mines",
-    description: "Avoid the mines and collect bigger rewards",
+    key: "mines",
     backgroundImage: "/images/list-games/mines.png",
-    tag: GameTags.HOT,
+    tag: "hot",
     href: ROUTES.MINES,
   },
   {
     id: 4,
-    name: "Plinko",
-    description: "Drop the ball, watch it bounce, and win prizes",
+    key: "plinko",
     backgroundImage: "/images/list-games/plinko.png",
-    tag: GameTags.NEW,
+    tag: "new",
     href: ROUTES.PLINKO,
   },
 ];

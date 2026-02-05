@@ -55,7 +55,7 @@ export default function Profile() {
               Location
               <span>
                 <Image
-                  src="/images/profile/location.svg"
+                  src="/images/profile/ro.svg"
                   alt="Location"
                   width={32}
                   height={23}
