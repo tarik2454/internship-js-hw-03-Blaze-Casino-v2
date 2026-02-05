@@ -1,10 +1,10 @@
 import { AxiosRequestConfig } from "axios";
 
 /**
- * Создаёт конфигурацию для axios запроса с опциональной авторизацией
- * @param token - Опциональный токен авторизации
- * @param additionalConfig - Дополнительная конфигурация (params, headers и т.д.)
- * @returns Конфигурация для axios запроса
+ * Creates a configuration for an axios request with optional authorization
+ * @param token - Optional authorization token
+ * @param additionalConfig - Additional configuration (params, headers, etc.)
+ * @returns Configuration for axios request
  */
 export function createAuthConfig(
   token?: string,
