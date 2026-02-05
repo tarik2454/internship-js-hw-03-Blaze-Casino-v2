@@ -8,6 +8,21 @@ interface RetryableRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
+let isRefreshing = false;
+let failedQueue: any[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+
+  failedQueue = [];
+};
+
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
@@ -39,17 +54,32 @@ api.interceptors.response.use(
       error.response?.status === 401 &&
       !originalRequest._retry
     ) {
-      originalRequest._retry = true;
-
       if (typeof window === "undefined") {
         throw createApiException("Session expired. Please login again.", 401);
       }
+
+      if (isRefreshing) {
+        return new Promise(function (resolve, reject) {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return api(originalRequest);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
 
       const refreshToken = getCookie("refreshToken");
       if (!refreshToken) {
         deleteCookie("accessToken");
         deleteCookie("refreshToken");
         window.location.href = ROUTES.LOGIN;
+        isRefreshing = false;
         throw createApiException("Session expired. Please login again.", 401);
       }
 
@@ -59,14 +89,23 @@ api.interceptors.response.use(
           { refreshToken },
         );
 
-        setCookie("accessToken", data.accessToken);
+        const newAccessToken = data.accessToken;
+
+        setCookie("accessToken", newAccessToken);
         if (data.refreshToken) {
           setCookie("refreshToken", data.refreshToken);
         }
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+
+        api.defaults.headers.common["Authorization"] =
+          `Bearer ${newAccessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        processQueue(null, newAccessToken);
 
         return api(originalRequest);
       } catch (refreshError) {
+        processQueue(refreshError, null);
+
         if (axios.isAxiosError(refreshError)) {
           const status = refreshError.response?.status;
           if (status === 401 || status === 403) {
@@ -88,6 +127,8 @@ api.interceptors.response.use(
           "Failed to refresh session. Please try again later.",
           refreshError instanceof Error ? 500 : undefined,
         );
+      } finally {
+        isRefreshing = false;
       }
     }
 
