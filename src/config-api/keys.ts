@@ -15,10 +15,12 @@ export const queryKeys = {
   plinko: ["plinko"],
   cases: ["cases"],
   mines: ["mines"],
+  bonus: ["bonus"],
 };
 
 export const queryKeyFactories = {
   user: {
+    current: () => queryKeys.user,
     detail: (id: string) => [...queryKeys.user, id],
   },
   games: {
@@ -70,6 +72,10 @@ export const queryKeyFactories = {
       offset,
     ],
     active: () => [...queryKeys.mines, "active"],
+  },
+  bonus: {
+    status: () => [...queryKeys.bonus, "status"],
+    claim: () => [...queryKeys.bonus, "claim"],
   },
 };
 

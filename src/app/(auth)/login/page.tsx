@@ -9,7 +9,7 @@ import { SESSION_MODE } from "@/config-api/session/session.constants";
 import { usePopup } from "@/providers/PopupProvider";
 import { ROUTES } from "@/shared/constants/routes";
 import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@/config-api/keys";
+import { queryKeyFactories } from "@/config-api/keys";
 
 export default function LoginPage() {
   const { mutate: handleLogin } = useLogin();
@@ -20,7 +20,9 @@ export default function LoginPage() {
   const handleSubmit = (data: LoginSchemaDto) => {
     handleLogin(data, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.user });
+        queryClient.invalidateQueries({
+          queryKey: queryKeyFactories.user.current(),
+        });
         showPopup({
           message: "Login successful",
           type: "success",

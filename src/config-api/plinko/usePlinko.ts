@@ -19,8 +19,9 @@ export function usePlinkoDrop() {
   return useMutation<PlinkoDropResponse, ApiError, PlinkoDropRequest>({
     mutationFn: (body: PlinkoDropRequest) => plinkoApi.postBet(body),
     onSuccess: (response, variables) => {
-      queryClient.setQueryData<CurrentUserResponse>(queryKeys.user, (old) =>
-        old ? { ...old, balance: response.newBalance } : old,
+      queryClient.setQueryData<CurrentUserResponse>(
+        queryKeyFactories.user.current(),
+        (old) => (old ? { ...old, balance: response.newBalance } : old),
       );
 
       const newHistoryItem: PlinkoDrop = {
