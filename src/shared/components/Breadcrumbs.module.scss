@@ -1,0 +1,32 @@
+@use "@/styles/index" as *;
+
+.wrapper {
+  display: none;
+
+  @include minWidth(xl) {
+    display: block;
+    margin-bottom: 40px;
+  }
+}
+
+.list {
+  display: flex;
+  gap: 4px;
+}
+
+.item {
+  background: linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
+  -webkit-background-clip: text;
+  display: flex;
+  align-items: center;
+  -webkit-text-fill-color: transparent;
+  gap: 4px;
+  background-clip: text;
+  line-height: 1.5;
+}
+
+.arrow,
+.separator,
+.label {
+  display: block;
+}

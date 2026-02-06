@@ -5,6 +5,7 @@ import { queryKeyFactories } from "@/config-api/keys";
 import { casesApi } from "@/config-api/cases/cases.api";
 import { cookies } from "next/headers";
 import { CaseDetail } from "@/module/case-detail/CaseDetail";
+import { Breadcrumbs } from "@/shared/components/Breadcrumbs";
 
 export default async function CaseDetailPage({
   params,

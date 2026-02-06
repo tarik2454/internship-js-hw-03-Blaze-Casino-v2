@@ -4,4 +4,12 @@
   position: relative;
   padding-top: 146px;
   padding-bottom: 54px;
+
+  @include minWidth(xl) {
+    padding-top: 120px;
+
+    &.homePage {
+      padding-top: 140px;
+    }
+  }
 }
