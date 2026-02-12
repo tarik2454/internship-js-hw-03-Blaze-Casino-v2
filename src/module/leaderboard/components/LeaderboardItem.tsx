@@ -1,6 +1,8 @@
 import Image from "next/image";
 import styles from "./LeaderboardItem.module.scss";
 import { ReactNode } from "react";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 
 interface LeaderboardItemProps {
   player: {
@@ -11,13 +13,17 @@ interface LeaderboardItemProps {
   };
   isCurrentUser: boolean;
   rank: ReactNode;
+  locale: Locale;
 }
 
 export function LeaderboardItem({
   player,
   isCurrentUser,
   rank,
+  locale,
 }: LeaderboardItemProps) {
+  const t = getTranslations(locale);
+
   return (
     <li
       key={player.username}
@@ -28,7 +34,7 @@ export function LeaderboardItem({
         <div className={styles.itemSecondBlock}>
           <span className={styles.itemName}>{player.username}</span>
           <span className={styles.itemGamesPlayed}>
-            {player.gamesPlayed} games
+            {player.gamesPlayed} {t.leaderboard.games}
           </span>
         </div>
       </div>
@@ -36,13 +42,13 @@ export function LeaderboardItem({
         <span className={styles.itemTotalWagered}>
           <Image
             src="/images/common/dollar.svg"
-            alt="Dollar"
+            alt={t.accessibility.dollar}
             width={16}
             height={16}
           />
           {Math.round(player.totalWagered)}
         </span>
-        <span className={styles.itemWinRate}>{player.winRate}% win</span>
+        <span className={styles.itemWinRate}>{player.winRate}% {t.leaderboard.winRate}</span>
       </div>
     </li>
   );

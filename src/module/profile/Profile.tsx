@@ -4,9 +4,13 @@ import { Section } from "@/shared/components/Section";
 import { Container } from "@/shared/components/Container";
 import { useCurrentUser } from "@/config-api/user/useUser";
 import Image from "next/image";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 import styles from "./Profile.module.scss";
 
 export default function Profile() {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   const { data: currentUser } = useCurrentUser();
 
   const totalWon = currentUser?.totalWon ?? 0;
@@ -24,7 +28,7 @@ export default function Profile() {
           <div className={styles.profileHeader}>
             <Image
               src={currentUser?.avatarURL ?? ""}
-              alt="User Avatar"
+              alt={t.accessibility.userAvatar}
               width={96}
               height={96}
               className={styles.profileAvatar}
@@ -34,29 +38,29 @@ export default function Profile() {
 
           <div className={styles.profileInfo}>
             <p className={styles.profileInfoItem}>
-              Total game
+              {t.profile.totalGame}
               <span className={styles.profileInfoItemValue}>
                 {currentUser?.gamesPlayed}
               </span>
             </p>
             <p className={styles.profileInfoItem}>
-              Win
+              {t.profile.win}
               <span className={styles.profileInfoItemValue}>
                 {total > 0 && `${winPercent.toFixed()}%`}
               </span>
             </p>
             <p className={styles.profileInfoItem}>
-              Loss
+              {t.profile.loss}
               <span className={styles.profileInfoItemValue}>
                 {total > 0 && `${lossPercent.toFixed()}%`}
               </span>
             </p>
             <div className={styles.profileInfoItem}>
-              Location
+              {t.profile.location}
               <span>
                 <Image
                   src="/images/profile/ro.svg"
-                  alt="Location"
+                  alt={t.accessibility.location}
                   width={32}
                   height={23}
                 />

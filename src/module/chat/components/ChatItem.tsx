@@ -6,6 +6,8 @@ import { VirtualItem, Virtualizer } from "@tanstack/react-virtual";
 import { ChatMessage } from "@/config-api/chat/chat.ws.types";
 import { CurrentUserResponse } from "@/config-api/user/user.types";
 import { cx } from "@/shared/utils/classNames";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 import styles from "./ChatItem.module.scss";
 
 interface ChatItemProps {
@@ -14,6 +16,7 @@ interface ChatItemProps {
   virtualItem: VirtualItem;
   virtualizer: Virtualizer<HTMLDivElement, Element>;
   formatTime: (iso: string) => string;
+  locale: Locale;
 }
 
 const ChatItemContent = memo(
@@ -21,11 +24,15 @@ const ChatItemContent = memo(
     msg,
     currentUser,
     formatTime,
+    locale,
   }: {
     msg: ChatMessage;
     currentUser: CurrentUserResponse | null | undefined;
     formatTime: (iso: string) => string;
+    locale: Locale;
   }) => {
+    const t = getTranslations(locale);
+
     return (
       <>
         <div className={styles.messageHeader}>
@@ -37,13 +44,13 @@ const ChatItemContent = memo(
                 : "/images/header/user.svg") ??
               "/images/header/user.svg"
             }
-            alt="User avatar"
+            alt={t.accessibility.userAvatar}
             width={44}
             height={44}
             className={styles.messageUserAvatar}
           />
           <div className={styles.messageUserName}>
-            {msg.username || currentUser?.username || "Unknown"}
+            {msg.username || currentUser?.username || t.common.unknown}
           </div>
           <div className={styles.messageTime}>{formatTime(msg.createdAt)}</div>
         </div>
@@ -61,6 +68,7 @@ export function ChatItem({
   virtualItem,
   virtualizer,
   formatTime,
+  locale,
 }: ChatItemProps) {
   "use no memo";
   const virtualizerRef = useRef(virtualizer);
@@ -94,6 +102,7 @@ export function ChatItem({
         msg={msg}
         currentUser={currentUser}
         formatTime={formatTime}
+        locale={locale}
       />
     </li>
   );

@@ -14,8 +14,12 @@ import {
   useMinesActive,
 } from "@/config-api/mines/useMines";
 import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 export function Mines() {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   const [hitMinePosition, setHitMinePosition] = useState<number | null>(null);
   const [allMinePositions, setAllMinePositions] = useState<number[]>([]);
   const [gridSize, setGridSize] = useState<MinesGridSize>(
@@ -46,17 +50,17 @@ export function Mines() {
   const computeStats = useCallback(
     (amount: number): StatItem[] => [
       {
-        label: "Current Multiplier",
+        label: t.mines.currentMultiplier,
         value: currentMultiplier,
         formatValue: (v) => `${Number(v).toFixed(2)}X`,
       },
       {
-        label: "Win Amount",
+        label: t.mines.winAmount,
         value: currentValue > 0 ? currentValue : amount * currentMultiplier,
         formatValue: (v) => `${Number(v).toFixed(2)}$`,
       },
     ],
-    [currentMultiplier, currentValue],
+    [currentMultiplier, currentValue, t],
   );
 
   const handlePlaceBet = useCallback(
@@ -86,7 +90,7 @@ export function Mines() {
             setAllMinePositions(res.minePositions);
           }
           showPopup({
-            message: "You hit a mine! Game over.",
+            message: t.mines.hitMine,
             type: POPUP_TYPE.ERROR,
             position: "topCenter",
             resultAmount: -(activeGame?.betAmount ?? 0),
@@ -104,7 +108,7 @@ export function Mines() {
         setAllMinePositions(res.minePositions);
       }
       showPopup({
-        message: `You won ${res.winAmount.toFixed(2)}$`,
+        message: `${t.mines.youWon} ${res.winAmount.toFixed(2)}$`,
         type: POPUP_TYPE.SUCCESS,
         position: "topCenter",
         resultAmount: res.winAmount - (activeGame?.betAmount ?? 0),
@@ -127,11 +131,12 @@ export function Mines() {
               allMinePositions={allMinePositions}
               onReveal={handleReveal}
               disabled={!activeGame || isGameOver || isRevealing}
+              locale={locale}
             />
           </div>
 
           <SettingsPanel
-            title="Mines Configuration"
+            title={t.mines.configuration}
             canBet={!activeGame || isGameOver}
             inputsDisabled={!!activeGame && !isGameOver}
             showAutoCashout={false}

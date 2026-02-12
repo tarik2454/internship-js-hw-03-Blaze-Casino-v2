@@ -12,8 +12,12 @@ import { useCrashSocket } from "@/config-api/crash/ws/useCrashSocket";
 import { useCrashBet } from "@/config-api/crash/useCrash";
 import { useCrashCashout } from "@/config-api/crash/useCrash";
 import { CrashGameDisplay } from "./components/CrashGameDisplay";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 export function Crash() {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   const queryClient = useQueryClient();
   const { showPopup } = usePopup();
 
@@ -46,17 +50,17 @@ export function Crash() {
   const computeStats = useCallback(
     (amount: number): StatItem[] => [
       {
-        label: "Current Multiplier",
+        label: t.crash.currentMultiplier,
         value: activeMultiplier,
         formatValue: (v) => `${Number(v).toFixed(2)}X`,
       },
       {
-        label: "Potential Win",
+        label: t.crash.potentialWin,
         value: amount * activeMultiplier,
         formatValue: (v) => `${Number(v).toFixed(2)}$`,
       },
     ],
-    [activeMultiplier],
+    [activeMultiplier, t],
   );
 
   const handleCashout = useCallback(() => {
@@ -66,7 +70,7 @@ export function Crash() {
       onSuccess: (data) => {
         setGameResult({ multiplier: data.multiplier, isWin: true });
         showPopup({
-          message: `You won ${data.winAmount.toFixed(2)}$`,
+          message: `${t.crash.youWon} ${data.winAmount.toFixed(2)}$`,
           type: POPUP_TYPE.SUCCESS,
           position: "topCenter",
           resultAmount: data.winAmount - lastBetAmount,
@@ -101,7 +105,7 @@ export function Crash() {
       setGameResult({ multiplier: activeAutoCashout, isWin: true });
       const winAmount = lastBetAmount * activeAutoCashout;
       showPopup({
-        message: `You won ${winAmount.toFixed(2)}$`,
+        message: `${t.crash.youWon} ${winAmount.toFixed(2)}$`,
         type: POPUP_TYPE.SUCCESS,
         position: "topCenter",
         resultAmount: lastBetAmount * (activeAutoCashout - 1),
@@ -140,7 +144,7 @@ export function Crash() {
     if (crashPoint && betId && !isAutoCashedOut) {
       setGameResult({ multiplier: crashPoint, isWin: false });
       showPopup({
-        message: `You lost ${lastBetAmount.toFixed(2)}$`,
+        message: `${t.crash.youLost} ${lastBetAmount.toFixed(2)}$`,
         type: POPUP_TYPE.ERROR,
         position: "topCenter",
         resultAmount: -lastBetAmount,
@@ -159,10 +163,11 @@ export function Crash() {
               elapsed={elapsed}
               gameResult={gameResult}
               isFirstLoad={isFirstLoad}
+              locale={locale}
             />
 
             <SettingsPanel
-              title="Crash Configuration"
+              title={t.crash.configuration}
               canBet={canBet}
               inputsDisabled={!!activeBetId}
               isCashoutDisabled={currentGameState !== "running" || !activeBetId}

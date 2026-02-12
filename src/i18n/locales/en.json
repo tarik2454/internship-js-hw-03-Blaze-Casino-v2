@@ -2,7 +2,8 @@
   "common": {
     "loading": "Loading...",
     "error": "Error",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "home": "Home"
   },
   "auth": {
     "title": "Blaze Casino",
@@ -103,7 +104,11 @@
     "mineAmount": "Mine Amount",
     "gridSize": "Grid Size",
     "hitMine": "You hit a mine! Game over.",
-    "youWon": "You won"
+    "youWon": "You won",
+    "youLost": "You lost",
+    "ariaMineTile": "Mine",
+    "ariaSafeTile": "Safe",
+    "ariaTile": "Tile"
   },
   "plinko": {
     "configuration": "Plinko Configuration",
@@ -122,15 +127,33 @@
     "sellFor": "Sell for",
     "soldFor": "Sold for",
     "tryAgain": "Try again",
-    "notFound": "Case not found"
+    "notFound": "Case not found",
+    "names": {
+      "Animal Case": "Animal Case",
+      "Space Case": "Space Case",
+      "Food Case": "Food Case",
+      "Sports Case": "Sports Case"
+    },
+    "rarities": {
+      "common": "Common",
+      "uncommon": "Uncommon",
+      "rare": "Rare",
+      "epic": "Epic",
+      "legendary": "Legendary",
+      "gold": "Gold"
+    }
   },
   "settings": {
     "betAmount": "Bet Amount",
+    "betAmountPlaceholder": "10.000",
     "autoCashout": "Auto Cashout (optional)",
     "autoCashoutPlaceholder": "e.g 2.00",
     "placeBet": "Place Bet",
     "cashout": "Cashout",
-    "cashingOut": "Cashing out..."
+    "cashingOut": "Cashing out...",
+    "half": "1/2",
+    "double": "x2",
+    "max": "Max"
   },
   "history": {
     "title": "Game history",
@@ -147,7 +170,40 @@
     "lines": "Lines",
     "risk": "Risk",
     "win": "Win",
-    "won": "won",
-    "lost": "lost"
+    "statuses": {
+      "won": "won",
+      "lost": "lost",
+      "cashed_out": "won"
+    },
+    "riskLevels": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "extreme": "Extreme"
+    }
+  },
+  "breadcrumbs": {
+    "home": "Home",
+    "allGames": "All games",
+    "crash": "Crash",
+    "cases": "Cases",
+    "caseDetails": "Case Details",
+    "mines": "Mines",
+    "plinko": "Plinko",
+    "profile": "Profile",
+    "bonus": "Bonus",
+    "ariaLabel": "Breadcrumb"
+  },
+  "accessibility": {
+    "chatTitle": "Chat title",
+    "userAvatar": "User Avatar",
+    "dollar": "Dollar",
+    "rocket": "Rocket",
+    "planet1": "Planet 1",
+    "planet2": "Planet 2",
+    "prize": "Prize",
+    "star": "Star",
+    "location": "Location",
+    "closeMenu": "Close menu"
   }
 }

@@ -12,12 +12,16 @@ import { useState } from "react";
 import { OpeningResult } from "./components/OpeningResult";
 import { CaseDetailItem } from "./CaseDetailItem";
 import { CaseRoulette } from "./components/CaseRoulette";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 interface CaseDetailProps {
   caseId: string;
 }
 
 export function CaseDetail({ caseId }: CaseDetailProps) {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   const [openingResult, setOpeningResult] =
     useState<CaseOpeningResponse | null>(null);
   const [isOpenResult, setIsOpenResult] = useState(false);
@@ -52,7 +56,7 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
     return (
       <Section>
         <Container>
-          <div>Loading...</div>
+          <div>{t.common.loading}</div>
         </Container>
       </Section>
     );
@@ -62,7 +66,7 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
     return (
       <Section>
         <Container>
-          <div>Case not found</div>
+          <div>{t.cases.notFound}</div>
         </Container>
       </Section>
     );
@@ -85,6 +89,7 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
             <CaseRoulette
               items={caseData.items}
               winningItem={openingResult.item}
+              locale={locale}
               onAnimationEnd={(skipped) =>
                 skipped
                   ? setRouletteDone(true)
@@ -99,6 +104,7 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
             <OpeningResult
               openingResult={openingResult}
               setIsOpenResult={handleCloseResult}
+              locale={locale}
             />
           </Container>
         </Section>
@@ -109,14 +115,14 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
               <div className={styles.GameArea}>
                 <div>
                   <h1 className={styles.caseTitle}>
-                    {caseData.name}
+                    {(t.cases.names as Record<string, string>)[caseData.name] ?? caseData.name}
                     <span className={styles.casePrice}> ${caseData.price}</span>
                   </h1>
 
                   <div className={styles.caseImageWrapper}>
                     <Image
                       src="/images/cases/chest.svg"
-                      alt={caseData.name}
+                      alt={(t.cases.names as Record<string, string>)[caseData.name] ?? caseData.name}
                       className={styles.caseImage}
                       fill={true}
                     />
@@ -130,7 +136,7 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
                     stylesVariant="redGradient"
                     className={styles.openButton}
                   >
-                    Open Case
+                    {t.cases.openCase}
                   </Button>
 
                   <div className={styles.switchWrapper}>
@@ -141,14 +147,14 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
                       className={styles.switch}
                     />
                     <span className={styles.switchLabel}>
-                      without animation
+                      {t.cases.withoutAnimation}
                     </span>
                   </div>
                 </aside>
               </div>
 
               <div className={styles.itemsList}>
-                <h2 className={styles.itemsTitle}>Case content</h2>
+                <h2 className={styles.itemsTitle}>{t.cases.caseContent}</h2>
                 <ul className={styles.itemsGrid}>
                   {caseData.items.map((item) => (
                     <CaseDetailItem key={item.id} item={item} />

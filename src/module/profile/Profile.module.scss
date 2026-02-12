@@ -35,7 +35,7 @@
 .profileInfo {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 100%;
   max-width: 660px;
@@ -52,6 +52,10 @@
   gap: 4px;
   color: var(--color-text-secondary);
   line-height: 1.5;
+
+  &:last-child {
+    gap: 7px;
+  }
 }
 
 .profileInfoItemValue {

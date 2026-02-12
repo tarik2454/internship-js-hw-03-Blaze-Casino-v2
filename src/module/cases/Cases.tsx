@@ -7,8 +7,12 @@ import styles from "./Cases.module.scss";
 import Image from "next/image";
 import Link from "next/link";
 import { ROUTES } from "@/shared/constants/routes";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 export function Cases() {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   const { data } = useCases();
 
   return (
@@ -25,20 +29,22 @@ export function Cases() {
                       <Image
                         key={i}
                         src="/images/cases/star.svg"
-                        alt="Star"
+                        alt={t.accessibility.star}
                         width={16}
                         height={16}
                       />
                     ))}
                   </div>
 
-                  <h3 className={styles.caseName}>{name}</h3>
+                  <h3 className={styles.caseName}>
+                    {(t.cases.names as Record<string, string>)[name] ?? name}
+                  </h3>
 
                   <div className={styles.casePrice}>
                     {price}
                     <Image
                       src="/images/common/dollar.svg"
-                      alt="Dollar"
+                      alt={t.accessibility.dollar}
                       width={16}
                       height={16}
                     />

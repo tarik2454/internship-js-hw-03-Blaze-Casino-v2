@@ -18,7 +18,8 @@ import { useCurrentUser } from "@/config-api/user/useUser";
 import Link from "next/link";
 import { useLocale, type Locale } from "@/providers/LocaleProvider";
 import { SettingsIcon } from "@/shared/icons/settings";
-import { LanguageMenu } from "./components/LanguageMenu";
+import { SettingsMenu } from "./components/SettingsMenu";
+import { getTranslations } from "@/i18n";
 
 export function Header() {
   const [isVisible, setIsVisible] = useState(false);
@@ -26,10 +27,13 @@ export function Header() {
 
   const { showPopup } = usePopup();
   const router = useRouter();
+
+  const { locale, setLocale } = useLocale();
+  const t = getTranslations(locale);
+
   const { mutate: logoutMutation } = useLogout();
   const { data: leaderboardData } = useLeaderboard();
   const { data: userData } = useCurrentUser();
-  const { locale, setLocale } = useLocale();
 
   const settingsButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -45,7 +49,7 @@ export function Header() {
   const handleLogout = () => {
     logoutMutation(undefined, {
       onSuccess: () => {
-        showPopup({ message: "Logout successful", type: "success" });
+        showPopup({ message: t.header.logoutSuccess, type: "success" });
         router.push(ROUTES.LOGIN);
       },
     });
@@ -124,7 +128,7 @@ export function Header() {
                     <SettingsIcon />
                   </Button>
                   {isLanguageMenuOpen && (
-                    <LanguageMenu
+                    <SettingsMenu
                       currentLocale={locale}
                       onSelect={handleSelectLanguage}
                       onClose={() => setIsLanguageMenuOpen(false)}
@@ -138,7 +142,7 @@ export function Header() {
                   stylesVariant="yellowGradient"
                   onClick={handleLogout}
                 >
-                  Logout <LogoutIcon />
+                  {t.header.logout} <LogoutIcon />
                 </Button>
               </div>
             </div>

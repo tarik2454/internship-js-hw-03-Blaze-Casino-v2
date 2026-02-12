@@ -63,6 +63,13 @@
     opacity: 1;
     pointer-events: auto;
   }
+
+  // :global([data-theme="light"]) & {
+  //   padding: 16px;
+  //   border-radius: var(--radius-16);
+  //   background: var(--color-bg-secondary);
+  //   opacity: 1;
+  // }
 }
 
 .chat {
@@ -96,7 +103,7 @@
   }
 
   @include minWidth(xl) {
-    height: 650px;
+    height: 860px;
     max-height: none;
   }
 }

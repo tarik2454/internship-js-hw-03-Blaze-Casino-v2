@@ -17,7 +17,7 @@ main {
 }
 
 body {
-  background: linear-gradient(180deg, #0f0c29 0%, #312c5f 50%, #24243e 100%);
+  background: var(--color-bg-main);
   color: var(--color-text-primary);
   font-weight: 400;
   font-size: 16px;
@@ -85,4 +85,13 @@ textarea {
   clip-path: inset(100%);
   clip: rect(0 0 0 0);
   overflow: hidden;
+}
+
+html[data-theme="light"] {
+  --color-bg-main: linear-gradient(
+    180deg,
+    #e8e6f0 0%,
+    #d5d0ee 50%,
+    #e0dff0 100%
+  );
 }

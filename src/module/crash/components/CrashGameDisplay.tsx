@@ -4,6 +4,8 @@ import { memo } from "react";
 import { cx } from "@/shared/utils/classNames";
 import { Scale } from "./Scale";
 import { getMultiplierLevels, getTimeLevels } from "../crash.utils";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 import styles from "./CrashGameDisplay.module.scss";
 
 interface GameResult {
@@ -17,6 +19,7 @@ interface CrashGameDisplayProps {
   elapsed: number;
   gameResult: GameResult | null;
   isFirstLoad: boolean;
+  locale: Locale;
 }
 
 export const CrashGameDisplay = memo(function CrashGameDisplay({
@@ -25,7 +28,9 @@ export const CrashGameDisplay = memo(function CrashGameDisplay({
   elapsed,
   gameResult,
   isFirstLoad,
+  locale,
 }: CrashGameDisplayProps) {
+  const t = getTranslations(locale);
   const displayMultiplier = multiplier.toFixed(2);
   const elapsedSeconds = Math.floor(elapsed / 1000);
 
@@ -63,7 +68,7 @@ export const CrashGameDisplay = memo(function CrashGameDisplay({
               </div>
               <Image
                 src="/images/crash/rocket.svg"
-                alt="Rocket"
+                alt={t.accessibility.rocket}
                 className={styles.rocketImage}
                 fill={true}
               />
@@ -73,7 +78,7 @@ export const CrashGameDisplay = memo(function CrashGameDisplay({
           <div className={styles.planet1}>
             <Image
               src="/images/crash/planet-1.png"
-              alt="Planet 1"
+              alt={t.accessibility.planet1}
               fill={true}
             />
           </div>
@@ -81,7 +86,7 @@ export const CrashGameDisplay = memo(function CrashGameDisplay({
           <div className={styles.planet2}>
             <Image
               src="/images/crash/planet-2.png"
-              alt="Planet 2"
+              alt={t.accessibility.planet2}
               fill={true}
             />
           </div>
@@ -113,11 +118,11 @@ export const CrashGameDisplay = memo(function CrashGameDisplay({
                 gameResult?.isWin === false && styles.isLose,
               )}
             >
-              Current Payout
+              {t.crash.currentPayout}
             </p>
           )}
           {gameState === "waiting" && isFirstLoad && (
-            <p className={styles.crashAreaDescription}>Waiting for bets...</p>
+            <p className={styles.crashAreaDescription}>{t.crash.waitingForBets}</p>
           )}
         </div>
       </div>

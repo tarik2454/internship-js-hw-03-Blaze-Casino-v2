@@ -7,6 +7,8 @@ import { ROUTE_META } from "@/shared/constants/routes";
 import { Container } from "./Container";
 import styles from "./Breadcrumbs.module.scss";
 import { ArrowLeftIcon } from "../icons/arrow-left";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 type BreadcrumbItem = {
   label: string;
@@ -20,13 +22,16 @@ type Props = {
 
 export function Breadcrumbs({ dynamicLabels }: Props) {
   const pathname = usePathname();
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
 
   const items = useMemo(() => {
     const result: BreadcrumbItem[] = [];
     const segments = pathname.split("/").filter(Boolean);
+    const bc = t.breadcrumbs as Record<string, string>;
 
     result.push({
-      label: ROUTE_META["/"]?.label || "Home",
+      label: bc[ROUTE_META["/"]?.labelKey] ?? t.breadcrumbs.home,
       href: "/",
       isCurrent: pathname === "/",
     });
@@ -46,9 +51,9 @@ export function Breadcrumbs({ dynamicLabels }: Props) {
 
       if (meta) {
         if (meta.dynamic) {
-          label = dynamicLabels?.["[id]"] || meta.label;
+          label = dynamicLabels?.["[id]"] || bc[meta.labelKey] || segment;
         } else {
-          label = meta.label;
+          label = bc[meta.labelKey] || segment;
         }
       } else {
         label = segment.charAt(0).toUpperCase() + segment.slice(1);
@@ -62,14 +67,14 @@ export function Breadcrumbs({ dynamicLabels }: Props) {
     });
 
     return result;
-  }, [pathname, dynamicLabels]);
+  }, [pathname, dynamicLabels, t]);
 
   if (items.length <= 1) return null;
 
   return (
     <div className={styles.wrapper}>
       <Container>
-        <nav aria-label="Breadcrumb" className={styles.breadcrumbs}>
+        <nav aria-label={t.breadcrumbs.ariaLabel} className={styles.breadcrumbs}>
           <ul className={styles.list}>
             {items.map((item, index) => (
               <li key={item.href} className={styles.item}>

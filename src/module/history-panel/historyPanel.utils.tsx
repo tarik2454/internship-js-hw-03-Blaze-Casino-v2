@@ -5,6 +5,8 @@ import {
   type GameType,
 } from "./historyPanel.types";
 import type { MinesHistoryItem } from "@/config-api/mines/mines.types";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 
 const columnHelper = createColumnHelper<HistoryRow>();
 
@@ -22,12 +24,14 @@ export const formatDate = (dateString: string) => {
 export const createColumns = (
   styles: Record<string, string>,
   gameType: GameType,
+  locale: Locale = "en",
 ): HistoryTableColumn[] => {
+  const t = getTranslations(locale);
   if (gameType === "cases") {
     return [
       columnHelper.display({
         id: "createdAt",
-        header: "Time",
+        header: t.history.time,
         cell: (info) => (
           <span className={styles.historyDate}>
             {formatDate(info.row.original.createdAt)}
@@ -36,11 +40,12 @@ export const createColumns = (
       }),
       columnHelper.display({
         id: "caseName",
-        header: "Case",
+        header: t.history.case,
         cell: (info) => {
           const row = info.row.original;
-          return "caseName" in row ? (
-            <span>{row.caseName}</span>
+          const cn = "caseName" in row ? row.caseName : undefined;
+          return cn ? (
+            <span>{(t.cases.names as Record<string, string>)[cn] ?? cn}</span>
           ) : (
             <span>-</span>
           );
@@ -48,7 +53,7 @@ export const createColumns = (
       }),
       columnHelper.display({
         id: "itemName",
-        header: "Item",
+        header: t.history.item,
         cell: (info) => {
           const row = info.row.original;
           return "itemName" in row ? (
@@ -60,12 +65,13 @@ export const createColumns = (
       }),
       columnHelper.display({
         id: "itemRarity",
-        header: "Rarity",
+        header: t.history.rarity,
         cell: (info) => {
           const row = info.row.original;
-          return "itemRarity" in row ? (
+          const ir = "itemRarity" in row ? row.itemRarity : undefined;
+          return ir ? (
             <span style={{ textTransform: "capitalize" }}>
-              {row.itemRarity}
+              {(t.cases.rarities as Record<string, string>)[ir.toLowerCase()] ?? ir}
             </span>
           ) : (
             <span>-</span>
@@ -74,7 +80,7 @@ export const createColumns = (
       }),
       columnHelper.display({
         id: "itemValue",
-        header: "Value",
+        header: t.history.value,
         cell: (info) => {
           const row = info.row.original;
           return "itemValue" in row ? (
@@ -86,7 +92,7 @@ export const createColumns = (
       }),
       columnHelper.display({
         id: "profit",
-        header: "Profit",
+        header: t.history.profit,
         cell: (info) => {
           const row = info.row.original;
           const profit = "profit" in row ? row.profit : 0;
@@ -112,7 +118,7 @@ export const createColumns = (
     return [
       columnHelper.display({
         id: "time",
-        header: "Time",
+        header: t.history.time,
         cell: (info) => {
           const row = info.row.original as MinesHistoryItem;
           const date =
@@ -124,7 +130,7 @@ export const createColumns = (
       }),
       columnHelper.display({
         id: "bet",
-        header: "Bet",
+        header: t.history.bet,
         cell: (info) => {
           const row = info.row.original as MinesHistoryItem;
           return (
@@ -136,7 +142,7 @@ export const createColumns = (
       }),
       columnHelper.display({
         id: "multiplier",
-        header: "Multiplier",
+        header: t.history.multiplier,
         cell: (info) => {
           const row = info.row.original as MinesHistoryItem;
           const multiplier = row.cashoutMultiplier ?? 0;
@@ -155,7 +161,7 @@ export const createColumns = (
       }),
       columnHelper.display({
         id: "winAmount",
-        header: "Win Amount",
+        header: t.history.winAmount,
         cell: (info) => {
           const row = info.row.original as MinesHistoryItem;
           const value = row.winAmount ?? 0;
@@ -174,11 +180,12 @@ export const createColumns = (
       }),
       columnHelper.display({
         id: "status",
-        header: "Status",
+        header: t.history.status,
         cell: (info) => {
           const row = info.row.original as MinesHistoryItem;
           const isWon = row.status === "won" || row.status === "cashed_out";
-          const label = isWon ? "Win" : "Lost";
+          const statusKey = isWon ? "won" : "lost";
+          const label = t.history.statuses[statusKey];
           return (
             <span
               style={{
@@ -197,7 +204,7 @@ export const createColumns = (
   const columns: HistoryTableColumn[] = [
     columnHelper.display({
       id: "createdAt",
-      header: "Time",
+      header: t.history.time,
       cell: (info) => (
         <span className={styles.historyDate}>
           {formatDate(info.row.original.createdAt)}
@@ -206,7 +213,7 @@ export const createColumns = (
     }),
     columnHelper.display({
       id: "bet",
-      header: "Bet",
+      header: t.history.bet,
       cell: (info) => {
         const row = info.row.original;
         const amount =
@@ -226,7 +233,7 @@ export const createColumns = (
     columns.push(
       columnHelper.display({
         id: "lines",
-        header: "Lines",
+        header: t.history.lines,
         cell: (info) => {
           const row = info.row.original;
           if ("linesCount" in row) {
@@ -237,13 +244,14 @@ export const createColumns = (
       }),
       columnHelper.display({
         id: "risk",
-        header: "Risk",
+        header: t.history.risk,
         cell: (info) => {
           const row = info.row.original;
           if ("riskLevel" in row) {
+            const riskKey = row.riskLevel as keyof typeof t.history.riskLevels;
             return (
               <span style={{ textTransform: "capitalize" }}>
-                {row.riskLevel}
+                {t.history.riskLevels[riskKey] ?? row.riskLevel}
               </span>
             );
           }
@@ -256,7 +264,7 @@ export const createColumns = (
   columns.push(
     columnHelper.display({
       id: "multiplier",
-      header: "Multiplier",
+      header: t.history.multiplier,
       cell: (info) => {
         const row = info.row.original;
         let multiplier: number | string | undefined;
@@ -284,7 +292,7 @@ export const createColumns = (
     }),
     columnHelper.display({
       id: "winAmount",
-      header: "Win Amount",
+      header: t.history.winAmount,
       cell: (info) => {
         const row = info.row.original;
         let winAmount: number | undefined;
@@ -315,7 +323,7 @@ export const createColumns = (
     }),
     columnHelper.display({
       id: "win",
-      header: "Win",
+      header: t.history.win,
       cell: (info) => {
         const row = info.row.original;
         let isWon = false;
@@ -336,7 +344,7 @@ export const createColumns = (
               textTransform: "capitalize",
             }}
           >
-            {isWon ? "won" : "lost"}
+            {t.history.statuses[isWon ? "won" : "lost"]}
           </span>
         );
       },

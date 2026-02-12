@@ -8,6 +8,8 @@ import { Button } from "@/shared/components/Button";
 import { InvertoryIcon } from "@/shared/icons/invertory";
 import { SettingsIcon } from "@/shared/icons/settings";
 import { useLockBodyScroll } from "@/shared/hooks/useLockBodyScroll";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 interface MobileMenuProps {
   isVisible: boolean;
@@ -22,6 +24,8 @@ export function MobileMenu({
   closeMenu,
   handleLogout,
 }: MobileMenuProps) {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   useLockBodyScroll(isVisible);
 
   return (
@@ -41,7 +45,7 @@ export function MobileMenu({
         <button
           className={styles.closeMenuButton}
           onClick={toggleMenu}
-          aria-label="Close menu"
+          aria-label={t.accessibility.closeMenu}
         >
           ×
         </button>
@@ -53,10 +57,10 @@ export function MobileMenu({
 
           <div className={styles.mobileMenuButtons}>
             <Button className={styles.mobileMenuButton}>
-              <InvertoryIcon /> Invertory
+              <InvertoryIcon /> {t.header.inventory}
             </Button>
             <Button className={styles.mobileMenuButton}>
-              <SettingsIcon /> Settings
+              <SettingsIcon /> {t.header.settings}
             </Button>
           </div>
         </div>
@@ -66,7 +70,7 @@ export function MobileMenu({
           stylesVariant="yellowGradient"
           onClick={handleLogout}
         >
-          Logout <LogoutIcon />
+          {t.header.logout} <LogoutIcon />
         </Button>
       </div>
     </>

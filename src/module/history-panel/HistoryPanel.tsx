@@ -11,13 +11,17 @@ import {
 } from "@tanstack/react-table";
 import { useGameHistory } from "./useGameHistory";
 import { createColumns } from "./historyPanel.utils";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 export function HistoryPanel() {
   const { data: history, gameType } = useGameHistory();
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
 
   const columns = useMemo(
-    () => createColumns(styles, gameType),
-    [gameType],
+    () => createColumns(styles, gameType, locale),
+    [gameType, locale],
   );
 
   const tableData = useMemo(() => {
@@ -45,7 +49,7 @@ export function HistoryPanel() {
   return (
     <Section className={styles.historySection}>
       <Container>
-        <h2 className={styles.historyPanelTitle}>Game history</h2>
+        <h2 className={styles.historyPanelTitle}>{t.history.title}</h2>
 
         <div className={styles.historyTableWrapper}>
           <table className={styles.historyTable}>

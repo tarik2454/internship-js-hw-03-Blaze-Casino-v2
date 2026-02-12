@@ -19,9 +19,13 @@ import {
 } from "@/config-api/plinko/usePlinko";
 import type { CurrentUserResponse } from "@/config-api/user/user.types";
 import { usePlinkoCanvas } from "./usePlinkoCanvas";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 import styles from "./Plinko.module.scss";
 
 export function Plinko() {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   const queryClient = useQueryClient();
   const { showPopup } = usePopup();
   const [riskLevel, setRiskLevel] = useState<RiskLevel>("medium");
@@ -64,8 +68,8 @@ export function Plinko() {
             showPopup({
               message:
                 profit >= 0
-                  ? `You won ${data.totalWin.toFixed(2)}$`
-                  : "You lost",
+                  ? `${t.plinko.youWon} ${data.totalWin.toFixed(2)}$`
+                  : t.plinko.youLost,
               type: profit >= 0 ? POPUP_TYPE.SUCCESS : POPUP_TYPE.ERROR,
               position: "topCenter",
               resultAmount: profit,
@@ -149,7 +153,7 @@ export function Plinko() {
                 previousUserData,
               );
             }
-            toast.error(error.message || "Failed to place bet");
+            toast.error(error.message || t.plinko.failedToBet);
           },
         },
       );
@@ -171,7 +175,7 @@ export function Plinko() {
           </div>
 
           <SettingsPanel
-            title="Plinko Configuration"
+            title={t.plinko.configuration}
             canBet={!isGameActive}
             inputsDisabled={isGameActive}
             showAutoCashout={false}

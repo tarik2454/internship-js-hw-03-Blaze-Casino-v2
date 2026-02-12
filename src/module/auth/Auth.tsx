@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,6 +9,8 @@ import {
   SessionMode,
 } from "@/config-api/session/session.constants";
 import { ROUTES } from "@/shared/constants/routes";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 export function Auth({
   mode,
@@ -15,31 +19,34 @@ export function Auth({
   mode: SessionMode;
   children: ReactNode;
 }) {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
         <Image
           src="/images/logo/logo-register.svg"
-          alt="Blaze Casino"
+          alt={t.auth.title}
           width={64}
           height={64}
           priority
           className={styles.logo}
         />
 
-        <h1 className={styles.title}>Blaze Casino</h1>
-        <p className={styles.description}>Welcome back!</p>
+        <h1 className={styles.title}>{t.auth.title}</h1>
+        <p className={styles.description}>{t.auth.welcomeBack}</p>
 
         {children}
 
         <p className={styles.footer}>
           {mode === SESSION_MODE.LOGIN ? (
             <Link href={ROUTES.REGISTER} className={styles.footerLink}>
-              Don&apos;t have an account? Register
+              {t.auth.noAccount}
             </Link>
           ) : (
             <Link href={ROUTES.LOGIN} className={styles.footerLink}>
-              Already have an account? Login
+              {t.auth.hasAccount}
             </Link>
           )}
         </p>

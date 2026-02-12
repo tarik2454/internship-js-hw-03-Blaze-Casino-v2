@@ -4,11 +4,14 @@ import { memo } from "react";
 import { Input } from "@/shared/components/Input";
 import { Button } from "@/shared/components/Button";
 import Image from "next/image";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 import styles from "./BetAmountInput.module.scss";
 
 interface BetAmountInputProps {
   amount: number;
   disabled: boolean;
+  locale: Locale;
   onAmountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onHalf: () => void;
   onDouble: () => void;
@@ -18,17 +21,20 @@ interface BetAmountInputProps {
 export const BetAmountInput = memo(function BetAmountInput({
   amount,
   disabled,
+  locale,
   onAmountChange,
   onHalf,
   onDouble,
   onMax,
 }: BetAmountInputProps) {
+  const t = getTranslations(locale);
+
   return (
     <div className={styles.inputWrapperBetAmount}>
       <Input
-        label="Bet Amount"
+        label={t.settings.betAmount}
         type="number"
-        placeholder="10.000"
+        placeholder={t.settings.betAmountPlaceholder}
         labelClassName={styles.label}
         inputClassName={styles.inputBetAmount}
         stylesVariant="gameInput"
@@ -46,27 +52,27 @@ export const BetAmountInput = memo(function BetAmountInput({
           onClick={onHalf}
           disabled={disabled}
         >
-          1/2
+          {t.settings.half}
         </Button>
         <Button
           className={styles.betButton}
           onClick={onDouble}
           disabled={disabled}
         >
-          x2
+          {t.settings.double}
         </Button>
         <Button
           className={styles.betButton}
           onClick={onMax}
           disabled={disabled}
         >
-          Max
+          {t.settings.max}
         </Button>
       </div>
 
       <Image
         src="/images/common/dollar.svg"
-        alt="Dollar"
+        alt={t.accessibility.dollar}
         width={24}
         height={24}
         className={styles.dollarIcon}

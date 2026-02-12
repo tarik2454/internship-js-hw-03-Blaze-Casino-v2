@@ -14,14 +14,14 @@ export const ROUTES = {
 
 export const ROUTE_META: Record<
   string,
-  { label: string; parent?: string; dynamic?: boolean }
+  { labelKey: string; parent?: string; dynamic?: boolean }
 > = {
-  "/": { label: "All games" },
-  "/crash": { label: "Crash", parent: "/" },
-  "/cases": { label: "Cases", parent: "/" },
-  "/cases/[id]": { label: "Case Details", parent: "/cases", dynamic: true },
-  "/mines": { label: "Mines", parent: "/" },
-  "/plinko": { label: "Plinko", parent: "/" },
-  "/profile": { label: "Profile", parent: "/" },
-  "/bonus": { label: "Bonus", parent: "/" },
+  "/": { labelKey: "allGames" },
+  "/crash": { labelKey: "crash", parent: "/" },
+  "/cases": { labelKey: "cases", parent: "/" },
+  "/cases/[id]": { labelKey: "caseDetails", parent: "/cases", dynamic: true },
+  "/mines": { labelKey: "mines", parent: "/" },
+  "/plinko": { labelKey: "plinko", parent: "/" },
+  "/profile": { labelKey: "profile", parent: "/" },
+  "/bonus": { labelKey: "bonus", parent: "/" },
 };
