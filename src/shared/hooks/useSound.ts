@@ -1,30 +1,44 @@
 import { Howl } from "howler";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useSoundContext } from "@/providers/SoundProvider";
 
 const SOUNDS = {
-  click: "/sounds/click.wav",
+  startGame: "/sounds/start-game.mp3",
   addingMoney: "/sounds/adding-money.mp3",
+  playing: "/sounds/playing.mp3",
+  cashout: "/sounds/cashout.mp3",
 };
 
 const VOLUME_SCALE: Record<keyof typeof SOUNDS, number> = {
-  click: 1,
   addingMoney: 1,
+  playing: 0.3,
+  startGame: 1,
+  cashout: 1,
+};
+
+const LOOP_SOUNDS: Set<keyof typeof SOUNDS> = new Set(["playing"]);
+
+const START_OFFSET: Partial<Record<keyof typeof SOUNDS, number>> = {
+  playing: 2,
 };
 
 export const useSound = () => {
   const { isMuted, volume, toggleMute, setVolume } = useSoundContext();
   const sounds = useRef<Record<keyof typeof SOUNDS, Howl | null>>({
-    click: null,
     addingMoney: null,
+    playing: null,
+    startGame: null,
+    cashout: null,
   });
 
   useEffect(() => {
     Object.entries(SOUNDS).forEach(([key, src]) => {
-      const scale = VOLUME_SCALE[key as keyof typeof SOUNDS];
-      sounds.current[key as keyof typeof SOUNDS] = new Howl({
+      const typedKey = key as keyof typeof SOUNDS;
+      const scale = VOLUME_SCALE[typedKey];
+      sounds.current[typedKey] = new Howl({
         src: [src],
         volume: volume * scale,
+        loop: LOOP_SOUNDS.has(typedKey),
       });
     });
 
@@ -44,12 +58,25 @@ export const useSound = () => {
     });
   }, [volume]);
 
-  const playSound = (type: keyof typeof SOUNDS) => {
-    if (!isMuted && sounds.current[type]) {
-      sounds.current[type].stop();
-      sounds.current[type].play();
-    }
-  };
+  const playSound = useCallback(
+    (type: keyof typeof SOUNDS) => {
+      if (!isMuted && sounds.current[type]) {
+        sounds.current[type].stop();
+        sounds.current[type].play();
+        const offset = START_OFFSET[type];
+        if (offset) {
+          sounds.current[type].seek(offset);
+        }
+      }
+    },
+    [isMuted],
+  );
 
-  return { playSound, isMuted, volume, toggleMute, setVolume };
+  const stopSound = useCallback((type: keyof typeof SOUNDS) => {
+    if (sounds.current[type]) {
+      sounds.current[type].stop();
+    }
+  }, []);
+
+  return { playSound, stopSound, isMuted, volume, toggleMute, setVolume };
 };

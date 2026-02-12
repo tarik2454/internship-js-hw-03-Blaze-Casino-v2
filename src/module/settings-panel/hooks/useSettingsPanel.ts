@@ -18,6 +18,7 @@ import type {
 export function useSettingsPanel({
   showPlinkoOptions,
   showMinesOptions,
+  maxBetAmount = 10000,
   onPlaceBet,
   onCashout,
   riskLevel: propsRisk,
@@ -34,6 +35,7 @@ export function useSettingsPanel({
   SettingsPanelProps,
   | "showPlinkoOptions"
   | "showMinesOptions"
+  | "maxBetAmount"
   | "onPlaceBet"
   | "onCashout"
   | "riskLevel"
@@ -76,9 +78,9 @@ export function useSettingsPanel({
   const handleAmountChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = parseFloat(e.target.value);
-      setAmount(isNaN(value) ? 0 : value);
+      setAmount(isNaN(value) ? 0 : Math.min(value, maxBetAmount));
     },
-    [],
+    [maxBetAmount],
   );
 
   const handleHalf = useCallback(
@@ -86,13 +88,16 @@ export function useSettingsPanel({
     [],
   );
 
-  const handleDouble = useCallback(() => setAmount((prev) => prev * 2), []);
+  const handleDouble = useCallback(
+    () => setAmount((prev) => Math.min(prev * 2, maxBetAmount)),
+    [maxBetAmount],
+  );
 
   const handleMax = useCallback(() => {
     if (user?.balance) {
-      setAmount(Math.min(user.balance, 10000));
+      setAmount(Math.min(user.balance, maxBetAmount));
     }
-  }, [user]);
+  }, [user, maxBetAmount]);
 
   const handleAutoToggle = useCallback((checked: boolean) => {
     setIsAuto(checked);

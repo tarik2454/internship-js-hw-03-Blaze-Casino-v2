@@ -19,6 +19,7 @@ export function SettingsPanel({
   showCashoutButton = true,
   showPlinkoOptions = false,
   showMinesOptions = false,
+  maxBetAmount = 10000,
   isCashoutDisabled = true,
   stats,
   computeStats,
@@ -63,6 +64,7 @@ export function SettingsPanel({
   } = useSettingsPanel({
     showPlinkoOptions,
     showMinesOptions,
+    maxBetAmount,
     onPlaceBet,
     onCashout,
     riskLevel,
@@ -86,6 +88,7 @@ export function SettingsPanel({
           amount={amount}
           disabled={inputsDisabled}
           locale={locale}
+          maxBetAmount={maxBetAmount}
           onAmountChange={handleAmountChange}
           onHalf={handleHalf}
           onDouble={handleDouble}

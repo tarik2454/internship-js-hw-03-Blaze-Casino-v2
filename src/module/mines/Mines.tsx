@@ -16,6 +16,7 @@ import {
 import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
 import { useLocale } from "@/providers/LocaleProvider";
 import { getTranslations } from "@/i18n";
+import { useSound } from "@/shared/hooks/useSound";
 
 export function Mines() {
   const { locale } = useLocale();
@@ -27,6 +28,7 @@ export function Mines() {
   );
 
   const { showPopup } = usePopup();
+  const { playSound, stopSound } = useSound();
 
   const { data: activeData, isSuccess, isFetching } = useMinesActive();
 
@@ -69,6 +71,7 @@ export function Mines() {
       gridSize?: MinesGridSize;
       mineAmount?: number;
     }) => {
+      playSound("startGame");
       setHitMinePosition(null);
       setAllMinePositions([]);
       startGame({
@@ -77,7 +80,7 @@ export function Mines() {
         gridSize: data.gridSize ?? DEFAULT_MINES_GRID_SIZE,
       });
     },
-    [startGame],
+    [startGame, playSound],
   );
 
   const handleReveal = useCallback(
@@ -108,6 +111,7 @@ export function Mines() {
 
   const handleCashout = useCallback(() => {
     if (!activeGame?._id) return;
+    playSound("cashout");
     cashoutGame(
       { gameId: activeGame._id },
       {
@@ -125,9 +129,21 @@ export function Mines() {
         },
       },
     );
-  }, [activeGame?._id, cashoutGame, showPopup]);
+  }, [activeGame?._id, cashoutGame, showPopup, playSound]);
 
-  const isCashoutDisabled = !activeGame || isGameOver;
+  const isCashoutDisabled = !activeGame || isGameOver || revealedTiles.length === 0;
+
+  useEffect(() => {
+    if (activeGame && !isGameOver) {
+      playSound("playing");
+    } else {
+      stopSound("playing");
+    }
+  }, [activeGame, isGameOver, playSound, stopSound]);
+
+  useEffect(() => {
+    return () => stopSound("playing");
+  }, [stopSound]);
 
   return (
     <Section>

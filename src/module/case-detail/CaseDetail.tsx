@@ -8,12 +8,13 @@ import styles from "./CaseDetail.module.scss";
 import Image from "next/image";
 import { Switch } from "@/shared/components/Switch";
 import { CaseOpeningResponse } from "@/config-api/cases/cases.types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OpeningResult } from "./components/OpeningResult";
 import { CaseDetailItem } from "./CaseDetailItem";
 import { CaseRoulette } from "./components/CaseRoulette";
 import { useLocale } from "@/providers/LocaleProvider";
 import { getTranslations } from "@/i18n";
+import { useSound } from "@/shared/hooks/useSound";
 
 interface CaseDetailProps {
   caseId: string;
@@ -31,6 +32,21 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
   const { data: caseData, isLoading } = useCase(caseId);
   const { mutate: openCase, isPending } = useOpenCase();
 
+  const { playSound, stopSound } = useSound();
+  const isPlaying = isOpenResult && openingResult && !rouletteDone && !withoutAnimation;
+
+  useEffect(() => {
+    if (isPlaying) {
+      playSound("playing");
+    } else {
+      stopSound("playing");
+    }
+  }, [isPlaying, playSound, stopSound]);
+
+  useEffect(() => {
+    return () => stopSound("playing");
+  }, [stopSound]);
+
   const handleCloseResult = (value: boolean) => {
     setIsOpenResult(value);
     if (!value) setRouletteDone(false);
@@ -38,6 +54,7 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
 
   const handleOpenCase = () => {
     if (!caseData) return;
+    playSound("startGame");
 
     openCase(
       { id: caseId },

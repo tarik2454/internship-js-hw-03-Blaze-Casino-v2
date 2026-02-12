@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError } from "../error.types";
-import { queryKeys, queryKeyFactories } from "../keys";
+import { queryKeyFactories } from "../keys";
 import { plinkoApi } from "./plinko.api";
 import {
   LinesCount,
@@ -11,7 +11,6 @@ import {
   PlinkoUserHistoryResponse,
   RiskLevel,
 } from "./plinko.types";
-import type { CurrentUserResponse } from "../user/user.types";
 
 export function usePlinkoDrop() {
   const queryClient = useQueryClient();
@@ -19,11 +18,6 @@ export function usePlinkoDrop() {
   return useMutation<PlinkoDropResponse, ApiError, PlinkoDropRequest>({
     mutationFn: (body: PlinkoDropRequest) => plinkoApi.postBet(body),
     onSuccess: (response, variables) => {
-      queryClient.setQueryData<CurrentUserResponse>(
-        queryKeyFactories.user.current(),
-        (old) => (old ? { ...old, balance: response.newBalance } : old),
-      );
-
       const newHistoryItem: PlinkoDrop = {
         _id: response.drops[0]?.dropId ?? "",
         betAmount: response.totalBet,

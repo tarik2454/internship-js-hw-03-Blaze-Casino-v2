@@ -12,6 +12,7 @@ interface BetAmountInputProps {
   amount: number;
   disabled: boolean;
   locale: Locale;
+  maxBetAmount?: number;
   onAmountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onHalf: () => void;
   onDouble: () => void;
@@ -22,6 +23,7 @@ export const BetAmountInput = memo(function BetAmountInput({
   amount,
   disabled,
   locale,
+  maxBetAmount = 10000,
   onAmountChange,
   onHalf,
   onDouble,
@@ -42,7 +44,7 @@ export const BetAmountInput = memo(function BetAmountInput({
         onChange={onAmountChange}
         disabled={disabled}
         min={0.1}
-        max={10000}
+        max={maxBetAmount}
         step={0.1}
       />
 

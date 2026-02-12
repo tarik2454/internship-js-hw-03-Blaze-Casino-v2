@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Container } from "@/shared/components/Container";
 import { Section } from "@/shared/components/Section";
 import { SettingsPanel } from "@/module/settings-panel/SettingsPanel";
@@ -8,6 +9,7 @@ import { CrashGameDisplay } from "./components/CrashGameDisplay";
 import { useLocale } from "@/providers/LocaleProvider";
 import { getTranslations } from "@/i18n";
 import { useCrashGame } from "./useCrashGame";
+import { useSound } from "@/shared/hooks/useSound";
 
 export function Crash() {
   const { locale } = useLocale();
@@ -24,6 +26,20 @@ export function Crash() {
     handlePlaceBet,
     handleCashout,
   } = useCrashGame(t);
+
+  const { playSound, stopSound } = useSound();
+
+  useEffect(() => {
+    if (activeBetId && currentGameState === "running") {
+      playSound("playing");
+    } else {
+      stopSound("playing");
+    }
+  }, [activeBetId, currentGameState, playSound, stopSound]);
+
+  useEffect(() => {
+    return () => stopSound("playing");
+  }, [stopSound]);
 
   return (
     <Section className={styles.crashSection}>
@@ -44,8 +60,14 @@ export function Crash() {
             inputsDisabled={!!activeBetId}
             isCashoutDisabled={currentGameState !== "running" || !activeBetId}
             computeStats={computeStats}
-            onPlaceBet={handlePlaceBet}
-            onCashout={handleCashout}
+            onPlaceBet={(data) => {
+              playSound("startGame");
+              handlePlaceBet(data);
+            }}
+            onCashout={() => {
+              playSound("cashout");
+              handleCashout();
+            }}
           />
         </div>
       </Container>
