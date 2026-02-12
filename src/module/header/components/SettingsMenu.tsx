@@ -7,6 +7,8 @@ import Image from "next/image";
 import { Button } from "@/shared/components/Button";
 import { Switch } from "@/shared/components/Switch";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useSoundContext } from "@/providers/SoundProvider";
+import { VolumeIcon, VolumeMutedIcon } from "@/shared/icons/volume";
 
 interface SettingsMenuProps {
   currentLocale: Locale;
@@ -28,6 +30,7 @@ export function SettingsMenu({
 }: SettingsMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const { theme, toggleTheme } = useTheme();
+  const { isMuted, volume, toggleMute, setVolume } = useSoundContext();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -74,6 +77,26 @@ export function SettingsMenu({
           )}
         </span>
       </div>
+
+      <div className={styles.volumeControl}>
+        <Button className={styles.volumeButton} onClick={toggleMute}>
+          {isMuted ? <VolumeMutedIcon /> : <VolumeIcon />}
+        </Button>
+        <input
+          type="range"
+          min={0}
+          max={1}
+          step={0.05}
+          value={isMuted ? 0 : volume}
+          onChange={(e) => {
+            const val = parseFloat(e.target.value);
+            if (isMuted && val > 0) toggleMute();
+            setVolume(val);
+          }}
+          className={styles.volumeSlider}
+        />
+      </div>
+
       <div className={styles.language}>
         {languages.map(({ code, label, icon }) => (
           <Button
