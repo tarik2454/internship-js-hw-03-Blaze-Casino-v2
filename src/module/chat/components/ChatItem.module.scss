@@ -20,7 +20,7 @@
   position: absolute;
   top: -24px;
   left: -24px;
-  border: 2px solid linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
+  @include gradientBorder;
   border-radius: 50%;
 }
 
@@ -32,11 +32,7 @@
 
 .myChatItem {
   .messageUserName {
-    background: var(--gradient-gold);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
+    @include gradientText;
   }
 }
 

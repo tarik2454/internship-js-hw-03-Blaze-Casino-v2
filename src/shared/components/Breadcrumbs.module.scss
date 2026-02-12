@@ -15,13 +15,10 @@
 }
 
 .item {
-  background: var(--gradient-gold);
-  -webkit-background-clip: text;
+  @include gradientText;
   display: flex;
   align-items: center;
-  -webkit-text-fill-color: transparent;
   gap: 4px;
-  background-clip: text;
   line-height: 1.5;
 }
 

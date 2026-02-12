@@ -71,6 +71,7 @@
 }
 
 .userAvatar {
+  @include gradientBorder;
   border-radius: 50%;
 }
 

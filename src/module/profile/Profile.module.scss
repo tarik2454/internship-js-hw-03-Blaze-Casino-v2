@@ -24,12 +24,8 @@
 }
 
 .profileAvatar {
-  border: 2px solid transparent;
+  @include gradientBorder($bg: var(--color-section-bg));
   border-radius: 50%;
-
-  background:
-    linear-gradient(rgba(66, 62, 105, 0.5), rgba(66, 62, 105, 0.5)) padding-box,
-    var(--gradient-gold) border-box;
 }
 
 .profileInfo {

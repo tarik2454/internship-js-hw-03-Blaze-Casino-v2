@@ -144,7 +144,7 @@ api.interceptors.response.use(
       error.message ||
       "An unexpected error occurred";
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && status !== 401) {
       const handler = getGlobalApiErrorHandler();
       if (handler) handler(message);
     }

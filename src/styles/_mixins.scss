@@ -1,6 +1,21 @@
 @use "sass:map";
 @use "variables" as *;
 
+@mixin gradientText($gradient: var(--gradient-gold)) {
+  background: $gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+@mixin gradientBorder($bg: var(--color-card-bg), $gradient: var(--gradient-gold)) {
+  border: 2px solid transparent;
+  background:
+    linear-gradient($bg, $bg) padding-box,
+    $gradient border-box;
+}
+
 @mixin flexCenter {
   display: flex;
   align-items: center;

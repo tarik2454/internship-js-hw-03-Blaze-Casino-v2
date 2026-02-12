@@ -85,12 +85,8 @@
 }
 
 .itemValue {
-  background: var(--gradient-gold);
+  @include gradientText;
   font-size: 14px;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
   font-weight: 600;
 }
 
