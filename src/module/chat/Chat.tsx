@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, FormEvent, useEffect, useState } from "react";
-import Image from "next/image";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import styles from "./Chat.module.scss";
 import { ArrowTop } from "@/shared/icons/arrow-top";
@@ -12,6 +11,7 @@ import { formatTime } from "./chat.utils";
 import { ChatItem } from "./components/ChatItem";
 import { Section } from "@/shared/components/Section";
 import { MessageIcon } from "@/shared/icons/message";
+import { ChatTitleIcon } from "@/shared/icons/chat-title";
 import { Button } from "@/shared/components/Button";
 import { useLockBodyScroll } from "@/shared/hooks/useLockBodyScroll";
 import { useLocale } from "@/providers/LocaleProvider";
@@ -99,12 +99,7 @@ export function Chat() {
       >
         <Section className={styles.chat}>
           <div className={styles.chatTitleWrapper}>
-            <Image
-              src="/images/chat/chat-title.svg"
-              alt={t.accessibility.chatTitle}
-              width={100}
-              height={18}
-            />
+            <ChatTitleIcon />
           </div>
 
           <ul className={styles.usersList}>

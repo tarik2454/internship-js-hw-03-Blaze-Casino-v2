@@ -57,7 +57,21 @@ export function SettingsMenu({
           className={styles.themeSwitchInput}
         />
         <span className={styles.themeSwitchLabel}>
-          {theme === "light" ? "Light" : "Dark"}
+          {theme === "light" ? (
+            <Image
+              src="/images/header/sun.png"
+              alt="Light"
+              width={18}
+              height={18}
+            />
+          ) : (
+            <Image
+              src="/images/header/moon.png"
+              alt="Dark"
+              width={18}
+              height={18}
+            />
+          )}
         </span>
       </div>
       <div className={styles.language}>

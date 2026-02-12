@@ -29,6 +29,10 @@
   position: relative !important;
 }
 
+.themeSwitchLabel {
+  color: var(--color-text-primary);
+}
+
 .language {
   display: flex;
   flex-direction: column;
