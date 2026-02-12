@@ -1,4 +1,6 @@
 @use "./reset";
+@use "./colors";
+@use "./theme-light";
 @use "./index" as *;
 
 * {
@@ -85,13 +87,4 @@ textarea {
   clip-path: inset(100%);
   clip: rect(0 0 0 0);
   overflow: hidden;
-}
-
-html[data-theme="light"] {
-  --color-bg-main: linear-gradient(
-    180deg,
-    #e8e6f0 0%,
-    #d5d0ee 50%,
-    #e0dff0 100%
-  );
 }

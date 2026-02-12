@@ -7,7 +7,7 @@
   width: 100%;
   height: 100vh;
   background-color: var(--color-bg-primary); // consistent with body theme
-  color: var(--color-red-21);
+  color: var(--color-error);
 }
 
 .content {
@@ -27,7 +27,7 @@
 
 .message {
   margin-top: 0.5rem;
-  color: var(--color-red-21); // make the error message red
+  color: var(--color-error); // make the error message red
 }
 
 .hint {
@@ -40,7 +40,7 @@
 .code {
   padding: 0.1rem 0.3rem;
   border-radius: 0.25rem;
-  background-color: rgba(255, 255, 255, 0.1); // slightly lighter for dark mode
+  background-color: var(--color-loader-track);
   font-family: monospace;
 }
 
@@ -49,7 +49,7 @@
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 0.25rem;
-  background-color: var(--color-violet-ff);
+  background-color: var(--color-accent);
   color: var(--color-white);
   font-weight: 600;
   cursor: pointer;

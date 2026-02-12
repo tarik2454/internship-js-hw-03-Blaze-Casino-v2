@@ -39,14 +39,14 @@
   min-width: 0;
   padding: 6px 16px;
   border-radius: var(--radius-4);
-  background: var(--color-blue-3f);
+  background: var(--color-card-bg);
   font-weight: 500;
   font-size: 14px;
   font-family: var(--font-manrope);
   transition: var(--transition-250);
 
   &:hover:not(:disabled) {
-    background: var(--color-blue-54);
+    background: var(--color-option-bg);
   }
 
   &:active:not(:disabled) {
@@ -59,9 +59,9 @@
 }
 
 .optionButtonActive {
-  background: var(--color-blue-54);
+  background: var(--color-option-bg);
 
   &:hover:not(:disabled) {
-    background: var(--color-blue-54);
+    background: var(--color-option-bg);
   }
 }

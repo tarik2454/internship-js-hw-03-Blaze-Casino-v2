@@ -17,7 +17,7 @@
   height: 100%;
   min-height: 361px;
   border-radius: var(--radius-16);
-  background: #423e6980;
+  background: var(--color-section-bg);
 
   @include minWidth(xl) {
     min-height: 638px;

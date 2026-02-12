@@ -15,7 +15,7 @@
 }
 
 .item {
-  background: linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
+  background: var(--gradient-gold);
   -webkit-background-clip: text;
   display: flex;
   align-items: center;

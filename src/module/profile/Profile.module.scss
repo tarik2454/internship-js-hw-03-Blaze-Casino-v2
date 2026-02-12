@@ -29,7 +29,7 @@
 
   background:
     linear-gradient(rgba(66, 62, 105, 0.5), rgba(66, 62, 105, 0.5)) padding-box,
-    linear-gradient(180deg, #ffcd71 0%, #e59603 100%) border-box;
+    var(--gradient-gold) border-box;
 }
 
 .profileInfo {
@@ -42,7 +42,7 @@
   padding: 16px 0;
   gap: 40px;
   border-radius: var(--radius-16);
-  background: #423e6980;
+  background: var(--color-section-bg);
 }
 
 .profileInfoItem {

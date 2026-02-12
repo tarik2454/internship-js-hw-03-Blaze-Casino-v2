@@ -42,9 +42,9 @@
 .mineAmountButton {
   min-width: 24px;
   padding: 4px 0;
-  border: 1px solid var(--color-blue-54);
-  border-radius: var(--radius-4);
-  background: var(--color-blue-55);
+  border: 1px solid var(--color-option-bg);
+    border-radius: var(--radius-4);
+    background: var(--color-input-bg);
   font-size: 12px;
 
   &:disabled {
@@ -53,7 +53,7 @@
 }
 
 .mineAmountButtonActive {
-  background: var(--color-blue-54);
+  background: var(--color-option-bg);
 }
 
 .optionButtons {
@@ -66,14 +66,14 @@
   min-width: 46px;
   padding: 6px 0;
   border-radius: var(--radius-4);
-  background: var(--color-blue-3f);
+  background: var(--color-card-bg);
   font-weight: 500;
   font-size: 14px;
   font-family: var(--font-manrope);
   transition: var(--transition-250);
 
   &:hover:not(:disabled) {
-    background: var(--color-blue-54);
+    background: var(--color-option-bg);
   }
 
   &:active:not(:disabled) {
@@ -86,9 +86,9 @@
 }
 
 .optionButtonActive {
-  background: var(--color-blue-54);
+  background: var(--color-option-bg);
 
   &:hover:not(:disabled) {
-    background: var(--color-blue-54);
+    background: var(--color-option-bg);
   }
 }

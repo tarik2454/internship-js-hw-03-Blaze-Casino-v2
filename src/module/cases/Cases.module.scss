@@ -19,8 +19,8 @@
 .caseItem {
   padding: 12px 8px 16px 8px;
   border-radius: var(--radius-16);
-  background: #423e6980;
-  box-shadow: 0px 4px 10px 0px #1515153d;
+  background: var(--color-section-bg);
+  box-shadow: 0px 4px 10px 0px var(--color-shadow-dark);
 
   @include minWidth(xl) {
     padding: 24px 8px 74px 8px;
@@ -79,7 +79,7 @@
   inset: 0;
   padding: 1px;
   border-radius: inherit;
-  background: linear-gradient(180deg, #ffcd71, #e59603);
+  background: var(--gradient-gold);
   content: "";
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
