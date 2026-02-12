@@ -46,13 +46,13 @@ export default function Profile() {
             <p className={styles.profileInfoItem}>
               {t.profile.win}
               <span className={styles.profileInfoItemValue}>
-                {total > 0 && `${winPercent.toFixed()}%`}
+                {`${winPercent.toFixed()}%`}
               </span>
             </p>
             <p className={styles.profileInfoItem}>
               {t.profile.loss}
               <span className={styles.profileInfoItemValue}>
-                {total > 0 && `${lossPercent.toFixed()}%`}
+                {`${lossPercent.toFixed()}%`}
               </span>
             </p>
             <div className={styles.profileInfoItem}>
