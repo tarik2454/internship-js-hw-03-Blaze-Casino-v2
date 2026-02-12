@@ -4,25 +4,19 @@ import { useSoundContext } from "@/providers/SoundProvider";
 
 const SOUNDS = {
   click: "/sounds/click.wav",
-  cardFlip: "/sounds/card-flip.mp3",
-  reveal: "/sounds/reveal.mp3",
-  result: "/sounds/result.mp3",
+  addingMoney: "/sounds/adding-money.mp3",
 };
 
 const VOLUME_SCALE: Record<keyof typeof SOUNDS, number> = {
   click: 1,
-  cardFlip: 0.2,
-  reveal: 1,
-  result: 1,
+  addingMoney: 1,
 };
 
 export const useSound = () => {
   const { isMuted, volume, toggleMute, setVolume } = useSoundContext();
   const sounds = useRef<Record<keyof typeof SOUNDS, Howl | null>>({
     click: null,
-    cardFlip: null,
-    reveal: null,
-    result: null,
+    addingMoney: null,
   });
 
   useEffect(() => {
@@ -52,10 +46,8 @@ export const useSound = () => {
 
   const playSound = (type: keyof typeof SOUNDS) => {
     if (!isMuted && sounds.current[type]) {
-      if (type !== "cardFlip") {
-        sounds.current[type]?.stop();
-      }
-      sounds.current[type]?.play();
+      sounds.current[type].stop();
+      sounds.current[type].play();
     }
   };
 

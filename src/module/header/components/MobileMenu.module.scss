@@ -82,17 +82,40 @@
   display: flex;
 }
 
+.mobileMenuButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mobileMenuLink {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 11px 16px;
+  gap: 8px;
+  border-radius: var(--radius-8);
+  background: var(--color-section-bg);
+  line-height: 1.5;
+}
+
 .mobileMenuButton {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  margin-bottom: 8px;
   padding: 11px 16px;
   gap: 8px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   background: var(--color-section-bg);
-  line-height: 1.5;
+  font-weight: 400;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+.settingsWrapper {
+  position: relative;
 }
 
 .logoutButton {

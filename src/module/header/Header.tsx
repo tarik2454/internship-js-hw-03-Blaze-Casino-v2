@@ -4,7 +4,7 @@ import { Container } from "@/shared/components/Container";
 import Image from "next/image";
 import styles from "./Header.module.scss";
 import { NavToggleIcon } from "@/shared/icons/nav-toggle";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MobileMenu } from "./components/MobileMenu";
 import { Button } from "@/shared/components/Button";
 import { LogoutIcon } from "@/shared/icons/logout";
@@ -20,6 +20,7 @@ import { useLocale, type Locale } from "@/providers/LocaleProvider";
 import { SettingsIcon } from "@/shared/icons/settings";
 import { SettingsMenu } from "./components/SettingsMenu";
 import { getTranslations } from "@/i18n";
+import { useSound } from "@/shared/hooks/useSound";
 
 export function Header() {
   const [isVisible, setIsVisible] = useState(false);
@@ -36,6 +37,20 @@ export function Header() {
   const { data: userData } = useCurrentUser();
 
   const settingsButtonRef = useRef<HTMLButtonElement>(null);
+
+  const { playSound } = useSound();
+  const prevBalanceRef = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (userData?.balance === undefined) return;
+    if (
+      prevBalanceRef.current !== undefined &&
+      userData.balance > prevBalanceRef.current
+    ) {
+      playSound("addingMoney");
+    }
+    prevBalanceRef.current = userData.balance;
+  }, [userData?.balance, playSound]);
 
   const currentUserAvatar =
     userData?.avatarURL || leaderboardData?.currentUser?.avatarURL;

@@ -41,7 +41,10 @@ export function useOpenCase() {
     onSuccess: (response) => {
       queryClient.setQueryData<CurrentUserResponse>(
         queryKeyFactories.user.current(),
-        (old) => (old ? { ...old, balance: response.newBalance } : old),
+        (old) =>
+          old
+            ? { ...old, balance: response.newBalance - response.itemValue }
+            : old,
       );
     },
   });
