@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useState, useRef, useMemo } from "react";
-import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import { Section } from "@/shared/components/Section";
 import { Container } from "@/shared/components/Container";
@@ -153,7 +152,11 @@ export function Plinko() {
                 previousUserData,
               );
             }
-            toast.error(error.message || t.plinko.failedToBet);
+            showPopup({
+              message: error.message || t.plinko.failedToBet,
+              type: POPUP_TYPE.ERROR,
+              position: "topCenter",
+            });
           },
         },
       );

@@ -36,9 +36,9 @@ export function Mines() {
     typeof gameId === "string" && gameId.length > 0 && rawGame != null;
   const activeGame = hasValidActiveGame ? rawGame : null;
 
-  const { mutateAsync: startGame } = useMinesStart();
-  const { mutateAsync: revealTile, isPending: isRevealing } = useMinesReveal();
-  const { mutateAsync: cashoutGame } = useMinesCashout();
+  const { mutate: startGame } = useMinesStart();
+  const { mutate: revealTile, isPending: isRevealing } = useMinesReveal();
+  const { mutate: cashoutGame } = useMinesCashout();
 
   const revealedTiles = activeGame?.revealedPositions ?? [];
   const gameGridSize = (activeGame?.gridSize ?? gridSize) as MinesGridSize;
@@ -83,38 +83,48 @@ export function Mines() {
   const handleReveal = useCallback(
     (position: number) => {
       if (!activeGame?._id) return;
-      revealTile({ gameId: activeGame._id, position }).then((res) => {
-        if (res.isMine) {
-          setHitMinePosition(position);
-          if (res.minePositions) {
-            setAllMinePositions(res.minePositions);
-          }
-          showPopup({
-            message: t.mines.hitMine,
-            type: POPUP_TYPE.ERROR,
-            position: "topCenter",
-            resultAmount: -(activeGame?.betAmount ?? 0),
-          });
-        }
-      });
+      revealTile(
+        { gameId: activeGame._id, position },
+        {
+          onSuccess: (res) => {
+            if (res.isMine) {
+              setHitMinePosition(position);
+              if (res.minePositions) {
+                setAllMinePositions(res.minePositions);
+              }
+              showPopup({
+                message: t.mines.hitMine,
+                type: POPUP_TYPE.ERROR,
+                position: "topCenter",
+                resultAmount: -(activeGame?.betAmount ?? 0),
+              });
+            }
+          },
+        },
+      );
     },
     [activeGame?._id, revealTile, showPopup],
   );
 
   const handleCashout = useCallback(() => {
     if (!activeGame?._id) return;
-    cashoutGame({ gameId: activeGame._id }).then((res) => {
-      if (res.minePositions) {
-        setAllMinePositions(res.minePositions);
-      }
-      showPopup({
-        message: `${t.mines.youWon} ${res.winAmount.toFixed(2)}$`,
-        type: POPUP_TYPE.SUCCESS,
-        position: "topCenter",
-        resultAmount: res.winAmount - (activeGame?.betAmount ?? 0),
-      });
-      setHitMinePosition(null);
-    });
+    cashoutGame(
+      { gameId: activeGame._id },
+      {
+        onSuccess: (res) => {
+          if (res.minePositions) {
+            setAllMinePositions(res.minePositions);
+          }
+          showPopup({
+            message: `${t.mines.youWon} ${res.winAmount.toFixed(2)}$`,
+            type: POPUP_TYPE.SUCCESS,
+            position: "topCenter",
+            resultAmount: res.winAmount - (activeGame?.betAmount ?? 0),
+          });
+          setHitMinePosition(null);
+        },
+      },
+    );
   }, [activeGame?._id, cashoutGame, showPopup]);
 
   const isCashoutDisabled = !activeGame || isGameOver;

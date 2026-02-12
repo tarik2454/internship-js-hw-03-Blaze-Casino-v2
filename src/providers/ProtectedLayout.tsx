@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ROUTES } from "@/shared/constants/routes";
 import { useCurrentUser } from "@/config-api/user/useUser";
 import { Loader } from "@/shared/components/Loader";
-import { ApiError } from "@/config-api/error.types";
+import { isApiException } from "@/config-api/error.types";
 import styles from "./ProtectedLayout.module.scss";
 
 interface ProtectedLayoutProps {
@@ -16,7 +16,7 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
   const router = useRouter();
   const { data, isError, isLoading, error } = useCurrentUser();
 
-  const apiError = error as ApiError;
+  const apiError = isApiException(error) ? error : null;
   const status = apiError?.status;
   const isAuthError =
     isError && (status === 401 || status === 403 || status === 404);

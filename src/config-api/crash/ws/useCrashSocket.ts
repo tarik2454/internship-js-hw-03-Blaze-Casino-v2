@@ -21,7 +21,6 @@ export function useCrashSocket() {
 
     socket.connect({
       onConnect: () => {
-        console.log("Connected to crash socket");
         if (currentGame?.gameId) {
           socket.subscribeToGame(currentGame.gameId);
         }
@@ -31,14 +30,8 @@ export function useCrashSocket() {
         setElapsed(data.elapsed);
       },
       onCrash: (data: GameCrashEvent) => {
-        console.log("WebSocket CRASH event:", data.crashPoint);
         setCrashPoint(data.crashPoint);
-        setTimeout(() => {
-          console.log("Resetting after crash...");
-          refetchCurrentGame();
-          setCrashPoint(null);
-          setMultiplier(1.0);
-        }, 3000);
+        refetchCurrentGame();
       },
     });
 

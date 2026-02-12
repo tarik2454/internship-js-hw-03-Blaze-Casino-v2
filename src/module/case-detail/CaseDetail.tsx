@@ -39,8 +39,6 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
   const handleOpenCase = () => {
     if (!caseData) return;
 
-    console.log(caseData);
-
     openCase(
       { id: caseId },
       {
