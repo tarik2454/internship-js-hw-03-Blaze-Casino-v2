@@ -5,6 +5,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Section } from "@/shared/components/Section";
 import { Container } from "@/shared/components/Container";
 import { SettingsPanel } from "@/module/settings-panel/SettingsPanel";
+import { BetAmountInput } from "@/module/settings-panel/components/BetAmountInput";
+import { PlinkoOptions } from "@/module/settings-panel/components/PlinkoOptions";
+import { ActionButtons } from "@/module/settings-panel/components/ActionButtons";
+import { useBetForm } from "@/module/settings-panel/hooks/useBetForm";
 import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
 import { queryKeyFactories } from "@/config-api/keys";
 import type {
@@ -42,6 +46,8 @@ export function Plinko() {
     lines: LinesCount;
     dropId: string;
   } | null>(null);
+
+  const bet = useBetForm({ maxBetAmount: 100 });
 
   const { mutate: postBet, isPending } = usePlinkoDrop();
   const { data: multipliersData } = usePlinkoMultipliers(riskLevel, linesCount);
@@ -103,88 +109,90 @@ export function Plinko() {
     },
   });
 
-  const handlePlaceBet = useCallback(
-    async (data: {
-      amount: number;
-      riskLevel?: RiskLevel;
-      linesCount?: LinesCount;
-      ballsCount?: BallsCount;
-    }) => {
-      playSound("startGame");
-      const currentRisk = (data.riskLevel || riskLevel) as RiskLevel;
-      const currentLines = data.linesCount || linesCount;
-      const currentBalls = data.ballsCount || ballsCount;
+  const onPlaceBet = useCallback(() => {
+    playSound("startGame");
 
-      const previousUserData = queryClient.getQueryData<CurrentUserResponse>(
+    const previousUserData = queryClient.getQueryData<CurrentUserResponse>(
+      queryKeyFactories.user.current(),
+    );
+
+    if (previousUserData) {
+      queryClient.setQueryData<CurrentUserResponse>(
         queryKeyFactories.user.current(),
-      );
-
-      if (previousUserData) {
-        queryClient.setQueryData<CurrentUserResponse>(
-          queryKeyFactories.user.current(),
-          (old) => {
-            if (!old) return old;
-            return {
-              ...old,
-              balance: old.balance - data.amount * currentBalls,
-            };
-          },
-        );
-      }
-
-      postBet(
-        {
-          amount: data.amount,
-          balls: currentBalls,
-          risk: currentRisk,
-          lines: currentLines,
+        (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            balance: old.balance - bet.amount * ballsCount,
+          };
         },
-        {
-          onSuccess: (response) => {
-            setExpectedBallsCount(response.drops.length);
-            setFinishedBallsCount(0);
+      );
+    }
 
-            const firstDropId =
-              response.drops[0]?.dropId || `temp-${Date.now()}`;
-            lastGameDataRef.current = {
-              totalBet: response.totalBet,
-              totalWin: response.totalWin,
-              newBalance: response.newBalance,
-              balls: currentBalls,
-              risk: currentRisk,
-              lines: currentLines,
-              dropId: firstDropId,
-            };
+    postBet(
+      {
+        amount: bet.amount,
+        balls: ballsCount,
+        risk: riskLevel,
+        lines: linesCount,
+      },
+      {
+        onSuccess: (response) => {
+          setExpectedBallsCount(response.drops.length);
+          setFinishedBallsCount(0);
 
-            response.drops.forEach((drop, index) => {
-              setTimeout(() => {
-                addBall(
-                  data.amount,
-                  drop.path,
-                  drop.multiplier,
-                  drop.winAmount,
-                );
-              }, index * 200);
-            });
-          },
-          onError: (error) => {
-            if (previousUserData) {
-              queryClient.setQueryData(
-                queryKeyFactories.user.current(),
-                previousUserData,
+          const firstDropId =
+            response.drops[0]?.dropId || `temp-${Date.now()}`;
+          lastGameDataRef.current = {
+            totalBet: response.totalBet,
+            totalWin: response.totalWin,
+            newBalance: response.newBalance,
+            balls: ballsCount,
+            risk: riskLevel,
+            lines: linesCount,
+            dropId: firstDropId,
+          };
+
+          response.drops.forEach((drop, index) => {
+            setTimeout(() => {
+              addBall(
+                bet.amount,
+                drop.path,
+                drop.multiplier,
+                drop.winAmount,
               );
-            }
-            showPopup({
-              message: error.message || t.plinko.failedToBet,
-              type: POPUP_TYPE.ERROR,
-              position: "topCenter",
-            });
-          },
+            }, index * 200);
+          });
         },
-      );
-    },
-    [postBet, riskLevel, linesCount, ballsCount, addBall, queryClient, playSound],
-  );
+        onError: (error) => {
+          if (previousUserData) {
+            queryClient.setQueryData(
+              queryKeyFactories.user.current(),
+              previousUserData,
+            );
+          }
+          showPopup({
+            message: error.message || t.plinko.failedToBet,
+            type: POPUP_TYPE.ERROR,
+            position: "topCenter",
+          });
+        },
+      },
+    );
+  }, [
+    postBet,
+    riskLevel,
+    linesCount,
+    ballsCount,
+    bet.amount,
+    addBall,
+    queryClient,
+    playSound,
+    showPopup,
+    t,
+  ]);
+
+  const noop = useCallback(() => {}, []);
 
   return (
     <Section>
@@ -201,20 +209,42 @@ export function Plinko() {
 
           <SettingsPanel
             title={t.plinko.configuration}
-            canBet={!isGameActive}
-            inputsDisabled={isGameActive}
-            showAutoCashout={false}
-            showCashoutButton={false}
-            showPlinkoOptions={true}
-            maxBetAmount={100}
-            onPlaceBet={handlePlaceBet}
-            riskLevel={riskLevel}
-            linesCount={linesCount}
-            ballsCount={ballsCount}
-            onRiskChange={setRiskLevel}
-            onLinesChange={setLinesCount}
-            onBallsChange={setBallsCount}
-          />
+            options={
+              <>
+                <BetAmountInput
+                  amount={bet.amount}
+                  disabled={isGameActive}
+                  locale={locale}
+                  maxBetAmount={100}
+                  onAmountChange={bet.handleAmountChange}
+                  onHalf={bet.handleHalf}
+                  onDouble={bet.handleDouble}
+                  onMax={bet.handleMax}
+                />
+                <PlinkoOptions
+                  riskLevel={riskLevel}
+                  linesCount={linesCount}
+                  ballsCount={ballsCount}
+                  onRiskChange={setRiskLevel}
+                  onLinesChange={setLinesCount}
+                  onBallsChange={setBallsCount}
+                  disabled={isGameActive}
+                  locale={locale}
+                />
+              </>
+            }
+          >
+            <ActionButtons
+              canBet={!isGameActive}
+              showCashoutButton={false}
+              isCashoutDisabled={true}
+              isCashingOut={false}
+              hideBorder={true}
+              locale={locale}
+              onPlaceBet={onPlaceBet}
+              onCashout={noop}
+            />
+          </SettingsPanel>
         </div>
       </Container>
     </Section>
