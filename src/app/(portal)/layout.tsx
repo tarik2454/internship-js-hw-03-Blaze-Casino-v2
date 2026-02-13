@@ -1,5 +1,6 @@
 import { Header } from "@/module/header/Header";
 import ProtectedLayout from "../../providers/ProtectedLayout";
+import { SoundProvider } from "../../providers/SoundProvider";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "../../providers/getQueryClient";
 import { userApi } from "@/config-api/user/user.api";
@@ -23,8 +24,10 @@ export default async function PortalLayout({
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <ProtectedLayout>
-        <Header />
-        <main>{children}</main>
+        <SoundProvider>
+          <Header />
+          <main>{children}</main>
+        </SoundProvider>
       </ProtectedLayout>
     </HydrationBoundary>
   );

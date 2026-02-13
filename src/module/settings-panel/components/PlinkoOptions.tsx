@@ -12,6 +12,8 @@ import {
   PLINKO_LINES,
   PLINKO_BALLS,
 } from "@/module/plinko/plinko.constants";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 import styles from "./PlinkoOptions.module.scss";
 import { cx } from "@/shared/utils/classNames";
 
@@ -23,6 +25,7 @@ interface PlinkoOptionsProps {
   onLinesChange: (lines: LinesCount) => void;
   onBallsChange: (balls: BallsCount) => void;
   disabled: boolean;
+  locale: Locale;
 }
 
 export const PlinkoOptions = memo(function PlinkoOptions({
@@ -33,11 +36,14 @@ export const PlinkoOptions = memo(function PlinkoOptions({
   onLinesChange,
   onBallsChange,
   disabled,
+  locale,
 }: PlinkoOptionsProps) {
+  const t = getTranslations(locale);
+
   return (
     <div className={styles.plinkoOptions}>
       <div className={styles.optionGroup}>
-        <label className={styles.optionLabel}>Risk</label>
+        <label className={styles.optionLabel}>{t.plinko.risk}</label>
         <div className={styles.optionButtons}>
           {PLINKO_RISK_LEVELS.map((risk) => (
             <Button
@@ -49,14 +55,14 @@ export const PlinkoOptions = memo(function PlinkoOptions({
               onClick={() => onRiskChange(risk)}
               disabled={disabled}
             >
-              {risk.charAt(0).toUpperCase() + risk.slice(1)}
+              {t.history.riskLevels[risk as keyof typeof t.history.riskLevels] ?? risk}
             </Button>
           ))}
         </div>
       </div>
 
       <div className={styles.optionGroup}>
-        <label className={styles.optionLabel}>Balls</label>
+        <label className={styles.optionLabel}>{t.plinko.balls}</label>
         <div className={styles.optionButtons}>
           {PLINKO_BALLS.map((balls) => (
             <Button
@@ -75,7 +81,7 @@ export const PlinkoOptions = memo(function PlinkoOptions({
       </div>
 
       <div className={styles.optionGroup}>
-        <label className={styles.optionLabel}>Row</label>
+        <label className={styles.optionLabel}>{t.plinko.row}</label>
         <div className={styles.optionButtons}>
           {PLINKO_LINES.map((lines) => (
             <Button

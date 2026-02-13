@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useState, useRef, useMemo } from "react";
-import { toast } from "react-toastify";
+import { useCallback, useEffect, useState, useRef, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Section } from "@/shared/components/Section";
 import { Container } from "@/shared/components/Container";
@@ -19,9 +18,14 @@ import {
 } from "@/config-api/plinko/usePlinko";
 import type { CurrentUserResponse } from "@/config-api/user/user.types";
 import { usePlinkoCanvas } from "./usePlinkoCanvas";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
+import { useSound } from "@/shared/hooks/useSound";
 import styles from "./Plinko.module.scss";
 
 export function Plinko() {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   const queryClient = useQueryClient();
   const { showPopup } = usePopup();
   const [riskLevel, setRiskLevel] = useState<RiskLevel>("medium");
@@ -32,6 +36,7 @@ export function Plinko() {
   const lastGameDataRef = useRef<{
     totalBet: number;
     totalWin: number;
+    newBalance: number;
     balls: BallsCount;
     risk: RiskLevel;
     lines: LinesCount;
@@ -50,6 +55,20 @@ export function Plinko() {
     [isPending, expectedBallsCount, finishedBallsCount],
   );
 
+  const { playSound, stopSound } = useSound();
+
+  useEffect(() => {
+    if (isGameActive) {
+      playSound("playing");
+    } else {
+      stopSound("playing");
+    }
+  }, [isGameActive, playSound, stopSound]);
+
+  useEffect(() => {
+    return () => stopSound("playing");
+  }, [stopSound]);
+
   const { canvasRef, addBall } = usePlinkoCanvas({
     lines: linesCount,
     multipliers,
@@ -60,12 +79,16 @@ export function Plinko() {
         if (newCount >= expectedBallsCount && expectedBallsCount > 0) {
           const data = lastGameDataRef.current;
           if (data) {
+            queryClient.setQueryData<CurrentUserResponse>(
+              queryKeyFactories.user.current(),
+              (old) => (old ? { ...old, balance: data.newBalance } : old),
+            );
             const profit = data.totalWin - data.totalBet;
             showPopup({
               message:
                 profit >= 0
-                  ? `You won ${data.totalWin.toFixed(2)}$`
-                  : "You lost",
+                  ? `${t.plinko.youWon} ${data.totalWin.toFixed(2)}$`
+                  : t.plinko.youLost,
               type: profit >= 0 ? POPUP_TYPE.SUCCESS : POPUP_TYPE.ERROR,
               position: "topCenter",
               resultAmount: profit,
@@ -87,6 +110,7 @@ export function Plinko() {
       linesCount?: LinesCount;
       ballsCount?: BallsCount;
     }) => {
+      playSound("startGame");
       const currentRisk = (data.riskLevel || riskLevel) as RiskLevel;
       const currentLines = data.linesCount || linesCount;
       const currentBalls = data.ballsCount || ballsCount;
@@ -125,6 +149,7 @@ export function Plinko() {
             lastGameDataRef.current = {
               totalBet: response.totalBet,
               totalWin: response.totalWin,
+              newBalance: response.newBalance,
               balls: currentBalls,
               risk: currentRisk,
               lines: currentLines,
@@ -149,12 +174,16 @@ export function Plinko() {
                 previousUserData,
               );
             }
-            toast.error(error.message || "Failed to place bet");
+            showPopup({
+              message: error.message || t.plinko.failedToBet,
+              type: POPUP_TYPE.ERROR,
+              position: "topCenter",
+            });
           },
         },
       );
     },
-    [postBet, riskLevel, linesCount, ballsCount, addBall, queryClient],
+    [postBet, riskLevel, linesCount, ballsCount, addBall, queryClient, playSound],
   );
 
   return (
@@ -171,12 +200,13 @@ export function Plinko() {
           </div>
 
           <SettingsPanel
-            title="Plinko Configuration"
+            title={t.plinko.configuration}
             canBet={!isGameActive}
             inputsDisabled={isGameActive}
             showAutoCashout={false}
             showCashoutButton={false}
             showPlinkoOptions={true}
+            maxBetAmount={100}
             onPlaceBet={handlePlaceBet}
             riskLevel={riskLevel}
             linesCount={linesCount}

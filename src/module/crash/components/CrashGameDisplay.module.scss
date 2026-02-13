@@ -9,7 +9,7 @@
   min-height: 361px;
   overflow: hidden;
   border-radius: var(--radius-16);
-  background: #423e6980;
+  background: var(--color-section-bg);
 
   &.isRunning {
     background: url("/images/crash/crash-bg.svg") no-repeat center center;
@@ -25,7 +25,7 @@
   &.isLose::after {
     position: absolute;
     inset: 0;
-    background: #00000099;
+    background: var(--color-overlay-dark);
     content: "";
     pointer-events: none;
   }
@@ -54,15 +54,15 @@
   &.isWin {
     backdrop-filter: none;
     background: transparent;
-    box-shadow: 0px 0px 48px 0px #82c91e;
-    color: #82c91e;
+    box-shadow: 0px 0px 48px 0px var(--color-success);
+    color: var(--color-success);
   }
 
   &.isLose {
     backdrop-filter: none;
     background: transparent;
-    box-shadow: 0px 0px 48px 0px #c62121;
-    color: #c62121;
+    box-shadow: 0px 0px 48px 0px var(--color-error);
+    color: var(--color-error);
   }
 }
 
@@ -84,11 +84,11 @@
   }
 
   &.isWin {
-    color: #82c91e;
+    color: var(--color-success);
   }
 
   &.isLose {
-    color: #c62121;
+    color: var(--color-error);
   }
 }
 
@@ -102,11 +102,11 @@
   pointer-events: none;
 
   &.isWin {
-    color: #82c91e;
+    color: var(--color-success);
   }
 
   &.isLose {
-    color: #c62121;
+    color: var(--color-error);
   }
 }
 

@@ -1,0 +1,55 @@
+html[data-theme="light"] {
+  /* Text */
+  --color-text-primary: #211d2e;
+  --color-text-secondary: #6e6880;
+
+  /* Backgrounds */
+  --color-bg-primary: #f6f4fb;
+  --color-bg-secondary: #dfdae9;
+  --color-bg-main: linear-gradient(
+    180deg,
+    #efecf4 0%,
+    #e0ddec 50%,
+    #e2dbec 100%
+  );
+  --color-auth-bg: #f9f7fd;
+  --color-card-bg: #e8e4f0;
+  --color-input-bg: #edeaf4;
+  --color-option-bg: rgba(110, 100, 160, 0.1);
+  --color-tile-bg: #dfd9ec;
+  --color-section-bg: rgba(170, 160, 200, 0.25);
+
+  /* Overlays */
+  --color-overlay: rgba(0, 0, 0, 0.3);
+  --color-overlay-dark: rgba(0, 0, 0, 0.5);
+
+  /* Accent & Links */
+  --color-accent: #7c5ce7;
+  --color-link: #6048c2;
+
+  /* Feedback */
+  --color-success: #2b8a3e;
+  --color-error: #c92a2a;
+  --color-result-win: #2b8a3e;
+  --color-result-loss: #d32f2f;
+
+  /* Borders & Dividers */
+  --color-border: #cdc6da;
+  --color-divider: #aea6be;
+
+  /* Shadows */
+  --color-shadow: rgba(80, 60, 120, 0.1);
+  --color-shadow-dark: rgba(0, 0, 0, 0.05);
+  --color-shadow-overlay: rgba(0, 0, 0, 0.1);
+
+  /* Button Glows */
+  --color-btn-danger-glow: rgba(255, 90, 140, 0.3);
+  --color-btn-gold-glow: rgba(253, 192, 78, 0.3);
+
+  /* Tabs */
+  --color-tab-active: rgba(124, 92, 231, 0.1);
+  --color-tab-hover: rgba(110, 100, 160, 0.08);
+
+  /* Loader */
+  --color-loader-track: rgba(0, 0, 0, 0.06);
+}

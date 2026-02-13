@@ -5,6 +5,8 @@ import { Button } from "@/shared/components/Button";
 import { DollarBtnIcon } from "@/shared/icons/dollar-btn";
 import { WalletBtnIcon } from "@/shared/icons/wallet-btn";
 import { cx } from "@/shared/utils/classNames";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 import styles from "./ActionButtons.module.scss";
 
 interface ActionButtonsProps {
@@ -13,6 +15,7 @@ interface ActionButtonsProps {
   isCashoutDisabled: boolean;
   isCashingOut: boolean;
   hideBorder?: boolean;
+  locale: Locale;
   onPlaceBet: () => void;
   onCashout: () => void;
 }
@@ -23,9 +26,11 @@ export const ActionButtons = memo(function ActionButtons({
   isCashoutDisabled,
   isCashingOut,
   hideBorder = false,
+  locale,
   onPlaceBet,
   onCashout,
 }: ActionButtonsProps) {
+  const t = getTranslations(locale);
   return (
     <div
       className={cx(
@@ -39,7 +44,7 @@ export const ActionButtons = memo(function ActionButtons({
         onClick={onPlaceBet}
         disabled={!canBet}
       >
-        Place Bet
+        {t.settings.placeBet}
         <span className={styles.actionButtonIcon}>
           <DollarBtnIcon />
         </span>
@@ -51,7 +56,7 @@ export const ActionButtons = memo(function ActionButtons({
           onClick={onCashout}
           disabled={isCashoutDisabled}
         >
-          {isCashingOut ? "Cashing out..." : "Cashout"}
+          {isCashingOut ? t.settings.cashingOut : t.settings.cashout}
           <span className={styles.actionButtonIcon}>
             <WalletBtnIcon />
           </span>

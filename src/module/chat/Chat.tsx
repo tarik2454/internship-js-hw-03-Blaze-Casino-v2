@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, FormEvent, useEffect, useState } from "react";
-import Image from "next/image";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import styles from "./Chat.module.scss";
 import { ArrowTop } from "@/shared/icons/arrow-top";
@@ -11,13 +10,17 @@ import { cx } from "@/shared/utils/classNames";
 import { formatTime } from "./chat.utils";
 import { ChatItem } from "./components/ChatItem";
 import { Section } from "@/shared/components/Section";
-
 import { MessageIcon } from "@/shared/icons/message";
+import { ChatTitleIcon } from "@/shared/icons/chat-title";
 import { Button } from "@/shared/components/Button";
 import { useLockBodyScroll } from "@/shared/hooks/useLockBodyScroll";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 export function Chat() {
   "use no memo";
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   const { messages, onlineCount, currentUser, sendMessage } = useChat();
 
   const { data: usersData } = useUsers();
@@ -96,17 +99,12 @@ export function Chat() {
       >
         <Section className={styles.chat}>
           <div className={styles.chatTitleWrapper}>
-            <Image
-              src="/images/chat/chat-title.svg"
-              alt="Chat title"
-              width={100}
-              height={18}
-            />
+            <ChatTitleIcon />
           </div>
 
           <ul className={styles.usersList}>
-            <li className={styles.userItem}>{onlineCount} online</li>
-            <li className={styles.userItem}>{totalUsers} friends</li>
+            <li className={styles.userItem}>{onlineCount} {t.chat.online}</li>
+            <li className={styles.userItem}>{totalUsers} {t.chat.friends}</li>
           </ul>
 
           <div ref={parentRef} className={styles.chatListContainer}>
@@ -134,6 +132,7 @@ export function Chat() {
                         virtualItem={virtualItem}
                         virtualizer={virtualizer}
                         formatTime={formatTime}
+                        locale={locale}
                       />
                     );
                   });
@@ -149,7 +148,7 @@ export function Chat() {
               type="text"
               id="chat-message"
               name="message"
-              placeholder="Write a message..."
+              placeholder={t.chat.messagePlaceholder}
               className={styles.chatInput}
               ref={messageInputRef}
             />

@@ -6,7 +6,7 @@
   flex-direction: column;
   padding: 10px 8px;
   border-radius: var(--radius-16);
-  background: #423e6980;
+  background: var(--color-section-bg);
 
   &::before {
     position: absolute;
@@ -85,12 +85,8 @@
 }
 
 .itemValue {
-  background: linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
+  @include gradientText;
   font-size: 14px;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
   font-weight: 600;
 }
 

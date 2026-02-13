@@ -8,8 +8,12 @@ import { useRouter } from "next/navigation";
 import { usePopup } from "@/providers/PopupProvider";
 import { SESSION_MODE } from "@/config-api/session/session.constants";
 import { ROUTES } from "@/shared/constants/routes";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 export default function RegisterPage() {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   const { mutate: handleRegister } = useRegister();
   const router = useRouter();
   const { showPopup } = usePopup();
@@ -18,7 +22,7 @@ export default function RegisterPage() {
     handleRegister(data, {
       onSuccess: () => {
         showPopup({
-          message: "Registration successful. Please login.",
+          message: t.auth.registerSuccess,
           type: "success",
         });
         router.push(ROUTES.LOGIN);

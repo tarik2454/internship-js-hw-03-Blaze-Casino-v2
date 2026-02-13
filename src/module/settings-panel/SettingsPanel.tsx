@@ -9,6 +9,7 @@ import { MinesOptions } from "./components/MinesOptions";
 import { BetStats } from "./components/BetStats";
 import { ActionButtons } from "./components/ActionButtons";
 import { useSettingsPanel } from "./hooks/useSettingsPanel";
+import { useLocale } from "@/providers/LocaleProvider";
 import styles from "./SettingsPanel.module.scss";
 export function SettingsPanel({
   title,
@@ -18,6 +19,7 @@ export function SettingsPanel({
   showCashoutButton = true,
   showPlinkoOptions = false,
   showMinesOptions = false,
+  maxBetAmount = 10000,
   isCashoutDisabled = true,
   stats,
   computeStats,
@@ -35,6 +37,7 @@ export function SettingsPanel({
   onGridSizeChange,
   onMineAmountChange,
 }: SettingsPanelProps) {
+  const { locale } = useLocale();
   const {
     amount,
     autoCashout,
@@ -61,6 +64,7 @@ export function SettingsPanel({
   } = useSettingsPanel({
     showPlinkoOptions,
     showMinesOptions,
+    maxBetAmount,
     onPlaceBet,
     onCashout,
     riskLevel,
@@ -83,6 +87,8 @@ export function SettingsPanel({
         <BetAmountInput
           amount={amount}
           disabled={inputsDisabled}
+          locale={locale}
+          maxBetAmount={maxBetAmount}
           onAmountChange={handleAmountChange}
           onHalf={handleHalf}
           onDouble={handleDouble}
@@ -94,6 +100,7 @@ export function SettingsPanel({
             autoCashout={autoCashout}
             isAuto={isAuto}
             disabled={inputsDisabled}
+            locale={locale}
             onAutoToggle={handleAutoToggle}
             onAutoCashoutChange={handleAutoCashoutChange}
           />
@@ -108,6 +115,7 @@ export function SettingsPanel({
             onLinesChange={setLinesCount}
             onBallsChange={setBallsCount}
             disabled={inputsDisabled}
+            locale={locale}
           />
         )}
 
@@ -118,6 +126,7 @@ export function SettingsPanel({
             gridSize={currentGridSize}
             onGridSizeChange={setGridSize}
             disabled={inputsDisabled}
+            locale={locale}
           />
         )}
       </div>
@@ -128,6 +137,7 @@ export function SettingsPanel({
         isCashoutDisabled={isCashoutDisabled}
         isCashingOut={isCashingOut}
         hideBorder={showPlinkoOptions}
+        locale={locale}
         onPlaceBet={handlePlaceBet}
         onCashout={handleCashout}
       />

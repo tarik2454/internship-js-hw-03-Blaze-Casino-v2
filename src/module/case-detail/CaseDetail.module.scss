@@ -33,11 +33,7 @@
 }
 
 .casePrice {
-  background: linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
+  @include gradientText;
 }
 
 .caseImageWrapper {

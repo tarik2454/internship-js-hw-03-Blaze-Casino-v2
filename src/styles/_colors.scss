@@ -1,0 +1,69 @@
+:root {
+  /* Utility */
+  --color-white: #fff;
+  --color-black: #000;
+  --color-transparent: transparent;
+
+  /* Text */
+  --color-text-primary: #fff;
+  --color-text-secondary: #adb5bd;
+
+  /* Backgrounds */
+  --color-bg-primary: #0f0c29;
+  --color-bg-secondary: #423e69;
+  --color-bg-main: linear-gradient(
+    180deg,
+    #0f0c29 0%,
+    #312c5f 50%,
+    #24243e 100%
+  );
+  --color-auth-bg: #151417;
+  --color-card-bg: #24243f;
+  --color-input-bg: #302c55;
+  --color-option-bg: #7c7ce854;
+  --color-tile-bg: #3d3858;
+  --color-section-bg: #423e6980;
+
+  /* Overlays */
+  --color-overlay: #00000080;
+  --color-overlay-dark: #00000099;
+
+  /* Accent & Links */
+  --color-accent: #887bff;
+  --color-link: #51a2ff;
+
+  /* Feedback */
+  --color-success: #82c91e;
+  --color-error: #c62121;
+  --color-result-win: #4ade80;
+  --color-result-loss: #ff5f5f;
+
+  /* Borders & Dividers */
+  --color-border: #adb5bd;
+  --color-divider: #848484;
+
+  /* Shadows */
+  --color-shadow: #bfd8ff33;
+  --color-shadow-dark: #1515153d;
+  --color-shadow-overlay: rgba(0, 0, 0, 0.3);
+
+  /* Gradients */
+  --gradient-gold: linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
+  --gradient-gold-hover: linear-gradient(180deg, #ffc352 0%, #e59603 100%);
+  --gradient-gold-active: linear-gradient(180deg, #f1b23e 0%, #aa6e00 100%);
+  --gradient-gold-disabled: linear-gradient(180deg, #ffdea1 0%, #fcc869 100%);
+  --gradient-danger: linear-gradient(0deg, #ff0047 0%, #ff417b 100%);
+  --gradient-danger-hover: linear-gradient(0deg, #ba0034 0%, #ff185f 100%);
+  --gradient-danger-disabled: linear-gradient(0deg, #ff6892 0%, #ff9bb9 100%);
+
+  /* Button Glows */
+  --color-btn-danger-glow: #ff5a8c;
+  --color-btn-gold-glow: #fdc04e;
+
+  /* Tabs */
+  --color-tab-active: #7c7ce830;
+  --color-tab-hover: #adb5bd33;
+
+  /* Loader */
+  --color-loader-track: rgba(255, 255, 255, 0.1);
+}

@@ -9,9 +9,9 @@ export function ArrowLeftIcon() {
     >
       <path
         stroke="url(#a)"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
         d="M16.75 6.75h-16m0 0 6-6m-6 6 6 6"
       />
       <defs>
@@ -23,8 +23,8 @@ export function ArrowLeftIcon() {
           y2="12.75"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#ffcd71" />
-          <stop offset="1" stop-color="#e59603" />
+          <stop stopColor="#ffcd71" />
+          <stop offset="1" stopColor="#e59603" />
         </linearGradient>
       </defs>
     </svg>

@@ -6,14 +6,11 @@
   gap: 16px;
   border: 1px solid transparent;
   border-radius: var(--radius-8);
-  background-color: var(--color-blue-3f);
-  box-shadow: 0px 2px 10px 0px #bfd8ff33;
+  background-color: var(--color-card-bg);
+  box-shadow: 0px 2px 10px 0px var(--color-shadow);
 
   &.currentUserItem {
-    border: 2px solid transparent;
-    background:
-      linear-gradient(var(--color-blue-3f), var(--color-blue-3f)) padding-box,
-      linear-gradient(180deg, #ffcd71 0%, #e59603 100%) border-box;
+    @include gradientBorder;
   }
 }
 
@@ -66,6 +63,7 @@
 }
 
 .itemWinRate {
-  color: var(--color-green-1e);
+  color: var(--color-success);
   font-size: 12px;
+  text-wrap: nowrap;
 }

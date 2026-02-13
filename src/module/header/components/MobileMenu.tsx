@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import styles from "./MobileMenu.module.scss";
 import { cx } from "@/shared/utils/classNames";
 import { Logo } from "@/shared/components/Logo";
@@ -7,7 +8,12 @@ import { LogoutIcon } from "@/shared/icons/logout";
 import { Button } from "@/shared/components/Button";
 import { InvertoryIcon } from "@/shared/icons/invertory";
 import { SettingsIcon } from "@/shared/icons/settings";
+import Link from "next/link";
 import { useLockBodyScroll } from "@/shared/hooks/useLockBodyScroll";
+import { useLocale, type Locale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
+import { ROUTES } from "@/shared/constants/routes";
+import { SettingsMenu } from "./SettingsMenu";
 
 interface MobileMenuProps {
   isVisible: boolean;
@@ -22,6 +28,10 @@ export function MobileMenu({
   closeMenu,
   handleLogout,
 }: MobileMenuProps) {
+  const { locale, setLocale } = useLocale();
+  const t = getTranslations(locale);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const settingsButtonRef = useRef<HTMLButtonElement>(null);
   useLockBodyScroll(isVisible);
 
   return (
@@ -41,7 +51,7 @@ export function MobileMenu({
         <button
           className={styles.closeMenuButton}
           onClick={toggleMenu}
-          aria-label="Close menu"
+          aria-label={t.accessibility.closeMenu}
         >
           ×
         </button>
@@ -52,12 +62,34 @@ export function MobileMenu({
           </div>
 
           <div className={styles.mobileMenuButtons}>
-            <Button className={styles.mobileMenuButton}>
-              <InvertoryIcon /> Invertory
-            </Button>
-            <Button className={styles.mobileMenuButton}>
-              <SettingsIcon /> Settings
-            </Button>
+            <Link
+              href={ROUTES.PROFILE}
+              className={styles.mobileMenuLink}
+              onClick={closeMenu}
+            >
+              <InvertoryIcon /> {t.header.profile}
+            </Link>
+
+            <div className={styles.settingsWrapper}>
+              <Button
+                ref={settingsButtonRef}
+                className={styles.mobileMenuButton}
+                onClick={() => setIsSettingsOpen((prev) => !prev)}
+              >
+                <SettingsIcon /> {t.header.settings}
+              </Button>
+              {isSettingsOpen && (
+                <SettingsMenu
+                  currentLocale={locale}
+                  onSelect={(lang: Locale) => {
+                    setLocale(lang);
+                    setIsSettingsOpen(false);
+                  }}
+                  onClose={() => setIsSettingsOpen(false)}
+                  triggerRef={settingsButtonRef}
+                />
+              )}
+            </div>
           </div>
         </div>
 
@@ -66,7 +98,7 @@ export function MobileMenu({
           stylesVariant="yellowGradient"
           onClick={handleLogout}
         >
-          Logout <LogoutIcon />
+          {t.header.logout} <LogoutIcon />
         </Button>
       </div>
     </>

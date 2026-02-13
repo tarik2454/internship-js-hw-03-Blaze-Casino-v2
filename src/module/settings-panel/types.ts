@@ -43,6 +43,7 @@ export interface SettingsPanelProps {
   onBallsChange?: (balls: BallsCount) => void;
   onGridSizeChange?: (size: MinesGridSize) => void;
   onMineAmountChange?: (amount: MinesMineAmount) => void;
+  maxBetAmount?: number;
   isCashoutDisabled?: boolean;
   stats?: StatItem[];
   computeStats?: (

@@ -1,4 +1,6 @@
 @use "./reset";
+@use "./colors";
+@use "./theme-light";
 @use "./index" as *;
 
 * {
@@ -17,7 +19,7 @@ main {
 }
 
 body {
-  background: linear-gradient(180deg, #0f0c29 0%, #312c5f 50%, #24243e 100%);
+  background: var(--color-bg-main);
   color: var(--color-text-primary);
   font-weight: 400;
   font-size: 16px;

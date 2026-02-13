@@ -26,7 +26,7 @@
   transition: background var(--transition-250);
 
   &:hover:not(:disabled) {
-    background: var(--color-blue-58);
+    background: var(--color-tile-bg);
   }
 
   &:disabled {
@@ -39,11 +39,11 @@
 }
 
 .mineTileCoin {
-  background: linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
+  background: var(--gradient-gold);
 }
 
 .mineTileMine {
-  background: linear-gradient(0deg, #ff0047 0%, #ff417b 100%);
+  background: var(--gradient-danger);
 }
 
 .mineTileIconWrapper {

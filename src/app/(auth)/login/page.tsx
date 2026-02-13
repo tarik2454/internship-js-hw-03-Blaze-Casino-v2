@@ -10,8 +10,12 @@ import { usePopup } from "@/providers/PopupProvider";
 import { ROUTES } from "@/shared/constants/routes";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeyFactories } from "@/config-api/keys";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 export default function LoginPage() {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   const { mutate: handleLogin } = useLogin();
   const router = useRouter();
   const { showPopup } = usePopup();
@@ -24,7 +28,7 @@ export default function LoginPage() {
           queryKey: queryKeyFactories.user.current(),
         });
         showPopup({
-          message: "Login successful",
+          message: t.auth.loginSuccess,
           type: "success",
         });
         router.push(ROUTES.HOME);

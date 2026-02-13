@@ -24,25 +24,21 @@
 }
 
 .profileAvatar {
-  border: 2px solid transparent;
+  @include gradientBorder($bg: var(--color-section-bg));
   border-radius: 50%;
-
-  background:
-    linear-gradient(rgba(66, 62, 105, 0.5), rgba(66, 62, 105, 0.5)) padding-box,
-    linear-gradient(180deg, #ffcd71 0%, #e59603 100%) border-box;
 }
 
 .profileInfo {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 100%;
   max-width: 660px;
   padding: 16px 0;
   gap: 40px;
   border-radius: var(--radius-16);
-  background: #423e6980;
+  background: var(--color-section-bg);
 }
 
 .profileInfoItem {
@@ -52,6 +48,10 @@
   gap: 4px;
   color: var(--color-text-secondary);
   line-height: 1.5;
+
+  &:last-child {
+    gap: 7px;
+  }
 }
 
 .profileInfoItemValue {

@@ -13,9 +13,13 @@ import {
   formatCountdownShort,
   getCountdownSeconds,
 } from "./bonus.utils";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 import styles from "./Bonus.module.scss";
 
 export default function Bonus() {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   const queryClient = useQueryClient();
   const [tick, setTick] = useState(0);
   const { data: bonusStatus, isLoading, refetch } = useBonus();
@@ -61,7 +65,7 @@ export default function Bonus() {
     return (
       <Section>
         <Container>
-          <div className={styles.bonusWrapper}>Loading...</div>
+          <div className={styles.bonusWrapper}>{t.common.loading}</div>
         </Container>
       </Section>
     );
@@ -79,20 +83,20 @@ export default function Bonus() {
     <Section>
       <Container>
         <div className={styles.bonusWrapper}>
-          <h2 className={styles.bonusTitle}>Minute Bonus</h2>
+          <h2 className={styles.bonusTitle}>{t.bonus.title}</h2>
 
           <div className={styles.bonusCard}>
             <div className={styles.bonusAmountBlock}>
               <span className={styles.bonusAmountValue}>
                 ${amount.toFixed(2)}
               </span>
-              <span className={styles.bonusAmountLabel}>Bonus Amount</span>
+              <span className={styles.bonusAmountLabel}>{t.bonus.bonusAmount}</span>
               {countdownShort != null ? (
                 <span className={styles.bonusNextIn}>
-                  Next bonus in: <strong>{countdownShort}</strong>
+                  {t.bonus.nextBonusIn} <strong>{countdownShort}</strong>
                 </span>
               ) : isAvailable ? (
-                <span className={styles.bonusAvailable}>Available now!</span>
+                <span className={styles.bonusAvailable}>{t.bonus.availableNow}</span>
               ) : null}
             </div>
 
@@ -100,19 +104,19 @@ export default function Bonus() {
 
             <div className={styles.bonusBreakdown}>
               <div className={styles.bonusBreakdownItem}>
-                <span className={styles.bonusBreakdownLabel}>Base Amount</span>
+                <span className={styles.bonusBreakdownLabel}>{t.bonus.baseAmount}</span>
                 <span className={styles.bonusBreakdownValue}>
                   ${baseAmount.toFixed(2)}
                 </span>
               </div>
               <div className={styles.bonusBreakdownItem}>
-                <span className={styles.bonusBreakdownLabel}>Wager Bonus</span>
+                <span className={styles.bonusBreakdownLabel}>{t.bonus.wagerBonus}</span>
                 <span className={styles.bonusBreakdownValue}>
                   ${wagerBonus.toFixed(2)}
                 </span>
               </div>
               <div className={styles.bonusBreakdownItem}>
-                <span className={styles.bonusBreakdownLabel}>Games Bonus</span>
+                <span className={styles.bonusBreakdownLabel}>{t.bonus.gamesBonus}</span>
                 <span className={styles.bonusBreakdownValue}>
                   ${gamesBonus.toFixed(2)}
                 </span>
@@ -122,7 +126,7 @@ export default function Bonus() {
             <div className={styles.bonusSeparator} />
 
             <div className={styles.bonusNextClaim}>
-              <span className={styles.bonusNextClaimLabel}>Next Claim At</span>
+              <span className={styles.bonusNextClaimLabel}>{t.bonus.nextClaimAt}</span>
               <span className={styles.bonusNextClaimValue}>
                 {nextClaimAt ? formatBonusDate(nextClaimAt) : ""}
               </span>
@@ -135,7 +139,7 @@ export default function Bonus() {
             onClick={handleClaim}
             disabled={!isAvailable || isClaiming}
           >
-            Claim Bonus{countdownShort != null ? ` (${countdownShort})` : ""}
+            {t.bonus.claimBonus}{countdownShort != null ? ` (${countdownShort})` : ""}
           </Button>
         </div>
       </Container>

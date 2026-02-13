@@ -2,7 +2,8 @@
   "common": {
     "loading": "Завантаження...",
     "error": "Помилка",
-    "unknown": "Невідомо"
+    "unknown": "Невідомо",
+    "home": "Головна"
   },
   "auth": {
     "title": "Blaze Casino",
@@ -25,7 +26,7 @@
   "header": {
     "logout": "Вийти",
     "logoutSuccess": "Вихід успішний",
-    "inventory": "Інвентар",
+    "profile": "Профіль",
     "settings": "Налаштування"
   },
   "language": {
@@ -48,16 +49,16 @@
     "totalGame": "Всього ігор",
     "win": "Виграші",
     "loss": "Програші",
-    "location": "Місцезнаходження",
+    "location": "Локація",
     "errorLoading": "Помилка завантаження профілю"
   },
   "chat": {
     "online": "онлайн",
-    "friends": "друзі",
+    "friends": "друзів",
     "messagePlaceholder": "Напишіть повідомлення..."
   },
   "leaderboard": {
-    "title": "Таблиця лідерів",
+    "title": "Лідерборд",
     "topPlayers": "Топ гравці",
     "games": "ігор",
     "winRate": "перемог"
@@ -103,7 +104,11 @@
     "mineAmount": "Кількість мін",
     "gridSize": "Розмір поля",
     "hitMine": "Ви потрапили на міну! Гра закінчена.",
-    "youWon": "Ви виграли"
+    "youWon": "Ви виграли",
+    "youLost": "Ви програли",
+    "ariaMineTile": "Міна",
+    "ariaSafeTile": "Безпечно",
+    "ariaTile": "Клітинка"
   },
   "plinko": {
     "configuration": "Налаштування Плінко",
@@ -121,16 +126,34 @@
     "skipAnimation": "пропустити анімацію",
     "sellFor": "Продати за",
     "soldFor": "Продано за",
-    "tryAgain": "Спробувати знову",
-    "notFound": "Кейс не знайдено"
+    "tryAgain": "Спробувати ще",
+    "notFound": "Кейс не знайдено",
+    "names": {
+      "Animal Case": "Кейс тварин",
+      "Space Case": "Космічний кейс",
+      "Food Case": "Кейс їжі",
+      "Sports Case": "Спортивний кейс"
+    },
+    "rarities": {
+      "common": "Звичайний",
+      "uncommon": "Незвичайний",
+      "rare": "Рідкісний",
+      "epic": "Епічний",
+      "legendary": "Легендарний",
+      "gold": "Золотий"
+    }
   },
   "settings": {
     "betAmount": "Сума ставки",
+    "betAmountPlaceholder": "10.000",
     "autoCashout": "Авто-вивід (опціонально)",
     "autoCashoutPlaceholder": "напр. 2.00",
     "placeBet": "Зробити ставку",
     "cashout": "Забрати",
-    "cashingOut": "Виводжу..."
+    "cashingOut": "Виводжу...",
+    "half": "1/2",
+    "double": "x2",
+    "max": "Макс"
   },
   "history": {
     "title": "Історія ігор",
@@ -147,7 +170,42 @@
     "lines": "Лінії",
     "risk": "Ризик",
     "win": "Виграш",
-    "won": "виграв",
-    "lost": "програв"
+    "statuses": {
+      "won": "виграв",
+      "lost": "програв",
+      "cashed_out": "виграв"
+    },
+    "riskLevels": {
+      "low": "Низький",
+      "medium": "Середній",
+      "high": "Високий",
+      "extreme": "Екстремальний"
+    }
+  },
+  "breadcrumbs": {
+    "home": "Головна",
+    "allGames": "Усі ігри",
+    "crash": "Краш",
+    "cases": "Кейси",
+    "caseDetails": "Деталі кейсу",
+    "mines": "Міни",
+    "plinko": "Плінко",
+    "profile": "Профіль",
+    "bonus": "Бонус",
+    "ariaLabel": "Навігація"
+  },
+  "accessibility": {
+    "chatTitle": "Заголовок чату",
+    "userAvatar": "Аватар користувача",
+    "dollar": "Долар",
+    "rocket": "Ракета",
+    "planet1": "Планета 1",
+    "planet2": "Планета 2",
+    "prize": "Приз",
+    "star": "Зірка",
+    "location": "Локація",
+    "closeMenu": "Закрити меню",
+    "lightTheme": "Світла тема",
+    "darkTheme": "Темна тема"
   }
 }

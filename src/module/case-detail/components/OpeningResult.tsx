@@ -10,14 +10,19 @@ import { queryKeyFactories } from "@/config-api/keys";
 import { CurrentUserResponse } from "@/config-api/user/user.types";
 import { useUpdateCurrentUser } from "@/config-api/user/useUser";
 import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 
 export function OpeningResult({
   openingResult,
   setIsOpenResult,
+  locale,
 }: {
   setIsOpenResult: (isOpenResult: boolean) => void;
   openingResult: CaseOpeningResponse;
+  locale: Locale;
 }) {
+  const t = getTranslations(locale);
   const [sold, setSold] = useState(false);
   const { mutate: updateUser } = useUpdateCurrentUser();
   const queryClient = useQueryClient();
@@ -38,7 +43,7 @@ export function OpeningResult({
           setSold(true);
           const netProfit = openingResult.itemValue - openingResult.casePrice;
           showPopup({
-            message: `Sold for ${openingResult.itemValue.toFixed(2)}$`,
+            message: `${t.cases.soldFor} ${openingResult.itemValue.toFixed(2)}$`,
             type: netProfit >= 0 ? POPUP_TYPE.SUCCESS : POPUP_TYPE.ERROR,
             position: "topCenter",
             resultAmount: netProfit,
@@ -78,14 +83,14 @@ export function OpeningResult({
           onClick={handleSell}
           disabled={sold}
         >
-          Sell for {value}$
+          {t.cases.sellFor} {value}$
         </Button>
         <Button
           stylesVariant="redGradient"
           className={styles.actionButton}
           onClick={handleTryAgain}
         >
-          Try again
+          {t.cases.tryAgain}
         </Button>
       </div>
     </div>

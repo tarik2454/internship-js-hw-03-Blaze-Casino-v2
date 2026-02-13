@@ -4,7 +4,7 @@ import { Container } from "@/shared/components/Container";
 import Image from "next/image";
 import styles from "./Header.module.scss";
 import { NavToggleIcon } from "@/shared/icons/nav-toggle";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MobileMenu } from "./components/MobileMenu";
 import { Button } from "@/shared/components/Button";
 import { LogoutIcon } from "@/shared/icons/logout";
@@ -18,7 +18,9 @@ import { useCurrentUser } from "@/config-api/user/useUser";
 import Link from "next/link";
 import { useLocale, type Locale } from "@/providers/LocaleProvider";
 import { SettingsIcon } from "@/shared/icons/settings";
-import { LanguageMenu } from "./components/LanguageMenu";
+import { SettingsMenu } from "./components/SettingsMenu";
+import { getTranslations } from "@/i18n";
+import { useSound } from "@/shared/hooks/useSound";
 
 export function Header() {
   const [isVisible, setIsVisible] = useState(false);
@@ -26,12 +28,29 @@ export function Header() {
 
   const { showPopup } = usePopup();
   const router = useRouter();
+
+  const { locale, setLocale } = useLocale();
+  const t = getTranslations(locale);
+
   const { mutate: logoutMutation } = useLogout();
   const { data: leaderboardData } = useLeaderboard();
   const { data: userData } = useCurrentUser();
-  const { locale, setLocale } = useLocale();
 
   const settingsButtonRef = useRef<HTMLButtonElement>(null);
+
+  const { playSound } = useSound();
+  const prevBalanceRef = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (userData?.balance === undefined) return;
+    if (
+      prevBalanceRef.current !== undefined &&
+      userData.balance > prevBalanceRef.current
+    ) {
+      playSound("addingMoney");
+    }
+    prevBalanceRef.current = userData.balance;
+  }, [userData?.balance, playSound]);
 
   const currentUserAvatar =
     userData?.avatarURL || leaderboardData?.currentUser?.avatarURL;
@@ -45,7 +64,7 @@ export function Header() {
   const handleLogout = () => {
     logoutMutation(undefined, {
       onSuccess: () => {
-        showPopup({ message: "Logout successful", type: "success" });
+        showPopup({ message: t.header.logoutSuccess, type: "success" });
         router.push(ROUTES.LOGIN);
       },
     });
@@ -81,7 +100,7 @@ export function Header() {
                 <div className={styles.balance}>
                   <Image
                     src="/images/common/dollar.svg"
-                    alt="Dollar"
+                    alt={t.accessibility.dollar}
                     width={24}
                     height={24}
                   />
@@ -89,7 +108,7 @@ export function Header() {
                   <span>
                     {userData?.balance !== undefined
                       ? userData.balance
-                          .toLocaleString("en-US")
+                          .toLocaleString("en-US", { useGrouping: true })
                           .replace(/,/g, ".")
                       : "0"}
                   </span>
@@ -98,7 +117,7 @@ export function Header() {
                   {currentUserAvatar ? (
                     <Image
                       src={currentUserAvatar}
-                      alt="User Avatar"
+                      alt={t.accessibility.userAvatar}
                       width={40}
                       height={40}
                       className={styles.userAvatar}
@@ -106,7 +125,7 @@ export function Header() {
                   ) : (
                     <Image
                       src="/images/header/user.svg"
-                      alt="User Avatar"
+                      alt={t.accessibility.userAvatar}
                       width={32}
                       height={32}
                     />
@@ -124,7 +143,7 @@ export function Header() {
                     <SettingsIcon />
                   </Button>
                   {isLanguageMenuOpen && (
-                    <LanguageMenu
+                    <SettingsMenu
                       currentLocale={locale}
                       onSelect={handleSelectLanguage}
                       onClose={() => setIsLanguageMenuOpen(false)}
@@ -138,7 +157,7 @@ export function Header() {
                   stylesVariant="yellowGradient"
                   onClick={handleLogout}
                 >
-                  Logout <LogoutIcon />
+                  {t.header.logout} <LogoutIcon />
                 </Button>
               </div>
             </div>

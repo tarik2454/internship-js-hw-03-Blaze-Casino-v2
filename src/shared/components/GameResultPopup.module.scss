@@ -14,7 +14,7 @@
   border: 1px solid color-mix(in srgb, #e7000b 50%, transparent);
   border-radius: 8px;
   background: color-mix(in srgb, #82181a 30%, transparent);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px var(--color-shadow-overlay);
 
   opacity: 0;
   transition: opacity 0.3s ease-out;
@@ -52,13 +52,13 @@
 }
 
 .label {
-  color: #ff5f5f;
+  color: var(--color-result-loss);
   font-weight: 700;
   font-size: 16px;
   text-align: center;
 
   .success & {
-    color: #4ade80;
+    color: var(--color-result-win);
   }
 }
 

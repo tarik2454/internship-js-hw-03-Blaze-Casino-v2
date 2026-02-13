@@ -15,6 +15,7 @@ export const bonusApi = {
   postClaimBonus: async (token?: string): Promise<ClaimBonusResponse> => {
     const { data } = await api.post<ClaimBonusResponse>(
       BONUS_ROUTES.CLAIM_BONUS,
+      null,
       createAuthConfig(token),
     );
     return data;

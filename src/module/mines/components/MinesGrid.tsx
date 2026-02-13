@@ -3,6 +3,8 @@
 import { useMemo } from "react";
 import Image from "next/image";
 import { cx } from "@/shared/utils/classNames";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 import styles from "./MinesGrid.module.scss";
 
 type MinesGridSize = 5 | 6 | 7 | 8;
@@ -16,6 +18,7 @@ interface MinesGridProps {
   allMinePositions?: number[];
   onReveal: (position: number) => void;
   disabled: boolean;
+  locale: Locale;
 }
 
 export function MinesGrid({
@@ -25,7 +28,9 @@ export function MinesGrid({
   allMinePositions = [],
   onReveal,
   disabled,
+  locale,
 }: MinesGridProps) {
+  const t = getTranslations(locale);
   const totalTiles = gridSize * gridSize;
   const revealedSet = useMemo(() => new Set(revealedTiles), [revealedTiles]);
   const minePositionsSet = useMemo(
@@ -59,7 +64,7 @@ export function MinesGrid({
             onClick={() => !disabled && !isRevealed && onReveal(index)}
             disabled={disabled || isRevealed}
             aria-label={
-              showBomb ? "Mine" : showCoin ? "Safe" : `Tile ${index + 1}`
+              showBomb ? t.mines.ariaMineTile : showCoin ? t.mines.ariaSafeTile : `${t.mines.ariaTile} ${index + 1}`
             }
           >
             {showCoin && (

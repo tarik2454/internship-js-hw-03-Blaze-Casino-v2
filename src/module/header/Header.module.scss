@@ -11,7 +11,7 @@
   @include minWidth(xl) {
     top: 0;
     padding: 24px 0;
-    background: linear-gradient(180deg, #0f0c29 0%, #312c5f 50%, #24243e 100%);
+    background: var(--color-bg-main);
   }
 }
 
@@ -58,7 +58,7 @@
   padding: 14px 24px;
   gap: 8px;
   transform: translateX(-50%);
-  border: 1px solid var(--color-grey-bd);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-1000);
   font-weight: 600;
 
@@ -71,6 +71,7 @@
 }
 
 .userAvatar {
+  @include gradientBorder;
   border-radius: 50%;
 }
 

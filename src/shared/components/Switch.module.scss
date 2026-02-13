@@ -29,7 +29,7 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: #82c91e;
+    background: var(--color-success);
     content: "";
     transition: transform 0.2s;
   }

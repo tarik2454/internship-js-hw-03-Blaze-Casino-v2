@@ -10,6 +10,8 @@ import {
   type MinesGridSize,
   type MinesMineAmount,
 } from "@/module/mines/mines.constants";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 import styles from "./MinesOptions.module.scss";
 
 interface MinesOptionsProps {
@@ -18,6 +20,7 @@ interface MinesOptionsProps {
   gridSize: MinesGridSize;
   onGridSizeChange: (size: MinesGridSize) => void;
   disabled?: boolean;
+  locale: Locale;
 }
 
 export const MinesOptions = memo(function MinesOptions({
@@ -26,12 +29,15 @@ export const MinesOptions = memo(function MinesOptions({
   gridSize,
   onGridSizeChange,
   disabled = false,
+  locale,
 }: MinesOptionsProps) {
+  const t = getTranslations(locale);
+
   return (
     <div className={styles.minesOptions}>
       <div className={styles.mineAmountWrapper}>
         <Input
-          label="Mine Amount"
+          label={t.mines.mineAmount}
           type="text"
           readOnly
           labelClassName={styles.optionLabel}
@@ -55,7 +61,7 @@ export const MinesOptions = memo(function MinesOptions({
       </div>
 
       <div>
-        <label className={styles.optionGridLabel}>Grid Size</label>
+        <label className={styles.optionGridLabel}>{t.mines.gridSize}</label>
         <div className={styles.optionButtons}>
           {MINES_GRID_SIZES.map((size) => (
             <Button

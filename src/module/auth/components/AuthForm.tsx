@@ -17,6 +17,8 @@ import {
   RegisterSchemaDto,
   registerSchema,
 } from "../auth.schema";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 type AuthFormProps<T> = {
   mode: "login" | "register";
@@ -27,6 +29,8 @@ export function AuthForm<T extends LoginSchemaDto | RegisterSchemaDto>({
   mode,
   onSubmit,
 }: AuthFormProps<T>) {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
   const schema = mode === "login" ? loginSchema : registerSchema;
 
   const form = useForm<T>({
@@ -48,10 +52,10 @@ export function AuthForm<T extends LoginSchemaDto | RegisterSchemaDto>({
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       {mode === "register" && (
         <Input
-          label="Username"
+          label={t.auth.username}
           {...registerField("username" as Path<T>)}
           type="text"
-          placeholder="Enter username"
+          placeholder={t.auth.usernamePlaceholder}
           stylesVariant="authInput"
           labelClassName={styles.label}
           error={getErrorMessage("username" as Path<T>)}
@@ -59,28 +63,28 @@ export function AuthForm<T extends LoginSchemaDto | RegisterSchemaDto>({
       )}
 
       <Input
-        label="Email"
+        label={t.auth.email}
         type="email"
         {...registerField("email" as Path<T>)}
         stylesVariant="authInput"
-        placeholder="Enter email"
+        placeholder={t.auth.emailPlaceholder}
         labelClassName={styles.label}
         error={getErrorMessage("email" as Path<T>)}
       />
 
       <Input
-        label="Password"
+        label={t.auth.password}
         type="password"
         {...registerField("password" as Path<T>)}
         stylesVariant="authInput"
-        placeholder="Enter password"
+        placeholder={t.auth.passwordPlaceholder}
         labelClassName={styles.label}
         inputWrapperClassName={styles.inputWrapperLast}
         error={getErrorMessage("password" as Path<T>)}
       />
 
       <Button type="submit" stylesVariant="redGradient">
-        {mode === "login" ? "Login" : "Register"}
+        {mode === "login" ? t.auth.login : t.auth.register}
       </Button>
     </form>
   );

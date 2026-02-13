@@ -7,6 +7,7 @@ import { Section } from "@/shared/components/Section";
 import { GAMES_LIST } from "./games-list.constants";
 import { useLocale } from "@/providers/LocaleProvider";
 import { getTranslations } from "@/i18n";
+import { cx } from "@/shared/utils/classNames";
 
 export function GamesList() {
   const { locale } = useLocale();
@@ -35,7 +36,10 @@ export function GamesList() {
                 <Link href={href} className={styles.itemLink}>
                   <Button
                     stylesVariant="redGradient"
-                    className={styles.itemButton}
+                    className={cx(
+                      styles.itemButton,
+                      styles[`itemButton_${locale}`],
+                    )}
                   >
                     {t.games.freePlay}
                   </Button>

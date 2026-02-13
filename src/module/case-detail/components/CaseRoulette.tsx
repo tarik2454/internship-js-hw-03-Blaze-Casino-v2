@@ -6,6 +6,8 @@ import { CaseDetailItem } from "../CaseDetailItem";
 import styles from "./CaseRoulette.module.scss";
 import Image from "next/image";
 import { Button } from "@/shared/components/Button";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 
 const ROULETTE_DURATION_MS = 4000;
 const ITEM_WIDTH = 100;
@@ -14,14 +16,17 @@ const REPEAT_COUNT = 20;
 interface CaseRouletteProps {
   items: CaseItem[];
   winningItem: CaseOpeningItem;
+  locale: Locale;
   onAnimationEnd?: (skipped?: boolean) => void;
 }
 
 export function CaseRoulette({
   items,
   winningItem,
+  locale,
   onAnimationEnd,
 }: CaseRouletteProps) {
+  const t = getTranslations(locale);
   const stripRef = useRef<HTMLUListElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const onAnimationEndRef = useRef(onAnimationEnd);
@@ -96,7 +101,7 @@ export function CaseRoulette({
         className={styles.rouletteSkipButton}
         onClick={() => onAnimationEnd?.(true)}
       >
-        skip animation
+        {t.cases.skipAnimation}
       </Button>
 
       <div className={styles.imageWrapper}>

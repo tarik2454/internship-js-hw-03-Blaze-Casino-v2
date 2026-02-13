@@ -53,17 +53,6 @@ export interface PlinkoRecentHistoryResponse {
   drops: PlinkoRecentDrop[];
 }
 
-export interface PlinkoDropResult {
-  dropId: string;
-  path: number[];
-  slotIndex: number;
-  multiplier: number;
-  winAmount: number;
-  serverSeed: string;
-  clientSeed: string;
-  nonce: number;
-}
-
 export interface PlinkoDropResponse {
   drops: PlinkoDropResult[];
   totalBet: number;

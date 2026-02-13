@@ -34,7 +34,7 @@
   padding: 1px;
   border-radius: inherit;
 
-  background: linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
+  background: var(--gradient-gold);
   content: "";
 
   -webkit-mask:
@@ -96,7 +96,7 @@
   left: 50%;
   width: 3px;
   transform: translateX(-50%);
-  background: linear-gradient(180deg, #ffcd71 0%, #e59603 100%);
+  background: var(--gradient-gold);
   pointer-events: none;
 }
 

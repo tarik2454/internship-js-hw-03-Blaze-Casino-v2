@@ -3,12 +3,15 @@
 import { memo } from "react";
 import { Input } from "@/shared/components/Input";
 import { Switch } from "@/shared/components/Switch";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 import styles from "./AutoCashoutInput.module.scss";
 
 interface AutoCashoutInputProps {
   autoCashout: string;
   isAuto: boolean;
   disabled: boolean;
+  locale: Locale;
   onAutoToggle: (checked: boolean) => void;
   onAutoCashoutChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -17,16 +20,19 @@ export const AutoCashoutInput = memo(function AutoCashoutInput({
   autoCashout,
   isAuto,
   disabled,
+  locale,
   onAutoToggle,
   onAutoCashoutChange,
 }: AutoCashoutInputProps) {
+  const t = getTranslations(locale);
+
   return (
     <div className={styles.inputWrapperAutoCashout}>
       <Input
-        label="Auto Cashout (optional)"
+        label={t.settings.autoCashout}
         type="text"
         inputMode="decimal"
-        placeholder="e.g 2.00"
+        placeholder={t.settings.autoCashoutPlaceholder}
         labelClassName={styles.label}
         inputClassName={styles.inputAutoCashout}
         stylesVariant="gameInput"
