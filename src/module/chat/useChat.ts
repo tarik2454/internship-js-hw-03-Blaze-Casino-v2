@@ -76,6 +76,15 @@ export function useChat() {
         }));
       },
       onError: (err: { message: string }) => {
+        const isAuthError =
+          /auth|token|unauthorized/i.test(err.message);
+
+        if (isAuthError) {
+          socketService.disconnect();
+          socketServiceRef.current = null;
+          return;
+        }
+
         showPopup({
           message: err.message,
           type: POPUP_TYPE.ERROR,
