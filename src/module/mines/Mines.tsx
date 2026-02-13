@@ -156,13 +156,15 @@ export function Mines() {
     !activeGame || isGameOver || revealedTiles.length === 0;
   const inputsDisabled = !!activeGame && !isGameOver;
 
+  const isPlaying = !!activeGameId && !isGameOver;
+
   useEffect(() => {
-    if (activeGame && !isGameOver) {
+    if (isPlaying) {
       playSound("playing");
     } else {
       stopSound("playing");
     }
-  }, [activeGame, isGameOver, playSound, stopSound]);
+  }, [isPlaying, playSound, stopSound]);
 
   useEffect(() => {
     return () => stopSound("playing");

@@ -8,6 +8,8 @@ import type {
   RiskLevel,
   LinesCount,
   BallsCount,
+  PlinkoDrop,
+  PlinkoUserHistoryResponse,
 } from "@/config-api/plinko/plinko.types";
 import {
   usePlinkoDrop,
@@ -70,6 +72,30 @@ export function usePlinkoGame(t: ReturnType<typeof getTranslations>) {
               queryKeyFactories.user.current(),
               (old) => (old ? { ...old, balance: data.newBalance } : old),
             );
+
+            const newHistoryItem: PlinkoDrop = {
+              _id: data.dropId,
+              betAmount: data.totalBet,
+              ballsCount: data.balls,
+              riskLevel: data.risk,
+              linesCount: data.lines,
+              totalWin: data.totalWin,
+              avgMultiplier:
+                data.totalBet === 0
+                  ? "0.00"
+                  : (data.totalWin / data.totalBet).toFixed(2),
+              status: data.totalWin >= data.totalBet ? "won" : "lost",
+              createdAt: new Date().toISOString(),
+            };
+
+            queryClient.setQueryData<PlinkoUserHistoryResponse>(
+              queryKeyFactories.plinko.userHistory(),
+              (old) => ({
+                ...old,
+                drops: [newHistoryItem, ...(old?.drops ?? [])],
+              }),
+            );
+
             const profit = data.totalWin - data.totalBet;
             showPopup({
               message:

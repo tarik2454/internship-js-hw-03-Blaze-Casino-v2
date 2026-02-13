@@ -173,9 +173,9 @@
     "risk": "Risk",
     "win": "Win",
     "statuses": {
-      "won": "won",
-      "lost": "lost",
-      "cashed_out": "won"
+      "won": "Won",
+      "lost": "Lost",
+      "cashed_out": "Won"
     },
     "riskLevels": {
       "low": "Low",
