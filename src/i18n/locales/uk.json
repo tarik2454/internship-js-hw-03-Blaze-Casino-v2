@@ -96,7 +96,8 @@
     "currentPayout": "Поточна виплата",
     "waitingForBets": "Очікування ставок...",
     "youWon": "Ви виграли",
-    "youLost": "Ви програли"
+    "youLost": "Ви програли",
+    "cashoutError": "Помилка виведення"
   },
   "mines": {
     "configuration": "Налаштування Мін",
@@ -206,9 +207,14 @@
     "star": "Зірка",
     "location": "Локація",
     "closeMenu": "Закрити меню",
+    "toggleMenu": "Відкрити/закрити меню",
+    "settings": "Налаштування",
+    "openChat": "Відкрити чат",
     "lightTheme": "Світла тема",
     "darkTheme": "Темна тема",
     "volume": "Гучність",
-    "close": "Закрити"
+    "close": "Закрити",
+    "closeOverlay": "Закрити накладення",
+    "chatInput": "Повідомлення чату"
   }
 }

@@ -32,7 +32,7 @@ export function useCrashGame(t: ReturnType<typeof getTranslations>) {
   const activeBetId = isAutoCashedOut ? undefined : betId;
 
   const { mutate: placeBet } = useCrashBet();
-  const { mutate: cashoutMutation } = useCrashCashout();
+  const { mutateAsync: cashoutMutation } = useCrashCashout();
 
   const activeMultiplier = useMemo(() => {
     if (currentGameState === "crashed") return 0;
@@ -56,10 +56,10 @@ export function useCrashGame(t: ReturnType<typeof getTranslations>) {
     [activeMultiplier, t],
   );
 
-  const handleCashout = useCallback(() => {
+  const handleCashout = useCallback(async () => {
     if (!betId) return;
     setIsAutoCashedOut(true);
-    cashoutMutation(betId, {
+    await cashoutMutation(betId, {
       onSuccess: (data) => {
         setGameResult({ multiplier: data.multiplier, isWin: true });
         showPopup({
@@ -67,6 +67,14 @@ export function useCrashGame(t: ReturnType<typeof getTranslations>) {
           type: POPUP_TYPE.SUCCESS,
           position: "topCenter",
           resultAmount: data.winAmount - lastBetAmount,
+        });
+      },
+      onError: () => {
+        setIsAutoCashedOut(false);
+        showPopup({
+          message: t.crash.cashoutError,
+          type: POPUP_TYPE.ERROR,
+          position: "topCenter",
         });
       },
     });

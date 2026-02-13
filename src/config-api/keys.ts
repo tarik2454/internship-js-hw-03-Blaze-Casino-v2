@@ -2,6 +2,7 @@ import type { LinesCount, RiskLevel } from "@/config-api/plinko/plinko.types";
 
 export const queryKeys = {
   user: ["user"],
+  users: ["users"],
   balance: ["balance"],
   games: ["games"],
   auth: {
@@ -22,6 +23,7 @@ export const queryKeyFactories = {
   user: {
     current: () => queryKeys.user,
     detail: (id: string) => [...queryKeys.user, id],
+    list: () => [...queryKeys.users, "list"],
   },
   games: {
     detail: (id: string) => [...queryKeys.games, id],

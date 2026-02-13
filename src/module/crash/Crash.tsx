@@ -55,11 +55,21 @@ export function Crash() {
     });
   }, [bet.amount, bet.parsedAutoCashout, handlePlaceBet, playSound]);
 
-  const onCashout = useCallback(() => {
+  const onCashout = useCallback(async () => {
     playSound("cashout");
-    bet.wrapCashout(() => handleCashout());
-  }, [bet.wrapCashout, handleCashout, playSound]);
+    bet.startCashout();
+    try {
+      await handleCashout();
+    } catch {
+    } finally {
+      bet.endCashout();
+    }
+  }, [bet.startCashout, bet.endCashout, handleCashout, playSound]);
 
+  const crashStats = useMemo(
+    () => computeStats(bet.amount),
+    [computeStats, bet.amount],
+  );
   const inputsDisabled = !!activeBetId;
 
   return (
@@ -108,7 +118,7 @@ export function Crash() {
               onPlaceBet={onPlaceBet}
               onCashout={onCashout}
             />
-            <BetStats stats={computeStats(bet.amount)} />
+            <BetStats stats={crashStats} />
           </SettingsPanel>
         </div>
       </Container>

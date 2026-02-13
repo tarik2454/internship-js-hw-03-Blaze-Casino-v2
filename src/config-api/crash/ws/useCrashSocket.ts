@@ -39,7 +39,7 @@ export function useCrashSocket() {
       socket.disconnect();
       socketRef.current = null;
     };
-  }, []);
+  }, [refetchCurrentGame]);
 
   useEffect(() => {
     if (currentGame?.gameId && socketRef.current?.isConnected()) {

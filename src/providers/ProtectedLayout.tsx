@@ -60,6 +60,7 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
             </p>
           )}
           <button
+            type="button"
             onClick={() => window.location.reload()}
             className={styles.retryButton}
           >

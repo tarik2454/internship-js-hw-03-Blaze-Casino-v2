@@ -41,6 +41,14 @@ export function MobileMenu({
           [styles.isVisible]: isVisible,
         })}
         onClick={closeMenu}
+        role="button"
+        tabIndex={0}
+        aria-label={t.accessibility.closeOverlay}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            closeMenu();
+          }
+        }}
       />
 
       <div

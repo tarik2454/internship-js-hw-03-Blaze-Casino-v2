@@ -25,13 +25,16 @@ export function usePlinkoDrop() {
         riskLevel: variables.risk,
         linesCount: variables.lines,
         totalWin: response.totalWin,
-        avgMultiplier: (response.totalWin / response.totalBet).toFixed(2),
+        avgMultiplier:
+          response.totalBet === 0
+            ? "0.00"
+            : (response.totalWin / response.totalBet).toFixed(2),
         status: response.totalWin >= response.totalBet ? "won" : "lost",
         createdAt: new Date().toISOString(),
       };
 
       queryClient.setQueryData<PlinkoUserHistoryResponse>(
-        queryKeyFactories.plinko.userHistory(10, 0),
+        queryKeyFactories.plinko.userHistory(),
         (old) => ({
           ...old,
           drops: [newHistoryItem, ...(old?.drops ?? [])],

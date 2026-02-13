@@ -12,7 +12,7 @@ export const BetStats = memo(function BetStats({ stats }: BetStatsProps) {
   return (
     <div className={styles.resultsWrapper}>
       {stats.map((stat, index) => (
-        <p key={index} className={styles.resultItem}>
+        <p key={stat.label} className={styles.resultItem}>
           {stat.label}:
           <span className={styles.resultValue}>
             {stat.formatValue ? stat.formatValue(stat.value) : stat.value}

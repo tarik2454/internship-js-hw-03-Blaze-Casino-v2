@@ -91,6 +91,7 @@ export function Header() {
             <Button
               className={styles.toggleMenuButton}
               onClick={handleToggleMenu}
+              ariaLabel={t.accessibility.toggleMenu}
             >
               <NavToggleIcon />
             </Button>
@@ -137,6 +138,7 @@ export function Header() {
                     ref={settingsButtonRef}
                     className={styles.settingsButton}
                     onClick={handleToggleLanguageMenu}
+                    ariaLabel={t.accessibility.settings}
                   >
                     <SettingsIcon />
                   </Button>

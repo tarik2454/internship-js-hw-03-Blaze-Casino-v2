@@ -20,7 +20,7 @@ const variantClassesMap = {
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
     {
-      ariaLabel = "",
+      ariaLabel,
       children,
       className = "",
       disabled = false,
@@ -34,7 +34,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        aria-label={ariaLabel}
+        aria-label={ariaLabel || undefined}
         type={type}
         className={cx(
           styles.button,

@@ -58,17 +58,8 @@ export function useBetForm({ maxBetAmount = 10000 }: UseBetFormOptions = {}) {
     [],
   );
 
-  const wrapCashout = useCallback(
-    async (fn: () => void | Promise<void>): Promise<void> => {
-      setIsCashingOut(true);
-      try {
-        await fn();
-      } finally {
-        setIsCashingOut(false);
-      }
-    },
-    [],
-  );
+  const startCashout = useCallback(() => setIsCashingOut(true), []);
+  const endCashout = useCallback(() => setIsCashingOut(false), []);
 
   return {
     amount,
@@ -82,6 +73,7 @@ export function useBetForm({ maxBetAmount = 10000 }: UseBetFormOptions = {}) {
     handleMax,
     handleAutoToggle,
     handleAutoCashoutChange,
-    wrapCashout,
+    startCashout,
+    endCashout,
   };
 }

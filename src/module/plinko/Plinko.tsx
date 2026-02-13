@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import { Section } from "@/shared/components/Section";
 import { Container } from "@/shared/components/Container";
 import { SettingsPanel } from "@/module/settings-panel/SettingsPanel";
@@ -16,7 +16,7 @@ import styles from "./Plinko.module.scss";
 
 export function Plinko() {
   const { locale } = useLocale();
-  const t = getTranslations(locale);
+  const t = useMemo(() => getTranslations(locale), [locale]);
   const {
     canvasRef,
     isGameActive,

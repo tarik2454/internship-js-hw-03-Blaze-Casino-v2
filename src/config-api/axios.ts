@@ -154,6 +154,15 @@ api.interceptors.response.use(
       error.message ||
       "An unexpected error occurred";
 
+    if (status === 401 && originalRequest?._retry) {
+      deleteCookie("accessToken");
+      deleteCookie("refreshToken");
+      if (typeof window !== "undefined") {
+        window.location.href = ROUTES.LOGIN;
+      }
+      throw createApiException("Session expired. Please login again.", 401);
+    }
+
     if (typeof window !== "undefined" && status !== 401) {
       const handler = getGlobalApiErrorHandler();
       if (handler) handler(message);

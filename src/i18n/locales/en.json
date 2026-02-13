@@ -96,7 +96,8 @@
     "currentPayout": "Current Payout",
     "waitingForBets": "Waiting for bets...",
     "youWon": "You won",
-    "youLost": "You lost"
+    "youLost": "You lost",
+    "cashoutError": "Cashout failed"
   },
   "mines": {
     "configuration": "Mines Configuration",
@@ -206,9 +207,14 @@
     "star": "Star",
     "location": "Location",
     "closeMenu": "Close menu",
+    "toggleMenu": "Toggle menu",
+    "settings": "Settings",
+    "openChat": "Open chat",
     "lightTheme": "Light theme",
     "darkTheme": "Dark theme",
     "volume": "Volume",
-    "close": "Close"
+    "close": "Close",
+    "closeOverlay": "Close overlay",
+    "chatInput": "Chat message"
   }
 }

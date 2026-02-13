@@ -25,7 +25,7 @@ export function useMinesStart() {
         queryKey: queryKeyFactories.user.current(),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeyFactories.mines.userHistory(10, 0),
+        queryKey: queryKeyFactories.mines.userHistory(),
       });
     },
   });
@@ -45,7 +45,7 @@ export function useMinesReveal() {
           queryKey: queryKeyFactories.user.current(),
         });
         queryClient.invalidateQueries({
-          queryKey: queryKeyFactories.mines.userHistory(10, 0),
+          queryKey: queryKeyFactories.mines.userHistory(),
         });
       } else {
         queryClient.setQueryData<MinesActiveResponse>(
@@ -89,7 +89,7 @@ export function useMinesCashout() {
         queryKey: queryKeyFactories.user.current(),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeyFactories.mines.userHistory(10, 0),
+        queryKey: queryKeyFactories.mines.userHistory(),
       });
     },
   });

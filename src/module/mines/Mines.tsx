@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { Section } from "@/shared/components/Section";
 import { Container } from "@/shared/components/Container";
 import { SettingsPanel } from "@/module/settings-panel/SettingsPanel";
@@ -31,7 +31,7 @@ import styles from "./Mines.module.scss";
 
 export function Mines() {
   const { locale } = useLocale();
-  const t = getTranslations(locale);
+  const t = useMemo(() => getTranslations(locale), [locale]);
   const [hitMinePosition, setHitMinePosition] = useState<number | null>(null);
   const [allMinePositions, setAllMinePositions] = useState<number[]>([]);
   const [gridSize, setGridSize] = useState<MinesGridSize>(
@@ -44,7 +44,6 @@ export function Mines() {
   const { showPopup } = usePopup();
   const { playSound, stopSound } = useSound();
   const bet = useBetForm({ maxBetAmount: 10000 });
-  const { wrapCashout } = bet;
 
   const { data: activeData, isSuccess, isFetching } = useMinesActive();
 
@@ -92,11 +91,14 @@ export function Mines() {
     });
   }, [startGame, playSound, bet.amount, mineAmount, gridSize]);
 
+  const activeGameId = activeGame?._id;
+  const activeBetAmount = activeGame?.betAmount ?? 0;
+
   const handleReveal = useCallback(
     (position: number) => {
-      if (!activeGame?._id) return;
+      if (!activeGameId) return;
       revealTile(
-        { gameId: activeGame._id, position },
+        { gameId: activeGameId, position },
         {
           onSuccess: (res) => {
             if (res.isMine) {
@@ -108,22 +110,23 @@ export function Mines() {
                 message: t.mines.hitMine,
                 type: POPUP_TYPE.ERROR,
                 position: "topCenter",
-                resultAmount: -(activeGame?.betAmount ?? 0),
+                resultAmount: -activeBetAmount,
               });
             }
           },
         },
       );
     },
-    [activeGame, revealTile, showPopup, t],
+    [activeGameId, activeBetAmount, revealTile, showPopup, t],
   );
 
-  const handleCashout = useCallback(() => {
-    if (!activeGame?._id) return;
+  const handleCashout = useCallback(async () => {
+    if (!activeGameId) return;
     playSound("cashout");
-    wrapCashout(async () => {
+    bet.startCashout();
+    try {
       await cashoutGame(
-        { gameId: activeGame._id },
+        { gameId: activeGameId },
         {
           onSuccess: (res) => {
             if (res.minePositions) {
@@ -133,15 +136,22 @@ export function Mines() {
               message: `${t.mines.youWon} ${res.winAmount.toFixed(2)}$`,
               type: POPUP_TYPE.SUCCESS,
               position: "topCenter",
-              resultAmount: res.winAmount - (activeGame?.betAmount ?? 0),
+              resultAmount: res.winAmount - activeBetAmount,
             });
             setHitMinePosition(null);
           },
         },
       );
-    });
-  }, [activeGame, cashoutGame, showPopup, playSound, t, wrapCashout]);
+    } catch {
+    } finally {
+      bet.endCashout();
+    }
+  }, [activeGameId, activeBetAmount, cashoutGame, showPopup, playSound, t, bet]);
 
+  const minesStats = useMemo(
+    () => computeStats(bet.amount),
+    [computeStats, bet.amount],
+  );
   const isCashoutDisabled =
     !activeGame || isGameOver || revealedTiles.length === 0;
   const inputsDisabled = !!activeGame && !isGameOver;
@@ -207,7 +217,7 @@ export function Mines() {
               onPlaceBet={handlePlaceBet}
               onCashout={handleCashout}
             />
-            <BetStats stats={computeStats(bet.amount)} />
+            <BetStats stats={minesStats} />
           </SettingsPanel>
         </div>
       </Container>

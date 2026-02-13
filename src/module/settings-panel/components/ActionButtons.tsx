@@ -53,7 +53,7 @@ export const ActionButtons = memo(function ActionButtons({
         <Button
           stylesVariant="yellowGradient"
           className={styles.actionButton}
-          onClick={onCashout}
+          onClick={() => onCashout?.()}
           disabled={isCashoutDisabled}
         >
           {isCashingOut ? t.settings.cashingOut : t.settings.cashout}

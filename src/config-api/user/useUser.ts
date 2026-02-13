@@ -19,7 +19,7 @@ export function useCurrentUser() {
 
 export function useUsers() {
   return useQuery<UserListResponse, ApiError>({
-    queryKey: ["users", "list"],
+    queryKey: queryKeyFactories.user.list(),
     queryFn: () => userApi.getUsers(),
   });
 }

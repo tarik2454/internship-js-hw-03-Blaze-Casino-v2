@@ -28,6 +28,7 @@ export function Input({
   ...props
 }: InputProps) {
   const id = useId();
+  const errorId = `${id}-error`;
 
   return (
     <div className={styles.wrapper}>
@@ -46,9 +47,15 @@ export function Input({
             stylesVariant && variantClassesMap[stylesVariant],
             inputClassName,
           )}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? errorId : undefined}
           {...props}
         />
-        {error && <span className={styles.error}>{error}</span>}
+        {error && (
+          <span id={errorId} className={styles.error}>
+            {error}
+          </span>
+        )}
       </div>
     </div>
   );

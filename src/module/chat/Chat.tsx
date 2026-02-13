@@ -148,6 +148,9 @@ export function Chat() {
           </div>
 
           <form className={styles.chatForm} onSubmit={handleSendMessage}>
+            <label htmlFor="chat-message" className="visually-hidden">
+              {t.accessibility.chatInput}
+            </label>
             <input
               type="text"
               id="chat-message"
@@ -172,6 +175,7 @@ export function Chat() {
         onClick={handleOpenChat}
         role="button"
         tabIndex={0}
+        aria-label={t.accessibility.closeOverlay}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             handleOpenChat();
@@ -184,6 +188,7 @@ export function Chat() {
           stylesVariant="yellowGradient"
           className={styles.chatButtonMobile}
           onClick={handleOpenChat}
+          ariaLabel={t.accessibility.openChat}
         >
           <MessageIcon />
         </Button>

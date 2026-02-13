@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { cx } from "@/shared/utils/classNames";
 import styles from "./GameResultPopup.module.scss";
@@ -33,7 +33,7 @@ export const GameResultPopup = ({
     onCloseRef.current = onClose;
   }, [onClose]);
 
-  function startCloseTimer(delay: number) {
+  const startCloseTimer = useCallback((delay: number) => {
     closeStartRef.current = Date.now();
     timeoutRef.current = setTimeout(() => {
       setIsVisible(false);
@@ -42,7 +42,7 @@ export const GameResultPopup = ({
         onCloseRef.current?.();
       }, 300);
     }, delay);
-  }
+  }, []);
 
   useEffect(() => {
     const showTimer = setTimeout(() => setIsVisible(true), 10);
@@ -50,9 +50,9 @@ export const GameResultPopup = ({
 
     return () => {
       clearTimeout(showTimer);
-      clearTimeout(timeoutRef.current!);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [autoCloseDelay]);
+  }, [autoCloseDelay, startCloseTimer]);
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) {

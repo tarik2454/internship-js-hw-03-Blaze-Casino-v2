@@ -101,7 +101,7 @@ export const createColumns = (
           return (
             <span
               style={{
-                color: isProfit ? "#82C91E" : "#C62121",
+                color: isProfit ? "var(--color-success)" : "var(--color-error)",
                 fontWeight: 600,
               }}
             >
@@ -150,7 +150,7 @@ export const createColumns = (
           return (
             <span
               style={{
-                color: isWon ? "#82C91E" : "#C62121",
+                color: isWon ? "var(--color-success)" : "var(--color-error)",
                 fontWeight: 600,
               }}
             >
@@ -169,7 +169,7 @@ export const createColumns = (
           return (
             <span
               style={{
-                color: isWon ? "#82C91E" : "#C62121",
+                color: isWon ? "var(--color-success)" : "var(--color-error)",
                 fontWeight: 600,
               }}
             >
@@ -189,7 +189,7 @@ export const createColumns = (
           return (
             <span
               style={{
-                color: isWon ? "#82C91E" : "#C62121",
+                color: isWon ? "var(--color-success)" : "var(--color-error)",
                 fontWeight: 600,
               }}
             >
@@ -283,7 +283,7 @@ export const createColumns = (
 
         return (
           <span
-            style={{ color: isWon ? "#82C91E" : "#C62121", fontWeight: 600 }}
+            style={{ color: isWon ? "var(--color-success)" : "var(--color-error)", fontWeight: 600 }}
           >
             {multiplier ? `${multiplier}x` : "0x"}
           </span>
@@ -314,7 +314,7 @@ export const createColumns = (
 
         return (
           <span
-            style={{ color: isWon ? "#82C91E" : "#C62121", fontWeight: 600 }}
+            style={{ color: isWon ? "var(--color-success)" : "var(--color-error)", fontWeight: 600 }}
           >
             ${isWon ? (winAmount || 0).toFixed(2) : "0.00"}
           </span>
@@ -339,7 +339,7 @@ export const createColumns = (
         return (
           <span
             style={{
-              color: isWon ? "#82C91E" : "#C62121",
+              color: isWon ? "var(--color-success)" : "var(--color-error)",
               fontWeight: 600,
               textTransform: "capitalize",
             }}
