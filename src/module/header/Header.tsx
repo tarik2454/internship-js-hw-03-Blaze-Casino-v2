@@ -107,9 +107,7 @@ export function Header() {
 
                   <span>
                     {userData?.balance !== undefined
-                      ? userData.balance
-                          .toLocaleString("en-US", { useGrouping: true })
-                          .replace(/,/g, ".")
+                      ? userData.balance.toFixed(2)
                       : "0"}
                   </span>
                 </div>
