@@ -2,11 +2,21 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Section } from "@/shared/components/Section";
-import styles from "./Mines.module.scss";
 import { Container } from "@/shared/components/Container";
-import { SettingsPanel, StatItem } from "../settings-panel/SettingsPanel";
+import { SettingsPanel } from "@/module/settings-panel/SettingsPanel";
+import { BetAmountInput } from "@/module/settings-panel/components/BetAmountInput";
+import { MinesOptions } from "@/module/settings-panel/components/MinesOptions";
+import { ActionButtons } from "@/module/settings-panel/components/ActionButtons";
+import { BetStats } from "@/module/settings-panel/components/BetStats";
+import { useBetForm } from "@/module/settings-panel/hooks/useBetForm";
+import { StatItem } from "@/module/settings-panel/types";
 import { MinesGrid } from "./components/MinesGrid";
-import { DEFAULT_MINES_GRID_SIZE, type MinesGridSize } from "./mines.constants";
+import {
+  DEFAULT_MINES_GRID_SIZE,
+  DEFAULT_MINES_MINE_AMOUNT,
+  type MinesGridSize,
+  type MinesMineAmount,
+} from "./mines.constants";
 import {
   useMinesStart,
   useMinesReveal,
@@ -17,6 +27,7 @@ import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
 import { useLocale } from "@/providers/LocaleProvider";
 import { getTranslations } from "@/i18n";
 import { useSound } from "@/shared/hooks/useSound";
+import styles from "./Mines.module.scss";
 
 export function Mines() {
   const { locale } = useLocale();
@@ -26,9 +37,13 @@ export function Mines() {
   const [gridSize, setGridSize] = useState<MinesGridSize>(
     DEFAULT_MINES_GRID_SIZE,
   );
+  const [mineAmount, setMineAmount] = useState<MinesMineAmount>(
+    DEFAULT_MINES_MINE_AMOUNT,
+  );
 
   const { showPopup } = usePopup();
   const { playSound, stopSound } = useSound();
+  const bet = useBetForm({ maxBetAmount: 10000 });
 
   const { data: activeData, isSuccess, isFetching } = useMinesActive();
 
@@ -65,23 +80,16 @@ export function Mines() {
     [currentMultiplier, currentValue, t],
   );
 
-  const handlePlaceBet = useCallback(
-    (data: {
-      amount: number;
-      gridSize?: MinesGridSize;
-      mineAmount?: number;
-    }) => {
-      playSound("startGame");
-      setHitMinePosition(null);
-      setAllMinePositions([]);
-      startGame({
-        amount: data.amount,
-        minesCount: data.mineAmount ?? 3,
-        gridSize: data.gridSize ?? DEFAULT_MINES_GRID_SIZE,
-      });
-    },
-    [startGame, playSound],
-  );
+  const handlePlaceBet = useCallback(() => {
+    playSound("startGame");
+    setHitMinePosition(null);
+    setAllMinePositions([]);
+    startGame({
+      amount: bet.amount,
+      minesCount: mineAmount,
+      gridSize: gridSize,
+    });
+  }, [startGame, playSound, bet.amount, mineAmount, gridSize]);
 
   const handleReveal = useCallback(
     (position: number) => {
@@ -131,7 +139,9 @@ export function Mines() {
     );
   }, [activeGame?._id, cashoutGame, showPopup, playSound]);
 
-  const isCashoutDisabled = !activeGame || isGameOver || revealedTiles.length === 0;
+  const isCashoutDisabled =
+    !activeGame || isGameOver || revealedTiles.length === 0;
+  const inputsDisabled = !!activeGame && !isGameOver;
 
   useEffect(() => {
     if (activeGame && !isGameOver) {
@@ -161,20 +171,35 @@ export function Mines() {
             />
           </div>
 
-          <SettingsPanel
-            title={t.mines.configuration}
-            canBet={!activeGame || isGameOver}
-            inputsDisabled={!!activeGame && !isGameOver}
-            showAutoCashout={false}
-            showCashoutButton={true}
-            showMinesOptions={true}
-            gridSize={gridSize}
-            onGridSizeChange={setGridSize}
-            computeStats={computeStats}
-            onPlaceBet={handlePlaceBet}
-            onCashout={handleCashout}
-            isCashoutDisabled={isCashoutDisabled}
-          />
+          <SettingsPanel title={t.mines.configuration}>
+            <BetAmountInput
+              amount={bet.amount}
+              disabled={inputsDisabled}
+              locale={locale}
+              onAmountChange={bet.handleAmountChange}
+              onHalf={bet.handleHalf}
+              onDouble={bet.handleDouble}
+              onMax={bet.handleMax}
+            />
+            <MinesOptions
+              mineAmount={mineAmount}
+              onMineAmountChange={setMineAmount}
+              gridSize={gridSize}
+              onGridSizeChange={setGridSize}
+              disabled={inputsDisabled}
+              locale={locale}
+            />
+            <ActionButtons
+              canBet={!activeGame || isGameOver}
+              showCashoutButton={true}
+              isCashoutDisabled={isCashoutDisabled}
+              isCashingOut={bet.isCashingOut}
+              locale={locale}
+              onPlaceBet={handlePlaceBet}
+              onCashout={handleCashout}
+            />
+            <BetStats stats={computeStats(bet.amount)} />
+          </SettingsPanel>
         </div>
       </Container>
     </Section>

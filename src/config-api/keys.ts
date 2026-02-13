@@ -1,4 +1,4 @@
-import { LinesCount, RiskLevel } from "@/module/settings-panel/types";
+import type { LinesCount, RiskLevel } from "@/config-api/plinko/plinko.types";
 
 export const queryKeys = {
   user: ["user"],

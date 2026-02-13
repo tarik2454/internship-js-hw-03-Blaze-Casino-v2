@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeyFactories } from "@/config-api/keys";
-import { StatItem } from "@/module/settings-panel/SettingsPanel";
+import { StatItem } from "@/module/settings-panel/types";
 import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
 import { useCrashSocket } from "@/config-api/crash/ws/useCrashSocket";
 import { useCrashBet, useCrashCashout } from "@/config-api/crash/useCrash";
