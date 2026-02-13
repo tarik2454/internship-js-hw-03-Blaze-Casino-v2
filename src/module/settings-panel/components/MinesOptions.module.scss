@@ -43,17 +43,13 @@
   min-width: 24px;
   padding: 4px 0;
   border: 1px solid var(--color-option-bg);
-    border-radius: var(--radius-4);
-    background: var(--color-input-bg);
+  border-radius: var(--radius-4);
+  background: var(--color-input-bg);
   font-size: 12px;
 
   &:disabled {
     opacity: 0.5;
   }
-}
-
-.mineAmountButtonActive {
-  background: var(--color-option-bg);
 }
 
 .optionButtons {

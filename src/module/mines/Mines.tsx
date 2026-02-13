@@ -44,6 +44,7 @@ export function Mines() {
   const { showPopup } = usePopup();
   const { playSound, stopSound } = useSound();
   const bet = useBetForm({ maxBetAmount: 10000 });
+  const { wrapCashout } = bet;
 
   const { data: activeData, isSuccess, isFetching } = useMinesActive();
 
@@ -55,7 +56,7 @@ export function Mines() {
 
   const { mutate: startGame } = useMinesStart();
   const { mutate: revealTile, isPending: isRevealing } = useMinesReveal();
-  const { mutate: cashoutGame } = useMinesCashout();
+  const { mutateAsync: cashoutGame } = useMinesCashout();
 
   const revealedTiles = activeGame?.revealedPositions ?? [];
   const gameGridSize = (activeGame?.gridSize ?? gridSize) as MinesGridSize;
@@ -120,8 +121,8 @@ export function Mines() {
   const handleCashout = useCallback(() => {
     if (!activeGame?._id) return;
     playSound("cashout");
-    bet.wrapCashout(() =>
-      cashoutGame(
+    wrapCashout(async () => {
+      await cashoutGame(
         { gameId: activeGame._id },
         {
           onSuccess: (res) => {
@@ -137,9 +138,9 @@ export function Mines() {
             setHitMinePosition(null);
           },
         },
-      ),
-    );
-  }, [activeGame, cashoutGame, showPopup, playSound, t, bet]);
+      );
+    });
+  }, [activeGame, cashoutGame, showPopup, playSound, t, wrapCashout]);
 
   const isCashoutDisabled =
     !activeGame || isGameOver || revealedTiles.length === 0;

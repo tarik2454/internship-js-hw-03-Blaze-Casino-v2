@@ -76,8 +76,7 @@ export function useChat() {
         }));
       },
       onError: (err: { message: string }) => {
-        const isAuthError =
-          /auth|token|unauthorized/i.test(err.message);
+        const isAuthError = /auth|token|unauthorized/i.test(err.message);
 
         if (isAuthError) {
           socketService.disconnect();
@@ -130,15 +129,6 @@ export function useChat() {
     );
   };
 
-  const handleRoomChange = (newRoom: string) => {
-    if (newRoom === roomRef.current) return;
-
-    startTransition(() => {
-      setMessages([]);
-      setRoom(newRoom);
-    });
-  };
-
   const onlineCount = onlineCounts[room] ?? 0;
 
   return {
@@ -147,6 +137,5 @@ export function useChat() {
     onlineCount,
     currentUser,
     sendMessage,
-    handleRoomChange,
   };
 }

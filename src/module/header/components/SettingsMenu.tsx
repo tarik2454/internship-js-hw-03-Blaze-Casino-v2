@@ -18,7 +18,11 @@ interface SettingsMenuProps {
   triggerRef?: RefObject<HTMLButtonElement | null>;
 }
 
-const languages: { code: Locale; labelKey: "english" | "ukrainian"; icon: string }[] = [
+const languages: {
+  code: Locale;
+  labelKey: "english" | "ukrainian";
+  icon: string;
+}[] = [
   { code: "en", labelKey: "english", icon: "/images/localization/sh.svg" },
   { code: "uk", labelKey: "ukrainian", icon: "/images/localization/ua.svg" },
 ];
@@ -95,6 +99,7 @@ export function SettingsMenu({
             if (isMuted && val > 0) toggleMute();
             setVolume(val);
           }}
+          aria-label={t.accessibility.volume}
           className={styles.volumeSlider}
         />
       </div>

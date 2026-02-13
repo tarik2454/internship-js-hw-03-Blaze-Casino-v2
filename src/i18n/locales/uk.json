@@ -55,7 +55,8 @@
   "chat": {
     "online": "онлайн",
     "friends": "друзів",
-    "messagePlaceholder": "Напишіть повідомлення..."
+    "messagePlaceholder": "Напишіть повідомлення...",
+    "sendMessage": "Надіслати повідомлення"
   },
   "leaderboard": {
     "title": "Лідерборд",
@@ -171,9 +172,9 @@
     "risk": "Ризик",
     "win": "Виграш",
     "statuses": {
-      "won": "виграв",
-      "lost": "програв",
-      "cashed_out": "виграв"
+      "won": "Виграв",
+      "lost": "Програв",
+      "cashed_out": "Виграв"
     },
     "riskLevels": {
       "low": "Низький",
@@ -206,6 +207,8 @@
     "location": "Локація",
     "closeMenu": "Закрити меню",
     "lightTheme": "Світла тема",
-    "darkTheme": "Темна тема"
+    "darkTheme": "Темна тема",
+    "volume": "Гучність",
+    "close": "Закрити"
   }
 }

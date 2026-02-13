@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { queryKeyFactories } from "@/config-api/keys";
+import { queryKeyFactories, queryKeys } from "@/config-api/keys";
 import { StatItem } from "@/module/settings-panel/types";
 import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
 import { useCrashSocket } from "@/config-api/crash/ws/useCrashSocket";
@@ -26,6 +26,7 @@ export function useCrashGame(t: ReturnType<typeof getTranslations>) {
     multiplier: number;
     isWin: boolean;
   } | null>(null);
+  const lastInvalidatedRef = useRef<string | null>(null);
 
   const currentGameState = crashPoint ? "crashed" : gameState;
   const activeBetId = isAutoCashedOut ? undefined : betId;
@@ -91,8 +92,10 @@ export function useCrashGame(t: ReturnType<typeof getTranslations>) {
       activeAutoCashout &&
       multiplier >= activeAutoCashout &&
       !isAutoCashedOut &&
-      currentGameState === "running"
+      currentGameState === "running" &&
+      lastInvalidatedRef.current !== betId
     ) {
+      lastInvalidatedRef.current = betId;
       requestAnimationFrame(() => {
         setIsAutoCashedOut(true);
         setGameResult({ multiplier: activeAutoCashout, isWin: true });
@@ -108,6 +111,9 @@ export function useCrashGame(t: ReturnType<typeof getTranslations>) {
         });
         queryClient.invalidateQueries({
           queryKey: queryKeyFactories.crash.getCurrent(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: [...queryKeys.crash, "user-history"],
         });
       });
     }
@@ -136,7 +142,13 @@ export function useCrashGame(t: ReturnType<typeof getTranslations>) {
   }, [currentGameState]);
 
   useEffect(() => {
-    if (crashPoint && betId && !isAutoCashedOut) {
+    if (
+      crashPoint &&
+      betId &&
+      !isAutoCashedOut &&
+      lastInvalidatedRef.current !== betId
+    ) {
+      lastInvalidatedRef.current = betId;
       requestAnimationFrame(() => {
         setGameResult({ multiplier: crashPoint, isWin: false });
         showPopup({
@@ -145,9 +157,33 @@ export function useCrashGame(t: ReturnType<typeof getTranslations>) {
           position: "topCenter",
           resultAmount: -lastBetAmount,
         });
+        queryClient.invalidateQueries({
+          queryKey: queryKeyFactories.user.current(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: [...queryKeys.crash, "user-history"],
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeyFactories.crash.getCurrent(),
+        });
       });
     }
-  }, [crashPoint, betId, isAutoCashedOut, lastBetAmount, showPopup, t]);
+  }, [
+    crashPoint,
+    betId,
+    isAutoCashedOut,
+    lastBetAmount,
+    showPopup,
+    t,
+    queryClient,
+  ]);
+
+  // Clear lastInvalidatedRef when game starts / next betting phase
+  useEffect(() => {
+    if (currentGameState === "waiting") {
+      lastInvalidatedRef.current = null;
+    }
+  }, [currentGameState]);
 
   return {
     multiplier,

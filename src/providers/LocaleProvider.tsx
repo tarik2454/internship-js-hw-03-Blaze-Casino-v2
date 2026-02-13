@@ -7,8 +7,8 @@ import {
   useEffect,
   useState,
 } from "react";
-
-export type Locale = "en" | "uk";
+import type { Locale } from "@/i18n";
+export type { Locale };
 
 type LocaleContextValue = {
   locale: Locale;

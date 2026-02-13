@@ -103,8 +103,12 @@ export function Chat() {
           </div>
 
           <ul className={styles.usersList}>
-            <li className={styles.userItem}>{onlineCount} {t.chat.online}</li>
-            <li className={styles.userItem}>{totalUsers} {t.chat.friends}</li>
+            <li className={styles.userItem}>
+              {onlineCount} {t.chat.online}
+            </li>
+            <li className={styles.userItem}>
+              {totalUsers} {t.chat.friends}
+            </li>
           </ul>
 
           <div ref={parentRef} className={styles.chatListContainer}>
@@ -152,7 +156,11 @@ export function Chat() {
               className={styles.chatInput}
               ref={messageInputRef}
             />
-            <button type="submit" className={styles.chatButton}>
+            <button
+              type="submit"
+              className={styles.chatButton}
+              aria-label={t.chat.sendMessage}
+            >
               <ArrowTop />
             </button>
           </form>
@@ -162,6 +170,13 @@ export function Chat() {
       <div
         className={cx(styles.chatOverlay, { [styles.isVisible]: isVisible })}
         onClick={handleOpenChat}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            handleOpenChat();
+          }
+        }}
       ></div>
 
       <div className={styles.chatButtonMobileWrapper}>

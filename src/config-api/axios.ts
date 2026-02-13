@@ -28,6 +28,10 @@ const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue = [];
 };
 
+if (!process.env.NEXT_PUBLIC_API_URL) {
+  throw new Error("NEXT_PUBLIC_API_URL is not defined");
+}
+
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
@@ -96,6 +100,12 @@ api.interceptors.response.use(
 
         const newAccessToken = data.accessToken;
 
+        if (typeof newAccessToken !== "string") {
+          throw createApiException(
+            "Invalid response format: missing accessToken",
+          );
+        }
+
         setCookie("accessToken", newAccessToken);
         if (data.refreshToken) {
           setCookie("refreshToken", data.refreshToken);
@@ -109,7 +119,7 @@ api.interceptors.response.use(
 
         return api(originalRequest);
       } catch (refreshError) {
-        processQueue(refreshError, null);
+        processQueue(refreshError);
 
         if (axios.isAxiosError(refreshError)) {
           const status = refreshError.response?.status;

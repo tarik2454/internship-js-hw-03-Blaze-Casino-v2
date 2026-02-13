@@ -55,7 +55,8 @@
   "chat": {
     "online": "online",
     "friends": "friends",
-    "messagePlaceholder": "Write a message..."
+    "messagePlaceholder": "Write a message...",
+    "sendMessage": "Send message"
   },
   "leaderboard": {
     "title": "Leaderboard",
@@ -206,6 +207,8 @@
     "location": "Location",
     "closeMenu": "Close menu",
     "lightTheme": "Light theme",
-    "darkTheme": "Dark theme"
+    "darkTheme": "Dark theme",
+    "volume": "Volume",
+    "close": "Close"
   }
 }

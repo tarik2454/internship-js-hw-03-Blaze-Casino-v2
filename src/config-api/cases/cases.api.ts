@@ -1,7 +1,6 @@
-
-
 import { api } from "../axios";
 import { createAuthConfig } from "../api.utils";
+import { createApiException } from "../error.types";
 import {
   CaseOpeningResponse,
   CaseResponse,
@@ -20,6 +19,9 @@ export const casesApi = {
   },
 
   getCase: async (id: string, token?: string): Promise<CaseResponse> => {
+    if (!/^[a-zA-Z0-9-]+$/.test(id)) {
+      throw createApiException("Invalid case ID format");
+    }
     const url = CASES_ROUTES.GET_CASE.replace(":id", id);
 
     const { data } = await api.get<CaseResponse>(url, createAuthConfig(token));
@@ -33,6 +35,9 @@ export const casesApi = {
     },
     token?: string,
   ): Promise<CaseOpeningResponse> => {
+    if (!/^[a-zA-Z0-9-]+$/.test(id)) {
+      throw createApiException("Invalid case ID format");
+    }
     const url = CASES_ROUTES.POST_OPEN_CASE.replace(":id", id);
 
     const { data } = await api.post<CaseOpeningResponse>(

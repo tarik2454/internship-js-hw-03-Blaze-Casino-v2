@@ -8,7 +8,7 @@ import styles from "./CaseDetail.module.scss";
 import Image from "next/image";
 import { Switch } from "@/shared/components/Switch";
 import { CaseOpeningResponse } from "@/config-api/cases/cases.types";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { OpeningResult } from "./components/OpeningResult";
 import { CaseDetailItem } from "./CaseDetailItem";
 import { CaseRoulette } from "./components/CaseRoulette";
@@ -28,12 +28,14 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
   const [isOpenResult, setIsOpenResult] = useState(false);
   const [withoutAnimation, setWithoutAnimation] = useState(false);
   const [rouletteDone, setRouletteDone] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { data: caseData, isLoading } = useCase(caseId);
   const { mutate: openCase, isPending } = useOpenCase();
 
   const { playSound, stopSound } = useSound();
-  const isPlaying = isOpenResult && openingResult && !rouletteDone && !withoutAnimation;
+  const isPlaying =
+    isOpenResult && openingResult && !rouletteDone && !withoutAnimation;
 
   useEffect(() => {
     if (isPlaying) {
@@ -44,7 +46,10 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
   }, [isPlaying, playSound, stopSound]);
 
   useEffect(() => {
-    return () => stopSound("playing");
+    return () => {
+      stopSound("playing");
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, [stopSound]);
 
   const handleCloseResult = (value: boolean) => {
@@ -108,7 +113,10 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
               onAnimationEnd={(skipped) =>
                 skipped
                   ? setRouletteDone(true)
-                  : setTimeout(() => setRouletteDone(true), 1000)
+                  : (timeoutRef.current = setTimeout(
+                      () => setRouletteDone(true),
+                      1000,
+                    ))
               }
             />
           </Container>
@@ -130,14 +138,19 @@ export function CaseDetail({ caseId }: CaseDetailProps) {
               <div className={styles.GameArea}>
                 <div>
                   <h1 className={styles.caseTitle}>
-                    {(t.cases.names as Record<string, string>)[caseData.name] ?? caseData.name}
+                    {(t.cases.names as Record<string, string>)[caseData.name] ??
+                      caseData.name}
                     <span className={styles.casePrice}> ${caseData.price}</span>
                   </h1>
 
                   <div className={styles.caseImageWrapper}>
                     <Image
                       src="/images/cases/chest.svg"
-                      alt={(t.cases.names as Record<string, string>)[caseData.name] ?? caseData.name}
+                      alt={
+                        (t.cases.names as Record<string, string>)[
+                          caseData.name
+                        ] ?? caseData.name
+                      }
                       className={styles.caseImage}
                       fill={true}
                     />

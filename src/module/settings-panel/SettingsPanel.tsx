@@ -9,10 +9,14 @@ interface SettingsPanelProps {
   children?: ReactNode;
 }
 
-export function SettingsPanel({ title, options, children }: SettingsPanelProps) {
+export function SettingsPanel({
+  title,
+  options,
+  children,
+}: SettingsPanelProps) {
   return (
     <aside className={styles.settingsPanelWrapper}>
-      <p className={styles.settingsPanelTitle}>{title}</p>
+      <h2 className={styles.settingsPanelTitle}>{title}</h2>
       <div className={styles.settingsPanel}>{options}</div>
       {children}
     </aside>

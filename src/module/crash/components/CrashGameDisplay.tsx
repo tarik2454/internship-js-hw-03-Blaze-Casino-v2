@@ -71,6 +71,7 @@ export const CrashGameDisplay = memo(function CrashGameDisplay({
                 alt={t.accessibility.rocket}
                 className={styles.rocketImage}
                 fill={true}
+                sizes="80px"
               />
             </div>
           </div>
@@ -80,6 +81,7 @@ export const CrashGameDisplay = memo(function CrashGameDisplay({
               src="/images/crash/planet-1.png"
               alt={t.accessibility.planet1}
               fill={true}
+              sizes="170px"
             />
           </div>
 
@@ -88,6 +90,7 @@ export const CrashGameDisplay = memo(function CrashGameDisplay({
               src="/images/crash/planet-2.png"
               alt={t.accessibility.planet2}
               fill={true}
+              sizes="100px"
             />
           </div>
         </>
@@ -122,7 +125,9 @@ export const CrashGameDisplay = memo(function CrashGameDisplay({
             </p>
           )}
           {gameState === "waiting" && isFirstLoad && (
-            <p className={styles.crashAreaDescription}>{t.crash.waitingForBets}</p>
+            <p className={styles.crashAreaDescription}>
+              {t.crash.waitingForBets}
+            </p>
           )}
         </div>
       </div>

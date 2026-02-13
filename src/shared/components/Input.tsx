@@ -43,7 +43,7 @@ export function Input({
           type={type}
           className={cx(
             styles.input,
-            variantClassesMap[stylesVariant as keyof typeof variantClassesMap],
+            stylesVariant && variantClassesMap[stylesVariant],
             inputClassName,
           )}
           {...props}

@@ -5,6 +5,8 @@ import { createPortal } from "react-dom";
 import { cx } from "@/shared/utils/classNames";
 import styles from "./GameResultPopup.module.scss";
 import { PopupData, POPUP_TYPE } from "@/providers/PopupProvider";
+import { useLocale } from "@/providers/LocaleProvider";
+import { getTranslations } from "@/i18n";
 
 const portalRoot = typeof document !== "undefined" ? document.body : null;
 
@@ -16,6 +18,9 @@ export const GameResultPopup = ({
   onClose,
   autoCloseDelay = 3000,
 }: PopupData) => {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
+
   const [isVisible, setIsVisible] = useState(false);
   const [isShouldRender, setIsShouldRender] = useState(true);
   const onCloseRef = useRef(onClose);
@@ -100,7 +105,11 @@ export const GameResultPopup = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <button className={styles.closeButton} onClick={handleClose}>
+      <button
+        className={styles.closeButton}
+        onClick={handleClose}
+        aria-label={t.accessibility.close}
+      >
         ×
       </button>
       <div className={styles.content}>

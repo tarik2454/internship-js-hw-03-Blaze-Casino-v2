@@ -38,7 +38,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         type={type}
         className={cx(
           styles.button,
-          variantClassesMap[stylesVariant as keyof typeof variantClassesMap],
+          stylesVariant && variantClassesMap[stylesVariant],
           className,
         )}
         onClick={onClick}

@@ -107,7 +107,7 @@ export function CaseRoulette({
       <div className={styles.imageWrapper}>
         <Image
           src="/images/cases/chest.svg"
-          alt="roulette arrow"
+          alt=""
           fill
           className={styles.image}
         />

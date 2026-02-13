@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useRef, useMemo } from "react";
+import { useCallback, useState, useRef, useMemo, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeyFactories } from "@/config-api/keys";
 import { usePopup, POPUP_TYPE } from "@/providers/PopupProvider";
@@ -35,6 +35,7 @@ export function usePlinkoGame(t: ReturnType<typeof getTranslations>) {
     lines: LinesCount;
     dropId: string;
   } | null>(null);
+  const timeoutIds = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const { mutate: postBet, isPending } = usePlinkoDrop();
   const { data: multipliersData } = usePlinkoMultipliers(riskLevel, linesCount);
@@ -47,6 +48,13 @@ export function usePlinkoGame(t: ReturnType<typeof getTranslations>) {
       (expectedBallsCount > 0 && finishedBallsCount < expectedBallsCount),
     [isPending, expectedBallsCount, finishedBallsCount],
   );
+
+  useEffect(() => {
+    return () => {
+      timeoutIds.current.forEach(clearTimeout);
+      timeoutIds.current = [];
+    };
+  }, []);
 
   const { canvasRef, addBall } = usePlinkoCanvas({
     lines: linesCount,
@@ -126,9 +134,10 @@ export function usePlinkoGame(t: ReturnType<typeof getTranslations>) {
             };
 
             response.drops.forEach((drop, index) => {
-              setTimeout(() => {
+              const id = setTimeout(() => {
                 addBall(amount, drop.path, drop.multiplier, drop.winAmount);
               }, index * 200);
+              timeoutIds.current.push(id);
             });
           },
           onError: (error) => {

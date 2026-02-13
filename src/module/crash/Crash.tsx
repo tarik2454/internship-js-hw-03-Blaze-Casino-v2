@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import { Container } from "@/shared/components/Container";
 import { Section } from "@/shared/components/Section";
 import { SettingsPanel } from "@/module/settings-panel/SettingsPanel";
@@ -18,7 +18,7 @@ import { useSound } from "@/shared/hooks/useSound";
 
 export function Crash() {
   const { locale } = useLocale();
-  const t = getTranslations(locale);
+  const t = useMemo(() => getTranslations(locale), [locale]);
   const {
     multiplier,
     elapsed,
@@ -102,9 +102,7 @@ export function Crash() {
             <ActionButtons
               canBet={canBet}
               showCashoutButton={true}
-              isCashoutDisabled={
-                currentGameState !== "running" || !activeBetId
-              }
+              isCashoutDisabled={currentGameState !== "running" || !activeBetId}
               isCashingOut={bet.isCashingOut}
               locale={locale}
               onPlaceBet={onPlaceBet}

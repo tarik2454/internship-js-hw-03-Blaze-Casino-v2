@@ -27,8 +27,11 @@ export const sessionApi = {
   },
 
   logout: async (): Promise<void> => {
-    await api.post(SESSION_ROUTES.LOGOUT);
-    deleteCookie("accessToken");
-    deleteCookie("refreshToken");
+    try {
+      await api.post(SESSION_ROUTES.LOGOUT);
+    } finally {
+      deleteCookie("accessToken");
+      deleteCookie("refreshToken");
+    }
   },
 };
