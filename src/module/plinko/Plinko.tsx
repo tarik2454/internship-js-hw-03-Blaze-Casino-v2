@@ -141,8 +141,7 @@ export function Plinko() {
           setExpectedBallsCount(response.drops.length);
           setFinishedBallsCount(0);
 
-          const firstDropId =
-            response.drops[0]?.dropId || `temp-${Date.now()}`;
+          const firstDropId = response.drops[0]?.dropId || `temp-${Date.now()}`;
           lastGameDataRef.current = {
             totalBet: response.totalBet,
             totalWin: response.totalWin,
@@ -155,12 +154,7 @@ export function Plinko() {
 
           response.drops.forEach((drop, index) => {
             setTimeout(() => {
-              addBall(
-                bet.amount,
-                drop.path,
-                drop.multiplier,
-                drop.winAmount,
-              );
+              addBall(bet.amount, drop.path, drop.multiplier, drop.winAmount);
             }, index * 200);
           });
         },
