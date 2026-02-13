@@ -23,7 +23,9 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const saved = localStorage.getItem("locale") as Locale | null;
     if (saved === "uk" || saved === "en") {
-      setLocaleState(saved);
+      requestAnimationFrame(() => {
+        setLocaleState(saved);
+      });
     }
   }, []);
 

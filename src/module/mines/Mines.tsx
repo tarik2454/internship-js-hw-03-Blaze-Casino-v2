@@ -114,30 +114,32 @@ export function Mines() {
         },
       );
     },
-    [activeGame?._id, revealTile, showPopup],
+    [activeGame, revealTile, showPopup, t],
   );
 
   const handleCashout = useCallback(() => {
     if (!activeGame?._id) return;
     playSound("cashout");
-    cashoutGame(
-      { gameId: activeGame._id },
-      {
-        onSuccess: (res) => {
-          if (res.minePositions) {
-            setAllMinePositions(res.minePositions);
-          }
-          showPopup({
-            message: `${t.mines.youWon} ${res.winAmount.toFixed(2)}$`,
-            type: POPUP_TYPE.SUCCESS,
-            position: "topCenter",
-            resultAmount: res.winAmount - (activeGame?.betAmount ?? 0),
-          });
-          setHitMinePosition(null);
+    bet.wrapCashout(() =>
+      cashoutGame(
+        { gameId: activeGame._id },
+        {
+          onSuccess: (res) => {
+            if (res.minePositions) {
+              setAllMinePositions(res.minePositions);
+            }
+            showPopup({
+              message: `${t.mines.youWon} ${res.winAmount.toFixed(2)}$`,
+              type: POPUP_TYPE.SUCCESS,
+              position: "topCenter",
+              resultAmount: res.winAmount - (activeGame?.betAmount ?? 0),
+            });
+            setHitMinePosition(null);
+          },
         },
-      },
+      ),
     );
-  }, [activeGame?._id, cashoutGame, showPopup, playSound]);
+  }, [activeGame, cashoutGame, showPopup, playSound, t, bet]);
 
   const isCashoutDisabled =
     !activeGame || isGameOver || revealedTiles.length === 0;

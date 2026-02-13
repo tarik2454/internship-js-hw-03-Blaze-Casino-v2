@@ -38,7 +38,11 @@ export default function LoginPage() {
 
   return (
     <Auth mode={SESSION_MODE.LOGIN}>
-      <AuthForm mode={SESSION_MODE.LOGIN} onSubmit={handleSubmit} />
+      <AuthForm
+        key={SESSION_MODE.LOGIN}
+        mode={SESSION_MODE.LOGIN}
+        onSubmit={handleSubmit}
+      />
     </Auth>
   );
 }

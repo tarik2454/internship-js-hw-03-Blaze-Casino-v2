@@ -22,11 +22,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem("theme") as Theme | null;
-    if (saved === "dark" || saved === "light") {
-      setThemeState(saved);
+    if (saved && (saved === "dark" || saved === "light") && saved !== theme) {
       document.documentElement.dataset.theme = saved;
+      requestAnimationFrame(() => {
+        setThemeState(saved);
+      });
     }
-  }, []);
+  }, [theme]);
 
   const toggleTheme = useCallback(() => {
     setThemeState((prev) => {

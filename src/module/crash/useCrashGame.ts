@@ -69,7 +69,7 @@ export function useCrashGame(t: ReturnType<typeof getTranslations>) {
         });
       },
     });
-  }, [betId, cashoutMutation, showPopup]);
+  }, [betId, cashoutMutation, showPopup, lastBetAmount, t]);
 
   const handlePlaceBet = useCallback(
     (data: { amount: number; autoCashout?: number }) => {
@@ -93,20 +93,22 @@ export function useCrashGame(t: ReturnType<typeof getTranslations>) {
       !isAutoCashedOut &&
       currentGameState === "running"
     ) {
-      setIsAutoCashedOut(true);
-      setGameResult({ multiplier: activeAutoCashout, isWin: true });
-      const winAmount = lastBetAmount * activeAutoCashout;
-      showPopup({
-        message: `${t.crash.youWon} ${winAmount.toFixed(2)}$`,
-        type: POPUP_TYPE.SUCCESS,
-        position: "topCenter",
-        resultAmount: lastBetAmount * (activeAutoCashout - 1),
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeyFactories.user.current(),
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeyFactories.crash.getCurrent(),
+      requestAnimationFrame(() => {
+        setIsAutoCashedOut(true);
+        setGameResult({ multiplier: activeAutoCashout, isWin: true });
+        const winAmount = lastBetAmount * activeAutoCashout;
+        showPopup({
+          message: `${t.crash.youWon} ${winAmount.toFixed(2)}$`,
+          type: POPUP_TYPE.SUCCESS,
+          position: "topCenter",
+          resultAmount: lastBetAmount * (activeAutoCashout - 1),
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeyFactories.user.current(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeyFactories.crash.getCurrent(),
+        });
       });
     }
   }, [
@@ -118,31 +120,34 @@ export function useCrashGame(t: ReturnType<typeof getTranslations>) {
     lastBetAmount,
     showPopup,
     queryClient,
+    t,
   ]);
 
   useEffect(() => {
     if (isFirstLoad && (currentGameState === "running" || gameResult)) {
-      setIsFirstLoad(false);
+      requestAnimationFrame(() => setIsFirstLoad(false));
     }
   }, [currentGameState, isFirstLoad, gameResult]);
 
   useEffect(() => {
     if (currentGameState === "waiting") {
-      setIsAutoCashedOut(false);
+      requestAnimationFrame(() => setIsAutoCashedOut(false));
     }
   }, [currentGameState]);
 
   useEffect(() => {
     if (crashPoint && betId && !isAutoCashedOut) {
-      setGameResult({ multiplier: crashPoint, isWin: false });
-      showPopup({
-        message: `${t.crash.youLost} ${lastBetAmount.toFixed(2)}$`,
-        type: POPUP_TYPE.ERROR,
-        position: "topCenter",
-        resultAmount: -lastBetAmount,
+      requestAnimationFrame(() => {
+        setGameResult({ multiplier: crashPoint, isWin: false });
+        showPopup({
+          message: `${t.crash.youLost} ${lastBetAmount.toFixed(2)}$`,
+          type: POPUP_TYPE.ERROR,
+          position: "topCenter",
+          resultAmount: -lastBetAmount,
+        });
       });
     }
-  }, [crashPoint, betId, isAutoCashedOut, lastBetAmount, showPopup]);
+  }, [crashPoint, betId, isAutoCashedOut, lastBetAmount, showPopup, t]);
 
   return {
     multiplier,

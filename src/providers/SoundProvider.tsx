@@ -25,15 +25,18 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const savedMuted = localStorage.getItem("sound-muted");
-    if (savedMuted === "true") setIsMuted(true);
-
     const savedVolume = localStorage.getItem("sound-volume");
-    if (savedVolume !== null) {
-      const parsed = parseFloat(savedVolume);
-      if (!isNaN(parsed) && parsed >= 0 && parsed <= 1) {
-        setVolumeState(parsed);
+
+    requestAnimationFrame(() => {
+      if (savedMuted === "true") setIsMuted(true);
+
+      if (savedVolume !== null) {
+        const parsed = parseFloat(savedVolume);
+        if (!isNaN(parsed) && parsed >= 0 && parsed <= 1) {
+          setVolumeState(parsed);
+        }
       }
-    }
+    });
   }, []);
 
   const toggleMute = useCallback(() => {

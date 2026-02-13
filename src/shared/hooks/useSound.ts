@@ -34,10 +34,8 @@ export const useSound = () => {
   useEffect(() => {
     Object.entries(SOUNDS).forEach(([key, src]) => {
       const typedKey = key as keyof typeof SOUNDS;
-      const scale = VOLUME_SCALE[typedKey];
       sounds.current[typedKey] = new Howl({
         src: [src],
-        volume: volume * scale,
         loop: LOOP_SOUNDS.has(typedKey),
       });
     });

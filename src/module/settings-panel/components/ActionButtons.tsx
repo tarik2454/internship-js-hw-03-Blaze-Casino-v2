@@ -11,20 +11,20 @@ import styles from "./ActionButtons.module.scss";
 
 interface ActionButtonsProps {
   canBet: boolean;
-  showCashoutButton: boolean;
-  isCashoutDisabled: boolean;
-  isCashingOut: boolean;
+  showCashoutButton?: boolean;
+  isCashoutDisabled?: boolean;
+  isCashingOut?: boolean;
   hideBorder?: boolean;
   locale: Locale;
   onPlaceBet: () => void;
-  onCashout: () => void;
+  onCashout?: () => void;
 }
 
 export const ActionButtons = memo(function ActionButtons({
   canBet,
-  showCashoutButton,
-  isCashoutDisabled,
-  isCashingOut,
+  showCashoutButton = false,
+  isCashoutDisabled = true,
+  isCashingOut = false,
   hideBorder = false,
   locale,
   onPlaceBet,

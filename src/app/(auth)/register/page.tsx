@@ -32,7 +32,11 @@ export default function RegisterPage() {
 
   return (
     <Auth mode={SESSION_MODE.REGISTER}>
-      <AuthForm mode={SESSION_MODE.REGISTER} onSubmit={handleSubmit} />
+      <AuthForm
+        key={SESSION_MODE.REGISTER}
+        mode={SESSION_MODE.REGISTER}
+        onSubmit={handleSubmit}
+      />
     </Auth>
   );
 }
