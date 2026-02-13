@@ -15,7 +15,7 @@ interface ChatItemProps {
   currentUser: CurrentUserResponse | null | undefined;
   virtualItem: VirtualItem;
   virtualizer: Virtualizer<HTMLDivElement, Element>;
-  formatTime: (iso: string) => string;
+  formatTime: (iso: string, locale: string) => string;
   locale: Locale;
 }
 
@@ -28,7 +28,7 @@ const ChatItemContent = memo(
   }: {
     msg: ChatMessage;
     currentUser: CurrentUserResponse | null | undefined;
-    formatTime: (iso: string) => string;
+    formatTime: (iso: string, locale: string) => string;
     locale: Locale;
   }) => {
     const t = getTranslations(locale);
@@ -52,7 +52,7 @@ const ChatItemContent = memo(
           <div className={styles.messageUserName}>
             {msg.username || currentUser?.username || t.common.unknown}
           </div>
-          <div className={styles.messageTime}>{formatTime(msg.createdAt)}</div>
+          <div className={styles.messageTime}>{formatTime(msg.createdAt, locale)}</div>
         </div>
         <p className={styles.messageContent}>{msg.text}</p>
       </>

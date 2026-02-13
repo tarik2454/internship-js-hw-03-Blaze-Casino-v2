@@ -9,6 +9,7 @@ import { Switch } from "@/shared/components/Switch";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useSoundContext } from "@/providers/SoundProvider";
 import { VolumeIcon, VolumeMutedIcon } from "@/shared/icons/volume";
+import { getTranslations } from "@/i18n";
 
 interface SettingsMenuProps {
   currentLocale: Locale;
@@ -17,9 +18,9 @@ interface SettingsMenuProps {
   triggerRef?: RefObject<HTMLButtonElement | null>;
 }
 
-const languages: { code: Locale; label: string; icon: string }[] = [
-  { code: "en", label: "English", icon: "/images/localization/sh.svg" },
-  { code: "uk", label: "Українська", icon: "/images/localization/ua.svg" },
+const languages: { code: Locale; labelKey: "english" | "ukrainian"; icon: string }[] = [
+  { code: "en", labelKey: "english", icon: "/images/localization/sh.svg" },
+  { code: "uk", labelKey: "ukrainian", icon: "/images/localization/ua.svg" },
 ];
 
 export function SettingsMenu({
@@ -31,6 +32,7 @@ export function SettingsMenu({
   const menuRef = useRef<HTMLDivElement>(null);
   const { theme, toggleTheme } = useTheme();
   const { isMuted, volume, toggleMute, setVolume } = useSoundContext();
+  const t = getTranslations(currentLocale);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -63,14 +65,14 @@ export function SettingsMenu({
           {theme === "light" ? (
             <Image
               src="/images/header/sun.png"
-              alt="Light"
+              alt={t.accessibility.lightTheme}
               width={18}
               height={18}
             />
           ) : (
             <Image
               src="/images/header/moon.png"
-              alt="Dark"
+              alt={t.accessibility.darkTheme}
               width={18}
               height={18}
             />
@@ -98,24 +100,27 @@ export function SettingsMenu({
       </div>
 
       <div className={styles.language}>
-        {languages.map(({ code, label, icon }) => (
-          <Button
-            key={code}
-            className={`${styles.languageOption} ${
-              currentLocale === code ? styles.active : ""
-            }`}
-            onClick={() => onSelect(code)}
-          >
-            <div className={styles.languageOption}>
-              <Image src={icon} alt={label} width={18} height={10} />
-              {label}
-            </div>
+        {languages.map(({ code, labelKey, icon }) => {
+          const label = t.language[labelKey];
+          return (
+            <Button
+              key={code}
+              className={`${styles.languageOption} ${
+                currentLocale === code ? styles.active : ""
+              }`}
+              onClick={() => onSelect(code)}
+            >
+              <div className={styles.languageOption}>
+                <Image src={icon} alt={label} width={18} height={10} />
+                {label}
+              </div>
 
-            {currentLocale === code && (
-              <span className={styles.checkmark}>✓</span>
-            )}
-          </Button>
-        ))}
+              {currentLocale === code && (
+                <span className={styles.checkmark}>✓</span>
+              )}
+            </Button>
+          );
+        })}
       </div>
     </div>
   );

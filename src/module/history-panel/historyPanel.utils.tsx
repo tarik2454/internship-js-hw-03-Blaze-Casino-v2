@@ -10,7 +10,7 @@ import type { Locale } from "@/i18n";
 
 const columnHelper = createColumnHelper<HistoryRow>();
 
-export const formatDate = (dateString: string) => {
+export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   const day = date.getDate().toString().padStart(2, "0");
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -32,14 +32,14 @@ export const createColumns = (
       columnHelper.display({
         id: "createdAt",
         header: t.history.time,
-        cell: (info) => (
-          <span className={styles.historyDate}>
-            {formatDate(info.row.original.createdAt)}
-          </span>
-        ),
-      }),
-      columnHelper.display({
-        id: "caseName",
+      cell: (info) => (
+        <span className={styles.historyDate}>
+          {formatDate(info.row.original.createdAt)}
+        </span>
+      ),
+    }),
+    columnHelper.display({
+      id: "caseName",
         header: t.history.case,
         cell: (info) => {
           const row = info.row.original;

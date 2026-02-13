@@ -204,6 +204,8 @@
     "prize": "Prize",
     "star": "Star",
     "location": "Location",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "lightTheme": "Light theme",
+    "darkTheme": "Dark theme"
   }
 }

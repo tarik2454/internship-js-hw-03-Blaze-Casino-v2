@@ -6,6 +6,7 @@ import { ReactQueryProvider } from "../providers/ReactQueryProvider";
 import { PopupProvider } from "../providers/PopupProvider";
 import { LocaleProvider } from "../providers/LocaleProvider";
 import { ThemeProvider } from "../providers/ThemeProvider";
+import { HtmlLangSync } from "@/shared/components/HtmlLangSync";
 
 const satoshi900 = Satoshi({
   src: [
@@ -55,6 +56,7 @@ export default function RootLayout({
         <ReactQueryProvider>
           <ThemeProvider>
             <LocaleProvider>
+              <HtmlLangSync />
               <PopupProvider>{children}</PopupProvider>
             </LocaleProvider>
           </ThemeProvider>

@@ -100,7 +100,7 @@ export function Header() {
                 <div className={styles.balance}>
                   <Image
                     src="/images/common/dollar.svg"
-                    alt="Dollar"
+                    alt={t.accessibility.dollar}
                     width={24}
                     height={24}
                   />
@@ -108,7 +108,7 @@ export function Header() {
                   <span>
                     {userData?.balance !== undefined
                       ? userData.balance
-                          .toLocaleString("en-US")
+                          .toLocaleString("en-US", { useGrouping: true })
                           .replace(/,/g, ".")
                       : "0"}
                   </span>
@@ -117,7 +117,7 @@ export function Header() {
                   {currentUserAvatar ? (
                     <Image
                       src={currentUserAvatar}
-                      alt="User Avatar"
+                      alt={t.accessibility.userAvatar}
                       width={40}
                       height={40}
                       className={styles.userAvatar}
@@ -125,7 +125,7 @@ export function Header() {
                   ) : (
                     <Image
                       src="/images/header/user.svg"
-                      alt="User Avatar"
+                      alt={t.accessibility.userAvatar}
                       width={32}
                       height={32}
                     />

@@ -204,6 +204,8 @@
     "prize": "Приз",
     "star": "Зірка",
     "location": "Локація",
-    "closeMenu": "Закрити меню"
+    "closeMenu": "Закрити меню",
+    "lightTheme": "Світла тема",
+    "darkTheme": "Темна тема"
   }
 }
