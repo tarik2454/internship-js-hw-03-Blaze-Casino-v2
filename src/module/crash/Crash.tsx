@@ -55,15 +55,12 @@ export function Crash() {
     });
   }, [bet.amount, bet.parsedAutoCashout, handlePlaceBet, playSound]);
 
-  const onCashout = useCallback(async () => {
+  const onCashout = useCallback(() => {
     playSound("cashout");
     bet.startCashout();
-    try {
-      await handleCashout();
-    } catch {
-    } finally {
-      bet.endCashout();
-    }
+    handleCashout()
+      .catch(() => {})
+      .finally(() => bet.endCashout());
   }, [bet.startCashout, bet.endCashout, handleCashout, playSound]);
 
   const crashStats = useMemo(

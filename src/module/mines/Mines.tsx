@@ -120,32 +120,29 @@ export function Mines() {
     [activeGameId, activeBetAmount, revealTile, showPopup, t],
   );
 
-  const handleCashout = useCallback(async () => {
+  const handleCashout = useCallback(() => {
     if (!activeGameId) return;
     playSound("cashout");
     bet.startCashout();
-    try {
-      await cashoutGame(
-        { gameId: activeGameId },
-        {
-          onSuccess: (res) => {
-            if (res.minePositions) {
-              setAllMinePositions(res.minePositions);
-            }
-            showPopup({
-              message: `${t.mines.youWon} ${res.winAmount.toFixed(2)}$`,
-              type: POPUP_TYPE.SUCCESS,
-              position: "topCenter",
-              resultAmount: res.winAmount - activeBetAmount,
-            });
-            setHitMinePosition(null);
-          },
+    cashoutGame(
+      { gameId: activeGameId },
+      {
+        onSuccess: (res) => {
+          if (res.minePositions) {
+            setAllMinePositions(res.minePositions);
+          }
+          showPopup({
+            message: `${t.mines.youWon} ${res.winAmount.toFixed(2)}$`,
+            type: POPUP_TYPE.SUCCESS,
+            position: "topCenter",
+            resultAmount: res.winAmount - activeBetAmount,
+          });
+          setHitMinePosition(null);
         },
-      );
-    } catch {
-    } finally {
-      bet.endCashout();
-    }
+      },
+    )
+      .catch(() => {})
+      .finally(() => bet.endCashout());
   }, [activeGameId, activeBetAmount, cashoutGame, showPopup, playSound, t, bet]);
 
   const minesStats = useMemo(
