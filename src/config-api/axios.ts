@@ -3,6 +3,9 @@ import { getGlobalApiErrorHandler } from "./apiErrorHandler";
 import { createApiException } from "./error.types";
 import { getCookie, setCookie, deleteCookie } from "@/config-api/cookies";
 import { ROUTES } from "@/shared/constants/routes";
+import { SESSION_ROUTES } from "@/config-api/session/session.constants";
+
+const AUTH_ROUTES = [SESSION_ROUTES.LOGIN, SESSION_ROUTES.REGISTER];
 
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
@@ -58,10 +61,15 @@ api.interceptors.response.use(
 
     const originalRequest = error.config as RetryableRequestConfig | undefined;
 
+    const isAuthRoute = AUTH_ROUTES.some(
+      (route) => originalRequest?.url?.includes(route),
+    );
+
     if (
       originalRequest &&
       error.response?.status === 401 &&
-      !originalRequest._retry
+      !originalRequest._retry &&
+      !isAuthRoute
     ) {
       if (typeof window === "undefined") {
         throw createApiException("Session expired. Please login again.", 401);

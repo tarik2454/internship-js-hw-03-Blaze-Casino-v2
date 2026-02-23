@@ -38,7 +38,10 @@ export function AuthForm<T extends LoginSchemaDto | RegisterSchemaDto>({
     resolver: zodResolver(schema) as Resolver<T>,
     defaultValues:
       mode === "login"
-        ? ({ email: "test-user@gmail.com", password: "@Tarik-1727" } as DefaultValues<T>)
+        ? ({
+            email: "test-user@gmail.com",
+            password: "@Tarik-2454",
+          } as DefaultValues<T>)
         : undefined,
   });
 

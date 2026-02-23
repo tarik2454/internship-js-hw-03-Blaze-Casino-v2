@@ -33,6 +33,12 @@ export default function LoginPage() {
         });
         router.push(ROUTES.HOME);
       },
+      onError: (error) => {
+        showPopup({
+          message: error.message || t.auth.loginError,
+          type: "error",
+        });
+      },
     });
   };
 
