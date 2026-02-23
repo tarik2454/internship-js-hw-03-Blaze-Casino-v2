@@ -35,7 +35,7 @@ export default function LoginPage() {
       },
       onError: (error) => {
         showPopup({
-          message: error.message || t.auth.loginError,
+          message: error.message,
           type: "error",
         });
       },
