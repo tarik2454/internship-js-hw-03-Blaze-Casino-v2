@@ -35,6 +35,10 @@ export function AuthForm<T extends LoginSchemaDto | RegisterSchemaDto>({
 
   const form = useForm<T>({
     resolver: zodResolver(schema) as Resolver<T>,
+    defaultValues:
+      mode === "login"
+        ? ({ email: "test-user@gmail.com", password: "@Tarik-1727" } as T)
+        : undefined,
   });
 
   const {
